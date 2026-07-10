@@ -1,0 +1,1112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GoldBelt Africa — Go Where the Data Points. Prospecting Maps for All 54 African Countries</title>
+<meta name="description" content="Africa's documented gold, mineral, gemstone and rare earth districts on one map — with named sources, country mining dossiers, AI briefings, GPX downloads and live prices. Web, installable on iOS & Android, offline-ready. From £4.99/month.">
+<meta name="theme-color" content="#191007">
+<link rel="manifest" href="manifest.json">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,800&family=Archivo:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+<style>
+:root{
+  --pit:#191007; --soil:#26190C; --seam:#3A2A16;
+  --quartz:#F0E7D5; --dust:#B7A88E;
+  --gold:#D9A93C; --gold-hi:#F3CB6A;
+  --greenstone:#5F8A6E; --oxide:#C96A45; --ree:#9B85D4;
+  --fire:#E8722C;
+  --mono:'IBM Plex Mono',monospace; --display:'Bricolage Grotesque',sans-serif; --body:'Archivo',sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{animation:none!important;transition:none!important}}
+body{background:var(--pit);color:var(--quartz);font-family:var(--body);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
+a{color:var(--gold);text-decoration:none}
+a:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid var(--gold-hi);outline-offset:3px}
+.wrap{max-width:1160px;margin:0 auto;padding:0 20px}
+.mono{font-family:var(--mono)}
+h2{font-family:var(--display);font-weight:800;font-size:clamp(1.5rem,3vw,2.2rem);letter-spacing:-.02em}
+.sec-head{display:flex;align-items:baseline;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:8px}
+.sec-tag{font-family:var(--mono);font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;color:var(--dust)}
+.sec-sub{color:var(--dust);max-width:72ch;margin-bottom:22px}
+section{border-bottom:1px solid var(--seam)}
+.soon{display:inline-block;font-family:var(--mono);font-size:.56rem;letter-spacing:.14em;color:var(--pit);background:var(--dust);border-radius:4px;padding:1px 6px;vertical-align:2px;margin-left:8px}
+
+/* nav */
+nav.top{position:sticky;top:0;z-index:1200;background:rgba(25,16,7,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--seam)}
+.nav-inner{display:flex;align-items:center;justify-content:space-between;height:64px}
+.logo{font-family:var(--display);font-weight:800;font-size:1.25rem;color:var(--quartz);letter-spacing:-.02em}
+.logo em{color:var(--gold);font-style:normal}
+.logo .coord{display:block;font-family:var(--mono);font-weight:400;font-size:.58rem;color:var(--dust);letter-spacing:.14em}
+.nav-links{display:flex;gap:22px;align-items:center}
+.nav-links a{color:var(--dust);font-size:.9rem;font-weight:500}
+.nav-links a:hover{color:var(--quartz)}
+.btn{display:inline-block;background:var(--gold);color:#241804;font-weight:600;padding:11px 22px;border-radius:6px;border:none;cursor:pointer;font-size:.95rem;font-family:var(--body)}
+.btn:hover{background:var(--gold-hi)}
+.btn.ghost{background:transparent;color:var(--gold);border:1px solid var(--gold)}
+.btn.ghost:hover{background:rgba(217,169,60,.1)}
+@media(max-width:960px){.nav-links a:not(.btn){display:none}}
+
+/* hero with night scene */
+header.hero{position:relative;overflow:hidden;border-bottom:1px solid var(--seam);min-height:640px;display:flex;align-items:center}
+.scene{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+.hero-fade{position:absolute;inset:0;background:linear-gradient(90deg,rgba(25,16,7,.88) 0%,rgba(25,16,7,.55) 55%,rgba(25,16,7,.15) 100%)}
+.hero-inner{position:relative;z-index:2;padding:90px 0 70px;width:100%}
+.eyebrow{font-family:var(--mono);font-size:.72rem;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin-bottom:18px}
+h1{font-family:var(--display);font-weight:800;font-size:clamp(2.3rem,5.6vw,4.2rem);line-height:1.03;letter-spacing:-.025em;max-width:14ch;text-shadow:0 2px 30px rgba(0,0,0,.6)}
+h1 .g{color:var(--gold)}
+.hero-sub{color:#D8CCB4;font-size:1.12rem;max-width:52ch;margin:22px 0 12px;text-shadow:0 1px 12px rgba(0,0,0,.7)}
+.plat-line{font-family:var(--mono);font-size:.72rem;letter-spacing:.14em;color:var(--dust);margin-bottom:28px}
+.plat-line b{color:var(--gold-hi);font-weight:600}
+.hero-cta{display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+.price-chip{font-family:var(--mono);font-size:.8rem;color:var(--dust);border:1px solid var(--seam);border-radius:6px;padding:10px 14px;background:rgba(38,25,12,.85)}
+.price-chip strong{color:var(--gold-hi);font-weight:600}
+
+/* five answers */
+.answers{padding:70px 0}
+.ans-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:16px;margin-top:32px}
+@media(max-width:1000px){.ans-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:560px){.ans-grid{grid-template-columns:1fr}}
+.ans{background:var(--soil);border:1px solid var(--seam);border-radius:12px;padding:22px}
+.ans .a-q{font-family:var(--mono);font-size:.64rem;color:var(--gold);letter-spacing:.14em;text-transform:uppercase;margin-bottom:8px}
+.ans h3{font-family:var(--display);font-weight:800;font-size:1.02rem;margin-bottom:6px}
+.ans p{font-size:.82rem;color:var(--dust)}
+
+/* map */
+.map-section{padding:60px 0 70px}
+.map-toolbar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px;align-items:center}
+.chip{font-family:var(--mono);font-size:.78rem;padding:8px 16px;border-radius:100px;border:1px solid var(--seam);background:var(--soil);color:var(--dust);cursor:pointer}
+.chip[aria-pressed="true"]{border-color:var(--gold);color:var(--gold-hi);background:rgba(217,169,60,.08)}
+.chip .dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:7px;vertical-align:1px}
+.chip.base{border-style:dashed}
+#map{height:560px;border-radius:12px;border:1px solid var(--seam);background:var(--soil)}
+@media(max-width:760px){#map{height:430px}}
+.map-meta{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-top:12px;align-items:center}
+.map-note{font-family:var(--mono);font-size:.7rem;color:var(--dust);letter-spacing:.04em;max-width:66ch}
+.updated{font-family:var(--mono);font-size:.7rem;color:var(--gold);letter-spacing:.08em;border:1px solid var(--seam);border-radius:6px;padding:8px 12px;background:var(--soil);white-space:nowrap}
+.updated .pulse{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--gold);margin-right:8px;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.25}}
+.leaflet-popup-content-wrapper{background:var(--soil);color:var(--quartz);border:1px solid var(--seam);border-radius:8px;font-family:var(--body)}
+.leaflet-popup-tip{background:var(--soil)}
+.pop-name{font-family:var(--display);font-weight:800;font-size:1.02rem;margin-bottom:2px}
+.pop-coord{font-family:var(--mono);font-size:.68rem;color:var(--gold);letter-spacing:.06em}
+.pop-body{font-size:.85rem;color:var(--dust);margin-top:6px;max-width:240px}
+.pop-lock{margin-top:8px;font-size:.8rem}
+.pin-del{background:none;border:1px solid var(--seam);color:var(--oxide);border-radius:4px;padding:2px 8px;font-family:var(--mono);font-size:.68rem;cursor:pointer;margin-top:8px}
+
+/* features */
+.features{padding:70px 0}
+.feat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:34px}
+@media(max-width:860px){.feat-grid{grid-template-columns:1fr}}
+.feat{background:var(--soil);border:1px solid var(--seam);border-radius:12px;padding:26px}
+.feat .fk{font-family:var(--mono);font-size:.68rem;color:var(--gold);letter-spacing:.18em;text-transform:uppercase}
+.feat h3{font-family:var(--display);font-weight:800;font-size:1.15rem;margin:10px 0 8px}
+.feat p{color:var(--dust);font-size:.92rem}
+
+/* sources */
+.sources{padding:70px 0}
+.src-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:30px}
+@media(max-width:760px){.src-grid{grid-template-columns:1fr}}
+.src{display:flex;gap:14px;align-items:flex-start;border:1px solid var(--seam);border-radius:10px;background:var(--soil);padding:16px 18px}
+.src .s-n{font-family:var(--mono);font-size:.66rem;color:var(--gold);letter-spacing:.1em;min-width:34px;padding-top:3px}
+.src h3{font-family:var(--display);font-weight:800;font-size:.98rem}
+.src p{font-size:.8rem;color:var(--dust)}
+
+/* AI briefing */
+.brief{padding:70px 0}
+.brief-box{background:var(--soil);border:1px solid var(--gold);border-radius:14px;padding:34px;margin-top:30px;display:grid;grid-template-columns:1.1fr .9fr;gap:30px;align-items:center}
+@media(max-width:860px){.brief-box{grid-template-columns:1fr}}
+.brief-box h3{font-family:var(--display);font-weight:800;font-size:1.5rem;margin-bottom:10px}
+.brief-box p{color:var(--dust);font-size:.95rem;margin-bottom:16px}
+.term{background:#120B04;border:1px solid var(--seam);border-radius:10px;padding:18px;font-family:var(--mono);font-size:.74rem;color:var(--dust);line-height:1.7;min-height:220px;white-space:pre-wrap}
+.term .t-gold{color:var(--gold-hi)}
+.term .cursor{display:inline-block;width:8px;height:14px;background:var(--gold);animation:pulse 1s infinite;vertical-align:-2px}
+
+/* tiers */
+.tiers{padding:70px 0}
+.bill-toggle{display:inline-flex;border:1px solid var(--seam);border-radius:100px;background:var(--soil);margin:20px 0 6px;padding:4px}
+.bill-toggle button{font-family:var(--mono);font-size:.78rem;padding:9px 20px;border-radius:100px;border:none;background:transparent;color:var(--dust);cursor:pointer;letter-spacing:.06em}
+.bill-toggle button[aria-pressed="true"]{background:var(--gold);color:#241804;font-weight:600}
+.save-note{font-family:var(--mono);font-size:.7rem;color:var(--greenstone);margin-left:12px;letter-spacing:.08em}
+.tier-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:28px}
+@media(max-width:920px){.tier-grid{grid-template-columns:1fr;max-width:480px;margin-left:auto;margin-right:auto}}
+.tier{background:var(--soil);border:1px solid var(--seam);border-radius:14px;padding:30px;display:flex;flex-direction:column;position:relative}
+.tier.hot{border-color:var(--gold)}
+.tier .flag{position:absolute;top:-12px;left:24px;background:var(--gold);color:#241804;font-family:var(--mono);font-size:.62rem;letter-spacing:.14em;text-transform:uppercase;font-weight:600;padding:4px 12px;border-radius:100px}
+.tier .tk{font-family:var(--mono);font-size:.68rem;letter-spacing:.18em;text-transform:uppercase;color:var(--dust)}
+.tier h3{font-family:var(--display);font-weight:800;font-size:1.4rem;margin:8px 0 4px}
+.tier .price{font-family:var(--mono);font-size:2rem;color:var(--gold-hi);font-weight:600;margin:10px 0 2px}
+.tier .per{font-family:var(--mono);font-size:.72rem;color:var(--dust);margin-bottom:20px;min-height:2.2em}
+.tier ul{list-style:none;margin-bottom:26px;flex:1}
+.tier li{padding:8px 0;border-bottom:1px dashed var(--seam);font-size:.88rem;color:var(--quartz)}
+.tier li::before{content:"◆";color:var(--gold);margin-right:10px;font-size:.7rem}
+.tier li.dim{color:var(--dust)}
+.tier li.dim::before{content:"◇";color:var(--seam)}
+.tier .btn{width:100%;text-align:center}
+.trial-note{font-family:var(--mono);font-size:.68rem;color:var(--dust);text-align:center;margin-top:10px;letter-spacing:.04em}
+
+/* coverage + modal */
+.coverage{padding:70px 0}
+.cov-search{width:100%;max-width:420px;background:var(--soil);border:1px solid var(--seam);border-radius:8px;color:var(--quartz);font-family:var(--mono);font-size:.85rem;padding:12px 16px;margin-top:6px}
+.cov-search::placeholder{color:var(--dust)}
+.cov-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:26px}
+@media(max-width:900px){.cov-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:520px){.cov-grid{grid-template-columns:1fr}}
+.cov{border:1px solid var(--seam);border-radius:10px;padding:16px 18px;background:var(--soil);cursor:pointer;text-align:left;font-family:var(--body);color:var(--quartz)}
+.cov:hover{border-color:var(--gold)}
+.cov .c-name{font-family:var(--display);font-weight:800;font-size:1rem;display:flex;justify-content:space-between;align-items:center}
+.cov .c-name::after{content:"→";color:var(--gold);font-size:.85rem}
+.cov .c-belt{font-family:var(--mono);font-size:.64rem;color:var(--gold);letter-spacing:.08em;margin-top:4px}
+.cov .c-min{font-size:.78rem;color:var(--dust);margin-top:4px}
+.modal-back{position:fixed;inset:0;background:rgba(12,8,3,.85);z-index:2000;display:none;align-items:flex-start;justify-content:center;overflow-y:auto;padding:40px 16px}
+.modal-back.open{display:flex}
+.modal{background:var(--soil);border:1px solid var(--gold);border-radius:14px;max-width:780px;width:100%;padding:34px;position:relative}
+.modal-close{position:absolute;top:16px;right:16px;background:none;border:1px solid var(--seam);color:var(--dust);border-radius:6px;font-family:var(--mono);font-size:.8rem;padding:6px 12px;cursor:pointer}
+.modal-close:hover{color:var(--quartz);border-color:var(--gold)}
+.modal .m-belt{font-family:var(--mono);font-size:.68rem;color:var(--gold);letter-spacing:.18em;text-transform:uppercase}
+.modal h3{font-family:var(--display);font-weight:800;font-size:1.8rem;margin:6px 0 18px}
+.m-row{border-top:1px dashed var(--seam);padding:14px 0}
+.m-row .m-k{font-family:var(--mono);font-size:.66rem;letter-spacing:.16em;text-transform:uppercase;color:var(--dust);margin-bottom:5px}
+.m-row .m-v{font-size:.92rem;color:var(--quartz)}
+.m-tip{background:rgba(217,169,60,.07);border:1px solid var(--seam);border-radius:8px;padding:14px 16px;font-size:.88rem;color:var(--gold-hi);margin-top:16px}
+.m-cta{margin-top:20px;text-align:center}
+
+/* ore guide */
+.ores{padding:70px 0}
+.ore-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin-top:30px}
+@media(max-width:1000px){.ore-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:520px){.ore-grid{grid-template-columns:1fr}}
+.ore{background:var(--soil);border:1px solid var(--seam);border-radius:12px;overflow:hidden}
+.ore svg{display:block;width:100%;height:150px;background:#120B04}
+.ore .o-body{padding:16px 18px}
+.ore .o-name{font-family:var(--display);font-weight:800;font-size:1rem}
+.ore .o-host{font-family:var(--mono);font-size:.62rem;color:var(--gold);letter-spacing:.1em;margin:4px 0 6px;text-transform:uppercase}
+.ore p{font-size:.8rem;color:var(--dust)}
+.spark{animation:glint 2.6s infinite}
+.spark.s2{animation-delay:.9s}.spark.s3{animation-delay:1.7s}
+@keyframes glint{0%,100%{opacity:.15}50%{opacity:1}}
+
+/* videos */
+.videos{padding:70px 0}
+.vid-grid{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-top:30px}
+@media(max-width:860px){.vid-grid{grid-template-columns:1fr}}
+.vid{background:var(--soil);border:1px solid var(--seam);border-radius:12px;overflow:hidden}
+.vid video{display:block;width:100%;aspect-ratio:16/9;background:#0D0803}
+.vid .v-cap{padding:14px 18px;font-size:.85rem;color:var(--dust)}
+.vid .v-cap strong{color:var(--quartz)}
+
+/* community */
+.community{padding:70px 0}
+.com-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:32px}
+@media(max-width:860px){.com-grid{grid-template-columns:1fr}}
+.com{background:var(--soil);border:1px solid var(--seam);border-radius:12px;padding:26px}
+.com h3{font-family:var(--display);font-weight:800;font-size:1.1rem;margin-bottom:8px}
+.com p{font-size:.88rem;color:var(--dust)}
+.finds{margin-top:14px;border-top:1px dashed var(--seam)}
+.find{display:flex;gap:12px;padding:10px 0;border-bottom:1px dashed var(--seam);font-size:.8rem;color:var(--dust)}
+.find .f-t{font-family:var(--mono);font-size:.62rem;color:var(--gold);white-space:nowrap;padding-top:2px}
+
+/* sponsors */
+.sponsors{padding:70px 0}
+.sp-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin-top:30px}
+@media(max-width:900px){.sp-grid{grid-template-columns:repeat(2,1fr)}}
+.sp{border:1px dashed var(--seam);border-radius:12px;padding:26px 20px;text-align:center;background:var(--soil)}
+.sp .s-slot{font-family:var(--mono);font-size:.62rem;color:var(--dust);letter-spacing:.18em;text-transform:uppercase}
+.sp h3{font-family:var(--display);font-weight:800;font-size:1.05rem;margin:8px 0 6px;color:var(--gold)}
+.sp p{font-size:.8rem;color:var(--dust)}
+.sp a{font-family:var(--mono);font-size:.72rem;display:inline-block;margin-top:12px}
+
+/* newsletter */
+.newsletter{padding:70px 0}
+.news-box{background:var(--soil);border:1px solid var(--seam);border-radius:14px;padding:34px;display:flex;gap:26px;align-items:center;justify-content:space-between;flex-wrap:wrap;margin-top:10px}
+.news-box h3{font-family:var(--display);font-weight:800;font-size:1.4rem}
+.news-box p{color:var(--dust);font-size:.92rem;max-width:44ch}
+.news-form{display:flex;gap:10px;flex-wrap:wrap}
+.news-form input{background:#120B04;border:1px solid var(--seam);border-radius:8px;color:var(--quartz);font-family:var(--mono);font-size:.85rem;padding:12px 16px;min-width:240px}
+.news-form input::placeholder{color:var(--dust)}
+#newsMsg{font-family:var(--mono);font-size:.7rem;color:var(--greenstone);margin-top:10px;width:100%}
+
+/* faq */
+.faq{padding:70px 0}
+.faq h3.f-cat{font-family:var(--mono);font-size:.72rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin:36px 0 4px}
+.faq details{border:1px solid var(--seam);border-radius:10px;background:var(--soil);margin-top:12px}
+.faq summary{cursor:pointer;padding:16px 22px;font-weight:600;font-size:.95rem;list-style:none;display:flex;justify-content:space-between;align-items:center;gap:14px}
+.faq summary::after{content:"+";font-family:var(--mono);color:var(--gold);font-size:1.2rem}
+.faq details[open] summary::after{content:"–"}
+.faq .a{padding:0 22px 18px;color:var(--dust);font-size:.9rem}
+
+/* support + footer */
+.support{padding:70px 0}
+.sup-box{background:var(--soil);border:1px solid var(--seam);border-radius:14px;padding:34px;margin-top:10px}
+.sup-box p{color:var(--dust);max-width:60ch;margin-bottom:16px}
+footer{padding:60px 0 40px}
+.foot-cols{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:26px;margin-bottom:36px}
+@media(max-width:860px){.foot-cols{grid-template-columns:1fr 1fr}}
+.foot-cols h4{font-family:var(--mono);font-size:.66rem;letter-spacing:.2em;text-transform:uppercase;color:var(--dust);margin-bottom:12px}
+.foot-cols a{display:block;color:var(--quartz);font-size:.88rem;padding:4px 0}
+.foot-cols a:hover{color:var(--gold)}
+.foot-tag{color:var(--dust);font-size:.85rem;max-width:30ch;margin-top:10px}
+.legal{border:1px solid var(--seam);border-radius:12px;background:var(--soil);padding:24px;font-size:.82rem;color:var(--dust)}
+.legal strong{color:var(--quartz)}
+.foot-row{display:flex;justify-content:space-between;flex-wrap:wrap;gap:16px;margin-top:30px;font-family:var(--mono);font-size:.72rem;color:var(--dust)}
+</style>
+</head>
+<body>
+
+<nav class="top">
+  <div class="wrap nav-inner">
+    <div class="logo">GoldBelt <em>Africa</em><span class="coord">LAT −35° → +37° · LON −17° → +51°</span></div>
+    <div class="nav-links">
+      <a href="#map-section">Maps</a>
+      <a href="#features">Features</a>
+      <a href="#tiers">Pricing</a>
+      <a href="#community">Community</a>
+      <a href="#sources">Sources</a>
+      <a href="#faq">FAQ</a>
+      <a class="btn" href="#map-section">Open the map</a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero">
+  <!-- Animated night scene: African bush, campfire, prospectors, sparkling ore -->
+  <svg class="scene" viewBox="0 0 1400 640" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+    <defs>
+      <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#0A0F1E"/><stop offset=".55" stop-color="#141326"/><stop offset=".8" stop-color="#2A1B14"/><stop offset="1" stop-color="#191007"/>
+      </linearGradient>
+      <radialGradient id="fireGlow" cx=".5" cy=".5" r=".5">
+        <stop offset="0" stop-color="#F0A24A" stop-opacity=".55"/><stop offset=".5" stop-color="#C4622A" stop-opacity=".22"/><stop offset="1" stop-color="#C4622A" stop-opacity="0"/>
+      </radialGradient>
+      <radialGradient id="moon" cx=".5" cy=".5" r=".5">
+        <stop offset="0" stop-color="#F3EAD2"/><stop offset="1" stop-color="#C9BD9C"/>
+      </radialGradient>
+    </defs>
+    <rect width="1400" height="640" fill="url(#sky)"/>
+    <circle cx="1160" cy="110" r="46" fill="url(#moon)" opacity=".9"/>
+    <!-- stars -->
+    <g fill="#EDE4CC">
+      <circle class="spark" cx="120" cy="70" r="1.6"/><circle class="spark s2" cx="300" cy="130" r="1.2"/>
+      <circle class="spark s3" cx="480" cy="60" r="1.5"/><circle class="spark" cx="640" cy="150" r="1.1"/>
+      <circle class="spark s2" cx="820" cy="80" r="1.6"/><circle class="spark s3" cx="960" cy="170" r="1.2"/>
+      <circle class="spark" cx="1290" cy="220" r="1.4"/><circle class="spark s2" cx="1050" cy="60" r="1.3"/>
+      <circle class="spark s3" cx="200" cy="200" r="1.2"/><circle class="spark" cx="740" cy="40" r="1.3"/>
+      <circle class="spark s2" cx="1360" cy="90" r="1.5"/><circle class="spark s3" cx="560" cy="210" r="1.1"/>
+    </g>
+    <!-- distant ridge -->
+    <path d="M0 420 L180 380 L340 410 L520 360 L700 405 L900 355 L1080 400 L1250 370 L1400 400 L1400 640 L0 640 Z" fill="#120D14"/>
+    <!-- acacia trees -->
+    <g fill="#0B0805">
+      <path d="M1000 430 q4 -60 6 -70 q-50 -8 -70 -34 q60 14 78 22 q18 -8 78 -22 q-20 26 -70 34 q2 10 6 70 Z"/>
+      <path d="M180 445 q3 -48 5 -56 q-40 -6 -56 -27 q48 11 62 18 q14 -7 62 -18 q-16 21 -56 27 q2 8 5 56 Z"/>
+    </g>
+    <!-- ground -->
+    <path d="M0 460 Q350 430 700 455 Q1050 480 1400 445 L1400 640 L0 640 Z" fill="#160E07"/>
+    <!-- fire glow on ground -->
+    <ellipse cx="700" cy="470" rx="340" ry="150" fill="url(#fireGlow)"/>
+    <!-- seated figures -->
+    <g fill="#060402">
+      <path d="M600 462 a16 18 0 0 1 32 0 l4 26 h-40 Z"/><circle cx="616" cy="448" r="9"/>
+      <path d="M770 460 a16 18 0 0 1 32 0 l4 28 h-40 Z"/><circle cx="786" cy="446" r="9"/>
+      <path d="M672 486 a15 16 0 0 1 30 0 l3 16 h-36 Z"/><circle cx="687" cy="474" r="8"/>
+    </g>
+    <!-- campfire -->
+    <g>
+      <rect x="688" y="497" width="34" height="5" rx="2" fill="#241305" transform="rotate(-8 705 500)"/>
+      <rect x="690" y="499" width="34" height="5" rx="2" fill="#2E1806" transform="rotate(10 707 501)"/>
+      <path fill="#E8722C" d="M705 498 q-12 -14 -3 -30 q2 10 8 12 q-3 -14 6 -24 q1 12 8 18 q6 -8 4 -16 q10 12 4 28 q-4 12 -13 14 q-10 1 -14 -2 Z">
+        <animate attributeName="d" dur="1.1s" repeatCount="indefinite"
+          values="M705 498 q-12 -14 -3 -30 q2 10 8 12 q-3 -14 6 -24 q1 12 8 18 q6 -8 4 -16 q10 12 4 28 q-4 12 -13 14 q-10 1 -14 -2 Z;
+                  M705 498 q-14 -12 -5 -28 q3 9 9 10 q-4 -15 7 -26 q0 13 7 19 q7 -7 5 -17 q9 13 2 29 q-4 11 -12 13 q-9 2 -13 0 Z;
+                  M705 498 q-12 -14 -3 -30 q2 10 8 12 q-3 -14 6 -24 q1 12 8 18 q6 -8 4 -16 q10 12 4 28 q-4 12 -13 14 q-10 1 -14 -2 Z"/>
+      </path>
+      <path fill="#F3CB6A" d="M706 496 q-6 -8 -1 -17 q2 6 5 7 q-1 -9 4 -14 q1 8 5 11 q4 8 -1 13 q-6 4 -12 0 Z" opacity=".9">
+        <animate attributeName="opacity" dur=".8s" values=".9;.6;.9" repeatCount="indefinite"/>
+      </path>
+      <!-- embers -->
+      <g fill="#F0A24A">
+        <circle cx="702" cy="470" r="1.6"><animate attributeName="cy" dur="3s" values="470;415" repeatCount="indefinite"/><animate attributeName="opacity" dur="3s" values="1;0" repeatCount="indefinite"/></circle>
+        <circle cx="712" cy="466" r="1.3"><animate attributeName="cy" dur="2.4s" values="466;420" repeatCount="indefinite"/><animate attributeName="opacity" dur="2.4s" values="1;0" repeatCount="indefinite"/></circle>
+        <circle cx="695" cy="474" r="1.2"><animate attributeName="cy" dur="3.6s" values="474;428" repeatCount="indefinite"/><animate attributeName="opacity" dur="3.6s" values=".9;0" repeatCount="indefinite"/></circle>
+      </g>
+    </g>
+    <!-- foreground ore rocks with sparkling minerals -->
+    <g>
+      <path d="M120 640 q-10 -70 40 -86 q56 -18 92 18 q30 32 12 68 Z" fill="#221610"/>
+      <path d="M158 578 q20 -10 38 2 l-8 20 q-18 6 -30 -4 Z" fill="#2C1D13"/>
+      <path d="M164 585 l14 -5 5 9 -12 6 Z" fill="#D9A93C" opacity=".85"/>
+      <circle class="spark" cx="176" cy="586" r="2.4" fill="#F3CB6A"/>
+      <circle class="spark s2" cx="150" cy="600" r="2" fill="#F0E7D5"/>
+      <circle class="spark s3" cx="205" cy="608" r="2.2" fill="#9B85D4"/>
+      <path d="M1230 640 q-14 -62 34 -80 q52 -20 90 12 q34 30 18 68 Z" fill="#20140D"/>
+      <path d="M1268 588 l16 -8 12 6 -6 16 -16 4 Z" fill="#2C1D13"/>
+      <circle class="spark s2" cx="1282" cy="592" r="2.6" fill="#F0E7D5"/>
+      <circle class="spark" cx="1306" cy="606" r="2.2" fill="#D9A93C"/>
+      <circle class="spark s3" cx="1256" cy="612" r="2" fill="#C96A45"/>
+    </g>
+  </svg>
+  <div class="hero-fade" aria-hidden="true"></div>
+  <div class="wrap hero-inner">
+    <p class="eyebrow">Prospecting intelligence · All 54 African countries · Live 24/7</p>
+    <h1>Go where the <span class="g">data points.</span></h1>
+    <p class="hero-sub">Stop guessing. Start finding. Africa's documented goldfields, mineral belts, gemstone fields and rare earth districts on one map — with the mines, the companies, the law and the ground truth for every country. Every layer from a source we can name.</p>
+    <p class="plat-line"><b>WEB</b> · INSTALLS ON <b>iOS &amp; ANDROID</b> · <b>OFFLINE-READY</b> · UPDATED CONTINUOUSLY</p>
+    <div class="hero-cta">
+      <a class="btn" href="#tiers">Start finding ground worth digging</a>
+      <a class="btn ghost" href="#map-section">Open the free map</a>
+      <div class="price-chip" id="goldPrice">GOLD SPOT · <strong>loading…</strong></div>
+    </div>
+  </div>
+</header>
+
+<section class="answers">
+  <div class="wrap">
+    <div class="sec-head"><h2>Five answers before you dig</h2><span class="sec-tag">FIG. 01 — THE METHOD</span></div>
+    <p class="sec-sub">Detect smarter, not harder. Every hour in the right district beats a week in the wrong one. GoldBelt answers the five questions that decide whether a trip pays.</p>
+    <div class="ans-grid">
+      <div class="ans"><div class="a-q">01 · Where</div><h3>Start where gold has already come out</h3><p>Documented districts and historic workings — the ground the old-timers pegged, mapped onto today's terrain.</p></div>
+      <div class="ans"><div class="a-q">02 · Why</div><h3>Read the rocks that host the gold</h3><p>Greenstone belts, Birimian shears, laterites and river gravels — the host geology that controls where gold sits.</p></div>
+      <div class="ans"><div class="a-q">03 · Who</div><h3>Check who holds the ground</h3><p>Country dossiers name the operating companies and link the official mining cadastres, so you know what's taken.</p></div>
+      <div class="ans"><div class="a-q">04 · Law</div><h3>Know the rules before you swing</h3><p>Permits, citizen-only licences, export rules and no-go zones for every country — in plain English.</p></div>
+      <div class="ans"><div class="a-q">05 · Worth</div><h3>Price what you're chasing</h3><p>Live spot prices tell you what a gram of gold or a parcel of tantalite is worth before you commit fuel and days.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="map-section" id="map-section">
+  <div class="wrap">
+    <div class="sec-head"><h2>Every layer on one map</h2><span class="sec-tag">FIG. 02 — OCCURRENCE MAP</span></div>
+    <p class="sec-sub">Every marker is a documented mineral district from the named sources below. Free preview shows a selection of gold districts; subscribers unlock all layers, coordinates and field notes. Drop your own pins — they save on your device, private to you.</p>
+    <div class="map-toolbar" role="group" aria-label="Map layers and tools">
+      <button class="chip" data-type="gold" aria-pressed="true"><span class="dot" style="background:var(--gold)"></span>Gold</button>
+      <button class="chip" data-type="metal" aria-pressed="true"><span class="dot" style="background:var(--greenstone)"></span>Base metals</button>
+      <button class="chip" data-type="gem" aria-pressed="true"><span class="dot" style="background:var(--oxide)"></span>Gemstones</button>
+      <button class="chip" data-type="ree" aria-pressed="true"><span class="dot" style="background:var(--ree)"></span>Rare earths</button>
+      <button class="chip base" id="baseBtn" aria-pressed="false">◧ Satellite view</button>
+      <button class="chip base" id="pinBtn" aria-pressed="false">⌖ Drop a pin</button>
+      <button class="chip base" id="gpxBtn">⇩ GPX (preview districts)</button>
+    </div>
+    <div id="map" aria-label="Interactive map of African mineral districts"></div>
+    <div class="map-meta">
+      <p class="map-note">SOURCES NAMED BELOW · MARKERS SHOW DISTRICT CENTRES, NOT CLAIM BOUNDARIES · A VALID PERMIT IS REQUIRED IN EVERY COUNTRY</p>
+      <div class="updated"><span class="pulse"></span>MAP UPDATED: <span id="updStamp">—</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="features" id="features">
+  <div class="wrap">
+    <div class="sec-head"><h2>Every layer worth checking before you dig</h2><span class="sec-tag">FIG. 03 — THE TOOLKIT</span></div>
+    <div class="feat-grid">
+      <div class="feat"><span class="fk">Districts</span><h3>Documented mineral districts</h3><p>Gold, base metals, gemstones and rare earths across all 54 countries, with GPS coordinates and deposit-type notes for every district.</p></div>
+      <div class="feat"><span class="fk">Dossiers</span><h3>Country mining dossiers</h3><p>Tap any country: key minerals, major mines, operating companies, the mining law, the permit route and a field tip — so you never dig as a fool.</p></div>
+      <div class="feat"><span class="fk">Pins</span><h3>Your pins &amp; field notes</h3><p>Drop waypoints with notes anywhere on the map. Stored privately on your device; encrypted sync across devices is coming.</p></div>
+      <div class="feat"><span class="fk">Terrain</span><h3>Satellite &amp; terrain views</h3><p>Flip between dark map, satellite imagery and terrain to read drainage, ridgelines and old workings from your chair.</p></div>
+      <div class="feat"><span class="fk">AI</span><h3>AI district briefings</h3><p>Pick a district and the AI reads the geological record and reports back in plain English — geology, history, approach, law.</p></div>
+      <div class="feat"><span class="fk">Downloads</span><h3>GPX for your handheld</h3><p>Download district waypoints as GPX files for Garmin units and phone apps. Printable one-page field sheets on the top tier.</p></div>
+      <div class="feat"><span class="fk">Pocket</span><h3>The map in your pocket</h3><p>Installs to your home screen on iOS and Android as an app, and keeps working offline where the signal dies.</p></div>
+      <div class="feat"><span class="fk">Live</span><h3>Live metal prices</h3><p>Gold spot updates in real time on the site, so you always know what today's gram is worth.</p></div>
+      <div class="feat"><span class="fk">Cadastre</span><h3>Official claim registers, linked</h3><p>Direct links to national mining cadastre portals — check open ground against the official record before you drive. Colour-coded live claim layers are on the roadmap.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="sources" id="sources">
+  <div class="wrap">
+    <div class="sec-head"><h2>Real data. Named sources.</h2><span class="sec-tag">FIG. 04 — WHERE EVERY LAYER COMES FROM</span></div>
+    <p class="sec-sub">No mystery layers. Everything on this map traces to a public, verifiable source — the same records exploration geologists use.</p>
+    <div class="src-grid">
+      <div class="src"><span class="s-n">S-01</span><div><h3>USGS Mineral Resources Data System (MRDS)</h3><p>The US Geological Survey's global database of mineral occurrences, deposits and past producers — the backbone occurrence layer for Africa.</p></div></div>
+      <div class="src"><span class="s-n">S-02</span><div><h3>National geological surveys</h3><p>Zimbabwe Geological Survey gold-deposit bulletins, Ghana Geological Survey Authority, Geological Survey of Tanzania, Council for Geoscience (South Africa) and their published memoirs and maps.</p></div></div>
+      <div class="src"><span class="s-n">S-03</span><div><h3>British Geological Survey archive</h3><p>Colonial-era and international survey mapping of African goldfields and mineral belts held in the BGS/NERC public record.</p></div></div>
+      <div class="src"><span class="s-n">S-04</span><div><h3>Official mining cadastre portals</h3><p>The online claim registers of DR Congo (CAMI), Zambia, Tanzania (Madini), Mozambique (INAMI), Namibia, Kenya and Ghana — linked from each country dossier.</p></div></div>
+      <div class="src"><span class="s-n">S-05</span><div><h3>Public company technical reports</h3><p>JORC and NI 43-101 technical reports filed by listed miners — the published geology of districts like Loulo, Kibali, Geita and Obuasi.</p></div></div>
+      <div class="src"><span class="s-n">S-06</span><div><h3>Satellite &amp; terrain data</h3><p>NASA SRTM elevation, ESA Copernicus Sentinel-2 imagery, Esri World Imagery and OpenStreetMap/CARTO base mapping.</p></div></div>
+      <div class="src"><span class="s-n">S-07</span><div><h3>Live market feeds</h3><p>Gold spot pricing via public market data APIs, refreshed continuously.</p></div></div>
+      <div class="src"><span class="s-n">S-08</span><div><h3>Mining codes &amp; gazettes</h3><p>Each country's mining act and official gazette — Ghana's Act 703, DRC's 2018 Code, Mali's 2023 Code, Zimbabwe's Mines &amp; Minerals Act — summarised in the dossiers.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="brief">
+  <div class="wrap">
+    <div class="sec-head"><h2>Pick a district. Get the intelligence report.</h2><span class="sec-tag">FIG. 05 — AI BRIEFINGS</span></div>
+    <div class="brief-box">
+      <div>
+        <h3>Professional-grade data. AI on every district.</h3>
+        <p>Choose any district on the map and the AI assembles what the geological record says — deposit style, host rocks, historic production, how the ground is worked, what the law requires — and reports back in plain English. No 400-page PDFs.</p>
+        <button class="btn" id="briefBtn">Run a sample briefing — Kadoma, Zimbabwe</button>
+      </div>
+      <div class="term" id="briefTerm"><span class="t-gold">goldbelt@africa:~$</span> select district --country ZW --name "Kadoma–Chakari"
+<span class="t-gold">goldbelt@africa:~$</span> generate briefing<span class="cursor"></span></div>
+    </div>
+  </div>
+</section>
+<section class="tiers" id="tiers">
+  <div class="wrap">
+    <div class="sec-head"><h2>One subscription. Every layer. Every country.</h2><span class="sec-tag">FIG. 06 — PRICING</span></div>
+    <div>
+      <div class="bill-toggle" role="group" aria-label="Billing period">
+        <button id="btnMonthly" aria-pressed="true">MONTHLY</button>
+        <button id="btnYearly" aria-pressed="false">YEARLY</button>
+      </div>
+      <span class="save-note">YEARLY = 2 MONTHS FREE + 7-DAY FREE TRIAL</span>
+    </div>
+    <div class="tier-grid">
+      <div class="tier">
+        <span class="tk">Tier 1</span><h3>Prospector</h3>
+        <div class="price" data-m="£4.99" data-y="£49">£4.99</div>
+        <div class="per" data-m="PER MONTH · CANCEL ANYTIME" data-y="PER YEAR · 2 MONTHS FREE · 7-DAY TRIAL">PER MONTH · CANCEL ANYTIME</div>
+        <ul>
+          <li>Full gold layer — every documented goldfield, all 54 countries</li>
+          <li>GPS coordinates &amp; field notes for every gold district</li>
+          <li>Your own pins &amp; notes on the map</li>
+          <li>Satellite &amp; terrain views</li>
+          <li>Installs on iOS &amp; Android · offline-ready</li>
+          <li>Live gold spot price</li>
+          <li class="dim">Base metals &amp; gemstone layers</li>
+          <li class="dim">Rare earths · AI briefings · GPX</li>
+        </ul>
+        <a class="btn ghost sub-link" data-m="STRIPE_LINK_T1_MONTHLY" data-y="STRIPE_LINK_T1_YEARLY" href="STRIPE_LINK_T1_MONTHLY">Subscribe — Prospector</a>
+        <p class="trial-note">SECURE CHECKOUT BY STRIPE</p>
+      </div>
+      <div class="tier hot">
+        <span class="flag">Best value · Most popular</span>
+        <span class="tk">Tier 2</span><h3>Explorer</h3>
+        <div class="price" data-m="£9.99" data-y="£99">£9.99</div>
+        <div class="per" data-m="PER MONTH · CANCEL ANYTIME" data-y="PER YEAR · 2 MONTHS FREE · 7-DAY TRIAL">PER MONTH · CANCEL ANYTIME</div>
+        <ul>
+          <li>Everything in Prospector</li>
+          <li>Base metals layer — copper, tin, tantalite, chrome, nickel</li>
+          <li>Gemstone layer — sapphire, ruby, emerald, tourmaline fields</li>
+          <li>All 54 country mining dossiers — mines, companies, law, permits</li>
+          <li>Official cadastre links for every country</li>
+          <li>Community finds feed &amp; monthly competition <span class="soon">SOON</span></li>
+          <li class="dim">Rare earths · AI briefings · GPX · field sheets</li>
+        </ul>
+        <a class="btn sub-link" data-m="STRIPE_LINK_T2_MONTHLY" data-y="STRIPE_LINK_T2_YEARLY" href="STRIPE_LINK_T2_MONTHLY">Subscribe — Explorer</a>
+        <p class="trial-note">SECURE CHECKOUT BY STRIPE</p>
+      </div>
+      <div class="tier">
+        <span class="tk">Tier 3</span><h3>Master Prospector</h3>
+        <div class="price" data-m="£14.99" data-y="£149">£14.99</div>
+        <div class="per" data-m="PER MONTH · CANCEL ANYTIME" data-y="PER YEAR · 2 MONTHS FREE · 7-DAY TRIAL">PER MONTH · CANCEL ANYTIME</div>
+        <ul>
+          <li>Everything in Explorer</li>
+          <li>Rare earth layer — carbonatite &amp; heavy-REE districts</li>
+          <li>AI district briefings — plain-English intelligence reports</li>
+          <li>GPX waypoint downloads for handheld GPS units</li>
+          <li>Printable one-page field sheets per district</li>
+          <li>Monthly new-district briefing by email</li>
+          <li>Priority support · vote on the next region we map</li>
+          <li>Waypoint sync across devices <span class="soon">SOON</span></li>
+        </ul>
+        <a class="btn ghost sub-link" data-m="STRIPE_LINK_T3_MONTHLY" data-y="STRIPE_LINK_T3_YEARLY" href="STRIPE_LINK_T3_MONTHLY">Subscribe — Master</a>
+        <p class="trial-note">SECURE CHECKOUT BY STRIPE</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="coverage" id="coverage">
+  <div class="wrap">
+    <div class="sec-head"><h2>Choose your country. The right map for each.</h2><span class="sec-tag">FIG. 07 — ALL 54 COUNTRIES</span></div>
+    <p class="sec-sub">Tap any country for its mining dossier: the minerals, the mines, the companies working the ground, the law, the permit route and a straight-talking field tip.</p>
+    <input class="cov-search" id="covSearch" type="search" placeholder="Search a country… e.g. Mali" aria-label="Search countries">
+    <div class="cov-grid" id="covGrid"></div>
+  </div>
+</section>
+
+<div class="modal-back" id="modalBack" role="dialog" aria-modal="true" aria-labelledby="mTitle">
+  <div class="modal">
+    <button class="modal-close" id="modalClose">ESC · CLOSE</button>
+    <div class="m-belt" id="mBelt"></div>
+    <h3 id="mTitle"></h3>
+    <div class="m-row"><div class="m-k">Key minerals</div><div class="m-v" id="mMin"></div></div>
+    <div class="m-row"><div class="m-k">Major mines &amp; districts</div><div class="m-v" id="mMines"></div></div>
+    <div class="m-row"><div class="m-k">Who mines here</div><div class="m-v" id="mCos"></div></div>
+    <div class="m-row"><div class="m-k">Law, permits &amp; rules</div><div class="m-v" id="mLaw"></div></div>
+    <div class="m-tip" id="mTip"></div>
+    <div class="m-cta"><a class="btn" href="#tiers">Unlock full district maps for this country</a></div>
+  </div>
+</div>
+
+<section class="ores">
+  <div class="wrap">
+    <div class="sec-head"><h2>Know your ground: read the ore before you dig</h2><span class="sec-tag">FIG. 08 — THE ROCKS THAT CARRY THE VALUE</span></div>
+    <p class="sec-sub">People become fools when they dig the wrong rock. This is what the value actually looks like in the ground — and the host stones that carry it.</p>
+    <div class="ore-grid">
+      <div class="ore">
+        <svg viewBox="0 0 300 150" aria-label="Gold veins in white quartz">
+          <path d="M40 120 q-14 -52 36 -66 q54 -16 96 4 q46 22 40 62 q-4 22 -30 24 l-112 0 q-26 -4 -30 -24 Z" fill="#DDD5C2"/>
+          <path d="M64 108 q20 -40 60 -52" stroke="#C4B8A0" stroke-width="3" fill="none"/>
+          <path d="M70 112 q30 -30 90 -44 q30 -8 52 6" stroke="#D9A93C" stroke-width="5" fill="none" stroke-linecap="round"/>
+          <path d="M96 118 q40 -18 96 -20" stroke="#B8871F" stroke-width="3" fill="none" stroke-linecap="round"/>
+          <circle class="spark" cx="150" cy="76" r="3" fill="#F3CB6A"/><circle class="spark s2" cx="196" cy="70" r="2.4" fill="#F3CB6A"/><circle class="spark s3" cx="110" cy="96" r="2.2" fill="#F3CB6A"/>
+        </svg>
+        <div class="o-body"><div class="o-name">Reef gold in quartz</div><div class="o-host">HOST: WHITE QUARTZ VEINS IN GREENSTONE</div><p>Yellow metal threads and blebs in milky quartz. Never brassy flakes that shatter — that's fool's gold (pyrite).</p></div>
+      </div>
+      <div class="ore">
+        <svg viewBox="0 0 300 150" aria-label="Placer gold on bedrock in a river gravel cross-section">
+          <rect width="300" height="150" fill="#1B3040"/>
+          <path d="M0 40 q75 14 150 2 q75 -12 150 4 L300 150 L0 150 Z" fill="#254254"/>
+          <path d="M0 96 q80 12 160 2 q80 -10 140 4 L300 150 L0 150 Z" fill="#6B5238"/>
+          <g fill="#57422C"><circle cx="60" cy="118" r="7"/><circle cx="110" cy="126" r="9"/><circle cx="170" cy="116" r="6"/><circle cx="228" cy="124" r="8"/><circle cx="272" cy="114" r="6"/></g>
+          <path d="M0 138 L300 132 L300 150 L0 150 Z" fill="#241A10"/>
+          <g fill="#2B2B2B"><circle cx="90" cy="134" r="2"/><circle cx="150" cy="136" r="2"/><circle cx="210" cy="132" r="2"/></g>
+          <circle class="spark" cx="120" cy="136" r="2.6" fill="#F3CB6A"/><circle class="spark s2" cx="188" cy="134" r="2.2" fill="#F3CB6A"/><circle class="spark s3" cx="252" cy="133" r="2" fill="#F3CB6A"/>
+        </svg>
+        <div class="o-body"><div class="o-name">Placer (alluvial) gold</div><div class="o-host">HOST: RIVER GRAVELS · ON BEDROCK · WITH BLACK SAND</div><p>Gold is heavy — it sinks through gravel and sits on bedrock with black magnetite sand. Dig to the bottom, not the top.</p></div>
+      </div>
+      <div class="ore">
+        <svg viewBox="0 0 300 150" aria-label="Green banded malachite copper ore">
+          <path d="M46 118 q-10 -56 44 -68 q58 -12 96 12 q38 24 26 56 l-166 0 Z" fill="#134D3A"/>
+          <path d="M60 108 q40 -44 128 -44" stroke="#2E8B62" stroke-width="8" fill="none"/>
+          <path d="M68 116 q44 -36 132 -30" stroke="#0E3B2C" stroke-width="6" fill="none"/>
+          <path d="M78 90 q36 -26 96 -24" stroke="#57C797" stroke-width="4" fill="none"/>
+          <circle class="spark s2" cx="180" cy="70" r="2.4" fill="#8FE0BC"/><circle class="spark" cx="120" cy="92" r="2" fill="#8FE0BC"/>
+        </svg>
+        <div class="o-body"><div class="o-name">Copper — malachite &amp; azurite</div><div class="o-host">HOST: OXIDISED COPPER LODES · COPPERBELT SHALES</div><p>Vivid green (malachite) and blue (azurite) staining is copper announcing itself at surface. Follow the stain to the lode.</p></div>
+      </div>
+      <div class="ore">
+        <svg viewBox="0 0 300 150" aria-label="Metallic grey galena silver ore cubes">
+          <path d="M50 122 q-8 -60 50 -70 q60 -10 96 16 q34 24 22 54 Z" fill="#3A3F46"/>
+          <g stroke="#12151A" stroke-width="2">
+            <rect x="110" y="62" width="34" height="34" fill="#8C97A6" transform="rotate(-8 127 79)"/>
+            <rect x="152" y="76" width="26" height="26" fill="#A9B4C2" transform="rotate(12 165 89)"/>
+            <rect x="86" y="88" width="22" height="22" fill="#7A8594" transform="rotate(-18 97 99)"/>
+          </g>
+          <circle class="spark" cx="130" cy="72" r="2.6" fill="#E8EEF6"/><circle class="spark s3" cx="166" cy="86" r="2.2" fill="#E8EEF6"/>
+        </svg>
+        <div class="o-body"><div class="o-name">Silver-bearing galena</div><div class="o-host">HOST: LEAD-ZINC LODES &amp; VEINS</div><p>Heavy, bright metallic cubes that flash like mirrors on fresh breaks. Much of Africa's silver rides inside lead ore.</p></div>
+      </div>
+      <div class="ore">
+        <svg viewBox="0 0 300 150" aria-label="Red-brown pisolitic bauxite aluminium ore">
+          <path d="M42 120 q-8 -58 52 -66 q62 -8 100 18 q34 24 20 48 Z" fill="#8A4A28"/>
+          <g fill="#A85E32" stroke="#5E3018" stroke-width="1.5">
+            <circle cx="100" cy="86" r="9"/><circle cx="128" cy="100" r="7"/><circle cx="150" cy="80" r="10"/><circle cx="178" cy="98" r="8"/><circle cx="200" cy="78" r="7"/><circle cx="118" cy="70" r="6"/><circle cx="172" cy="66" r="6"/>
+          </g>
+          <circle class="spark s2" cx="150" cy="80" r="2" fill="#F0C9A6"/>
+        </svg>
+        <div class="o-body"><div class="o-name">Bauxite — aluminium ore</div><div class="o-host">HOST: LATERITE PLATEAUS (BOKÉ, GUINEA)</div><p>Rusty-red rock full of pea-sized balls (pisolites), capping flat plateaus. Light for its size — the world's aluminium starts here.</p></div>
+      </div>
+      <div class="ore">
+        <svg viewBox="0 0 300 150" aria-label="Diamond octahedron in blue-grey kimberlite">
+          <path d="M150 132 q-70 4 -84 -34 q-12 -36 30 -58 q46 -24 90 -6 q46 20 40 58 q-6 36 -76 40 Z" fill="#3E4A56"/>
+          <g fill="#2F3944"><circle cx="104" cy="84" r="8"/><circle cx="190" cy="70" r="10"/><circle cx="160" cy="104" r="7"/><circle cx="128" cy="58" r="6"/></g>
+          <g>
+            <path d="M150 56 L176 82 L150 108 L124 82 Z" fill="#DCEBF5" stroke="#9FC4DB" stroke-width="2"/>
+            <path d="M150 56 L150 108 M124 82 L176 82" stroke="#9FC4DB" stroke-width="1.5"/>
+          </g>
+          <circle class="spark" cx="150" cy="70" r="3" fill="#FFFFFF"/><circle class="spark s2" cx="162" cy="90" r="2.2" fill="#FFFFFF"/><circle class="spark s3" cx="138" cy="88" r="2" fill="#FFFFFF"/>
+        </svg>
+        <div class="o-body"><div class="o-name">Diamond in kimberlite</div><div class="o-host">HOST: KIMBERLITE PIPES &amp; RIVER GRAVELS</div><p>Blue-grey volcanic rock from deep in the Earth. Diamonds also wash into gravels — Kono and the Lunda fields are alluvial.</p></div>
+      </div>
+      <div class="ore">
+        <svg viewBox="0 0 300 150" aria-label="Red ruby crystal in white marble">
+          <path d="M48 120 q-10 -56 46 -66 q60 -10 96 14 q36 24 22 52 Z" fill="#E8E2D4"/>
+          <path d="M64 106 q44 -34 150 -30" stroke="#CFC6B2" stroke-width="5" fill="none"/>
+          <g>
+            <path d="M150 60 L172 72 L172 96 L150 108 L128 96 L128 72 Z" fill="#C22B3F" stroke="#8E1626" stroke-width="2"/>
+            <path d="M150 60 L150 108 M128 72 L172 96 M172 72 L128 96" stroke="#E06A79" stroke-width="1.2" opacity=".8"/>
+          </g>
+          <circle class="spark" cx="158" cy="74" r="2.6" fill="#FFD9DE"/><circle class="spark s3" cx="142" cy="94" r="2" fill="#FFD9DE"/>
+        </svg>
+        <div class="o-body"><div class="o-name">Ruby in marble</div><div class="o-host">HOST: MARBLE &amp; AMPHIBOLITE (MONTEPUEZ)</div><p>Hexagonal red corundum crystals locked in white marble, or freed into gravels. Sapphire is the same mineral in blue.</p></div>
+      </div>
+      <div class="ore">
+        <svg viewBox="0 0 300 150" aria-label="Rare earth carbonatite with bastnaesite veins">
+          <path d="M44 120 q-8 -58 50 -68 q62 -10 100 16 q36 24 22 52 Z" fill="#5C5346"/>
+          <path d="M62 108 q46 -40 150 -36" stroke="#9B85D4" stroke-width="6" fill="none" stroke-linecap="round"/>
+          <path d="M74 116 q40 -26 130 -26" stroke="#C4A94E" stroke-width="4" fill="none" stroke-linecap="round"/>
+          <circle class="spark s2" cx="160" cy="78" r="2.6" fill="#CBBCF0"/><circle class="spark" cx="120" cy="94" r="2.2" fill="#CBBCF0"/><circle class="spark s3" cx="204" cy="82" r="2" fill="#CBBCF0"/>
+        </svg>
+        <div class="o-body"><div class="o-name">Rare earths — bastnäsite</div><div class="o-host">HOST: CARBONATITE INTRUSIONS (KANGANKUNDE, GAKARA)</div><p>Waxy honey-to-lilac veins in brown carbonatite hills. The metals inside power magnets, EVs and wind turbines.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="videos">
+  <div class="wrap">
+    <div class="sec-head"><h2>From the field</h2><span class="sec-tag">FIG. 09 — FOOTAGE</span></div>
+    <p class="sec-sub">Real ground, real rigs, real finds — footage from the districts on the map.</p>
+    <div class="vid-grid">
+      <div class="vid">
+        <video controls preload="none" src="media/ore-guide.mp4" poster=""></video>
+        <div class="v-cap"><strong>Reading the ore.</strong> Gold in quartz, copper stain, ruby gravel and kimberlite — what to look for before you dig.</div>
+      </div>
+      <div class="vid">
+        <video controls preload="none" src="media/field.mp4" poster=""></video>
+        <div class="v-cap"><strong>On the ground.</strong> Rivers, ridgelines and detector work in the bush — the districts as you'll actually meet them.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="community" id="community">
+  <div class="wrap">
+    <div class="sec-head"><h2>Join the community</h2><span class="sec-tag">FIG. 10 — GROW YOUR CREW</span></div>
+    <p class="sec-sub">The prospecting community makes up its own mind — and shares what works. Trip reports, finds and straight answers from people on the same ground.</p>
+    <div class="com-grid">
+      <div class="com">
+        <h3>Finds feed <span class="soon">LAUNCHING</span></h3>
+        <p>Members post finds, gravels and ground reports by district. A taste of what's coming:</p>
+        <div class="finds">
+          <div class="find"><span class="f-t">KÉDOUGOU, SN</span><span>"0.8 g of flake off bedrock in the corridor — third visit paid for the trip."</span></div>
+          <div class="find"><span class="f-t">GWANDA, ZW</span><span>"Old-timer dump reworked with the detector: two nuggets, 3.1 g total."</span></div>
+          <div class="find"><span class="f-t">ERONGO, NA</span><span>"Aquamarine pocket in the granite — licensed dig, best crystal 6 cm."</span></div>
+        </div>
+      </div>
+      <div class="com">
+        <h3>Win prizes</h3>
+        <p>Find of the Month: members vote, the winner takes a free month of Master Prospector and the featured slot on the homepage. Photos must be legal, licensed finds — we celebrate prospectors who do it right.</p>
+      </div>
+      <div class="com">
+        <h3>Releases — see what's new</h3>
+        <p>Every map update is logged: new districts added, dossiers refreshed, layers improved. The "MAP UPDATED" stamp above the map always shows the latest release, so you know the data under your boots is current.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sponsors">
+  <div class="wrap">
+    <div class="sec-head"><h2>Gear partners</h2><span class="sec-tag">FIG. 11 — ADVERTISE TO PROSPECTORS</span></div>
+    <p class="sec-sub">Our members buy detectors, coils, pans, sluices and GPS units. If you make or sell prospecting gear, this audience is yours.</p>
+    <div class="sp-grid">
+      <div class="sp"><div class="s-slot">SPONSOR SLOT A</div><h3>Your detector brand here</h3><p>Homepage placement + monthly email feature.</p><a href="mailto:hello@goldbeltafrica.com?subject=Sponsor%20Slot%20A">ENQUIRE →</a></div>
+      <div class="sp"><div class="s-slot">SPONSOR SLOT B</div><h3>Coils &amp; accessories</h3><p>Reach detectorists planning African trips.</p><a href="mailto:hello@goldbeltafrica.com?subject=Sponsor%20Slot%20B">ENQUIRE →</a></div>
+      <div class="sp"><div class="s-slot">SPONSOR SLOT C</div><h3>Pans, sluices &amp; field kit</h3><p>Placement beside the alluvial districts layer.</p><a href="mailto:hello@goldbeltafrica.com?subject=Sponsor%20Slot%20C">ENQUIRE →</a></div>
+      <div class="sp"><div class="s-slot">SPONSOR SLOT D</div><h3>Tours, training &amp; insurance</h3><p>Guided digs, courses and cover for prospectors.</p><a href="mailto:hello@goldbeltafrica.com?subject=Sponsor%20Slot%20D">ENQUIRE →</a></div>
+    </div>
+  </div>
+</section>
+
+<section class="newsletter">
+  <div class="wrap">
+    <div class="news-box">
+      <div>
+        <h3>Stay in touch.</h3>
+        <p>Trip reports, layer updates, the occasional good-find email. No spam, ever.</p>
+      </div>
+      <form class="news-form" id="newsForm">
+        <input type="email" id="newsEmail" placeholder="your@email.com" required aria-label="Email address">
+        <button class="btn" type="submit">Keep me posted</button>        
+        <div id="newsMsg" role="status"></div>
+      </form>
+    </div>
+  </div>
+</section>
+<section class="faq" id="faq">
+  <div class="wrap">
+    <div class="sec-head"><h2>The questions we get most</h2><span class="sec-tag">FIG. 12 — 39 STRAIGHT ANSWERS</span></div>
+
+    <h3 class="f-cat">Getting started</h3>
+    <details><summary>What is GoldBelt Africa?</summary><div class="a">A subscription map and intelligence service for prospecting in Africa: documented gold, mineral, gemstone and rare earth districts across all 54 countries, plus each country's mines, companies, laws and permit routes — all from named public sources.</div></details>
+    <details><summary>Who is it for?</summary><div class="a">Detectorists planning African trips, small-scale and artisanal miners, diaspora prospectors returning home, mineral collectors, students of geology and anyone who wants to understand what lies under African ground before spending money on it.</div></details>
+    <details><summary>Do I need experience to use it?</summary><div class="a">No. The "Know your ground" guide teaches what ore actually looks like, the dossiers explain each country in plain English, and the AI briefings turn dense geology into a page you can read over breakfast.</div></details>
+    <details><summary>Does it work on my phone?</summary><div class="a">Yes. It's built mobile-first, and you can install it to your home screen on iOS and Android so it opens like an app — no app store needed.</div></details>
+    <details><summary>Does it work offline?</summary><div class="a">The app shell, your pins and district data keep working offline once loaded. Fresh satellite tiles need signal, so load your target area before you leave coverage. Full offline map packs are on the roadmap.</div></details>
+    <details><summary>Which countries are covered?</summary><div class="a">All 54 African countries have a dossier. District map density is deepest where the geology is richest — Zimbabwe, Ghana, Mali, Tanzania, South Africa, DRC — and grows every month.</div></details>
+    <details><summary>Is the site available 24/7?</summary><div class="a">Yes — it runs on globally distributed infrastructure with no single server to go down, so the map is live around the clock, worldwide.</div></details>
+    <details><summary>Do you have iOS and Android apps?</summary><div class="a">GoldBelt installs as an app on both from your browser (Add to Home Screen). Native app-store versions are on the roadmap.</div></details>
+
+    <h3 class="f-cat">Maps &amp; data</h3>
+    <details><summary>Where does the map data come from?</summary><div class="a">Named public sources only: the USGS Mineral Resources Data System, national geological surveys, the BGS archive, official mining cadastres, filed JORC/NI 43-101 company reports and NASA/ESA satellite data. See the Sources section — every layer is traceable.</div></details>
+    <details><summary>How accurate are the coordinates?</summary><div class="a">Markers show district centres from the geological record — accurate to the district, not to a nugget. They put you on the right ground; your detector, pan and eyes do the last hundred metres.</div></details>
+    <details><summary>How often is the map updated?</summary><div class="a">Continuously, with new districts and dossier refreshes logged monthly. The MAP UPDATED stamp above the map shows the date of the latest release.</div></details>
+    <details><summary>What does the "MAP UPDATED" stamp mean?</summary><div class="a">The date the current data release went live. If it's recent, the dossiers, laws and layers reflect the latest information we hold.</div></details>
+    <details><summary>What do the coloured layers mean?</summary><div class="a">Gold (gold markers), base metals (green), gemstones (rust) and rare earths (violet). Toggle each with the chips above the map.</div></details>
+    <details><summary>Why are some markers faded with a lock?</summary><div class="a">Those districts belong to a higher tier than the free preview. The popup tells you which plan unlocks the full coordinates and notes.</div></details>
+    <details><summary>Can I download coordinates to my GPS?</summary><div class="a">Yes — Master Prospector includes GPX waypoint downloads that load straight into Garmin units and phone apps. A free sample GPX of the preview districts is available above the map.</div></details>
+    <details><summary>Can I add my own pins and notes?</summary><div class="a">Yes. Turn on "Drop a pin", tap the map, type a note. Pins save instantly and reload every visit.</div></details>
+    <details><summary>Are my pins private?</summary><div class="a">Completely. They're stored on your own device and never uploaded. Nobody — including us — sees your spots. Encrypted sync across your devices is coming as an option.</div></details>
+    <details><summary>What are AI district briefings?</summary><div class="a">Pick a district and the AI assembles what the geological record says — deposit style, host rocks, history, approach and the legal position — into a plain-English report. Included with Master Prospector.</div></details>
+    <details><summary>Can I request a district or region?</summary><div class="a">Yes — Master members vote monthly on which region we digitise next, and any member can email a request.</div></details>
+    <details><summary>Do you show live mining claims and tenements?</summary><div class="a">We link every country's official cadastre portal so you can check claims against the government record — always the final word. Colour-coded live claim layers on our own map are on the roadmap.</div></details>
+    <details><summary>What is a greenstone belt?</summary><div class="a">Ancient belts of altered volcanic rock — the classic host of African reef gold. Zimbabwe alone has dozens, which is why it records more small gold workings than any other African country.</div></details>
+    <details><summary>What's the difference between reef and alluvial gold?</summary><div class="a">Reef (lode) gold sits in solid rock, usually quartz veins — hammer and crusher territory. Alluvial (placer) gold has been washed into river gravels — pan, sluice and detector territory. The map notes which type each district carries.</div></details>
+    <details><summary>What are rare earths, and why should a prospector care?</summary><div class="a">Seventeen metals that power magnets, EVs and turbines. Africa holds some of the highest-grade occurrences on Earth (Kangankunde, Gakara). Prices and demand are rising — knowing where they occur is tomorrow's advantage.</div></details>
+
+    <h3 class="f-cat">In the field: law &amp; safety</h3>
+    <details><summary>Does a marker guarantee I'll find gold?</summary><div class="a">No — and be suspicious of anyone who promises that. A marker means documented mineralisation and production history: the right ground to try. Skill, permits, access and hours in the field decide the rest.</div></details>
+    <details><summary>Is it legal to prospect at these locations?</summary><div class="a">Only with the correct permit. Every African country regulates prospecting. The dossiers give each country's law and permit route; never work someone else's claim or a protected area.</div></details>
+    <details><summary>How do I get a prospecting permit?</summary><div class="a">Through the national mining authority or cadastre named in the country dossier — for example Zimbabwe's Ministry of Mines for a prospecting licence, or Ghana's Minerals Commission. Fees are usually modest; the dossier tells you where to start.</div></details>
+    <details><summary>Can foreigners prospect in Africa?</summary><div class="a">It varies. Some countries welcome licensed foreign prospectors; others reserve small-scale licences for citizens (Ghana, Tanzania), making a local partnership the legal route. Each dossier states the position plainly.</div></details>
+    <details><summary>Is metal detecting legal in Africa?</summary><div class="a">In most countries a detector is simply a tool — it's the digging and taking of minerals that's licensed. Mauritania even legalised detector prospecting in designated zones. Check the dossier and never detect on archaeological sites.</div></details>
+    <details><summary>Is it safe to travel to these districts?</summary><div class="a">Security varies enormously — from very safe (Botswana, Namibia) to no-go (parts of the Sahel, Sudan). Dossiers flag known risk regions, but always check your government's current travel advice before booking anything.</div></details>
+    <details><summary>What about private land and protected areas?</summary><div class="a">National parks, heritage sites and active claims are off-limits everywhere. On communal or private land, permission from the owner or chief plus your permit is the standard. When in doubt, ask first — it also earns local knowledge no map can give.</div></details>
+    <details><summary>Can I sell what I find?</summary><div class="a">Only through legal channels, which differ by country — in Zimbabwe all gold must be sold to Fidelity Gold Refinery; in Rwanda tin and tantalite must be tagged and traceable. Each dossier covers the export and sale rules.</div></details>
+    <details><summary>Any health and safety basics?</summary><div class="a">Never enter old shafts or adits — bad air and collapse kill experienced miners every year. Work with a partner, carry water and a first-aid kit, tell someone your plan, and treat mercury as the poison it is: we never endorse its use.</div></details>
+    <details><summary>What detector should I buy?</summary><div class="a">For African gold country, a pulse-induction or high-frequency VLF machine built for mineralised ground is the usual choice. We don't sell gear — see our gear partners, and ask the community what works on ground like yours.</div></details>
+
+    <h3 class="f-cat">Account &amp; billing</h3>
+    <details><summary>Can I cancel anytime?</summary><div class="a">Yes. Subscriptions run through Stripe and cancel in one click from your receipt email. No contracts, no minimum term, no phone calls.</div></details>
+    <details><summary>Is there a free trial?</summary><div class="a">Yearly plans include a 7-day free trial — cancel within it and pay nothing. Monthly plans start immediately at £4.99.</div></details>
+    <details><summary>How do payments work?</summary><div class="a">Stripe handles checkout — cards, Apple Pay and Google Pay. We never see or store your card details.</div></details>
+    <details><summary>Which plan should I start with?</summary><div class="a">Only chasing gold? Prospector. Want gemstones, metals and the 54 country dossiers? Explorer is the best value. Master adds rare earths, AI briefings, GPX and field sheets for serious trips.</div></details>
+    <details><summary>Can I upgrade or downgrade later?</summary><div class="a">Yes, anytime — the change takes effect on your next billing date, and upgrades unlock instantly.</div></details>
+    <details><summary>Do you offer refunds?</summary><div class="a">If something's wrong in your first 14 days, email us and we'll make it right or refund you. After that, cancelling stops all future charges.</div></details>
+    <details><summary>Will I get a receipt for VAT/tax?</summary><div class="a">Yes — Stripe emails a receipt for every payment, suitable for your records.</div></details>
+    <details><summary>How fast is support?</summary><div class="a">Within 24 hours by email, usually much faster. Master members jump the queue.</div></details>
+  </div>
+</section>
+
+<section class="support">
+  <div class="wrap">
+    <div class="sec-head"><h2>We're here to help</h2><span class="sec-tag">FIG. 13 — SUPPORT</span></div>
+    <div class="sup-box">
+      <p>Having issues or questions about the map, your account or a layer? Send us a message and our support team will get back to you within 24 hours.</p>
+      <a class="btn" href="mailto:hello@goldbeltafrica.com?subject=Support%20request">Email support — replies within 24h</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-cols">
+      <div>
+        <div class="logo">GoldBelt <em>Africa</em></div>
+        <p class="foot-tag">Built on the geological record. Made for prospectors. Empowering every prospector with real geoscientific data.</p>
+      </div>
+      <div>
+        <h4>Product</h4>
+        <a href="#map-section">Open the map</a>
+        <a href="#features">Features</a>
+        <a href="#tiers">Pricing</a>
+        <a href="#sources">Data sources</a>
+      </div>
+      <div>
+        <h4>Community</h4>
+        <a href="#community">Finds feed</a>
+        <a href="#community">Win prizes</a>
+        <a href="#community">Releases</a>
+        <a href="#faq">FAQ</a>
+      </div>
+      <div>
+        <h4>Company</h4>
+        <a href="#coverage">Country coverage</a>
+        <a href="mailto:hello@goldbeltafrica.com">Contact</a>
+        <a href="#" id="privacyLink">Privacy policy</a>
+        <a href="#" id="licenseLink">Licence agreement</a>
+      </div>
+    </div>
+    <div class="legal">
+      <strong>Important — read before you prospect.</strong> GoldBelt Africa provides educational and reference mapping compiled from published geological information. Markers indicate documented mineral districts, not guaranteed deposits and not permission to enter or work any land. Prospecting, panning, metal detecting and mineral extraction are regulated in every African country and require the appropriate licence or permit from the national mining authority. Always confirm land ownership, existing claims and local law before any field activity. GoldBelt Africa accepts no liability for prospecting outcomes or unlicensed activity. Mineral prices shown are indicative spot prices from third-party feeds. Country dossiers summarise laws in good faith and may date; the official gazette always prevails.
+    </div>
+    <div class="foot-row">
+      <span>© 2026 GOLDBELT AFRICA · REGISTERED IN ENGLAND &amp; WALES</span>
+      <span>HELLO@GOLDBELTAFRICA.COM</span>
+      <span>LIVE 24/7 · SERVED GLOBALLY</span>
+    </div>
+  </div>
+</footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<script>
+/* ============ RELEASE STAMP — update this date on every data commit ============ */
+const LAST_UPDATED = "2026-07-10";
+
+/* ============ documented mineral districts (sources: see Sources section) ============ */
+const DISTRICTS = [
+ {n:"Kadoma–Chakari District",c:"Zimbabwe",lat:-18.33,lng:29.91,t:"gold",tier:0,note:"Midlands greenstone belt. Long history of reef and alluvial gold; heavily worked historic district."},
+ {n:"Kwekwe–Sherwood District",c:"Zimbabwe",lat:-18.93,lng:29.82,t:"gold",tier:1,note:"Greenstone-hosted gold with extensive historic workings along the Great Dyke margin."},
+ {n:"Shamva District",c:"Zimbabwe",lat:-17.31,lng:31.57,t:"gold",tier:1,note:"Harare–Bindura–Shamva greenstone belt. Documented reef gold and small-scale workings."},
+ {n:"Bindura District",c:"Zimbabwe",lat:-17.30,lng:31.33,t:"gold",tier:1,note:"Northern limb of the Harare greenstone belt; gold with nickel occurrences nearby."},
+ {n:"Penhalonga Valley",c:"Zimbabwe",lat:-18.89,lng:32.70,t:"gold",tier:1,note:"Mutare greenstone belt. Historic alluvial and reef gold in the eastern highlands."},
+ {n:"Gwanda Belt",c:"Zimbabwe",lat:-20.94,lng:29.00,t:"gold",tier:1,note:"Gwanda greenstone belt; dense cluster of historic gold workings."},
+ {n:"Obuasi District",c:"Ghana",lat:6.20,lng:-1.67,t:"gold",tier:0,note:"Ashanti belt. One of Africa's most productive gold districts for over a century."},
+ {n:"Tarkwa District",c:"Ghana",lat:5.30,lng:-1.99,t:"gold",tier:1,note:"Tarkwaian conglomerate-hosted gold; major producing district."},
+ {n:"Bibiani Belt",c:"Ghana",lat:6.46,lng:-2.32,t:"gold",tier:2,note:"Sefwi belt shear-zone gold; documented workings along the belt margin."},
+ {n:"Geita District",c:"Tanzania",lat:-2.87,lng:32.23,t:"gold",tier:0,note:"Lake Victoria goldfields; greenstone-hosted gold south of the lake."},
+ {n:"Bulyanhulu–Kahama",c:"Tanzania",lat:-3.23,lng:32.55,t:"gold",tier:2,note:"Narrow high-grade quartz veins in the Sukumaland greenstone belt."},
+ {n:"Witwatersrand Basin",c:"South Africa",lat:-26.20,lng:28.05,t:"gold",tier:0,note:"The most productive goldfield in history; conglomerate reef gold around Johannesburg."},
+ {n:"Barberton Belt",c:"South Africa",lat:-25.79,lng:31.05,t:"gold",tier:1,note:"One of Earth's oldest greenstone belts; reef gold mined since the 1880s."},
+ {n:"Pilgrim's Rest–Sabie",c:"South Africa",lat:-24.89,lng:30.76,t:"gold",tier:1,note:"Historic alluvial and reef goldfield on the Mpumalanga escarpment."},
+ {n:"Kéniéba Window (Loulo)",c:"Mali",lat:12.94,lng:-11.32,t:"gold",tier:1,note:"West Mali Birimian window; one of Africa's richest modern gold districts."},
+ {n:"Sadiola District",c:"Mali",lat:13.88,lng:-11.70,t:"gold",tier:2,note:"Laterite and saprolite-hosted gold in the Kayes region."},
+ {n:"Morila District",c:"Mali",lat:11.68,lng:-7.42,t:"gold",tier:2,note:"Southern Mali Birimian gold; famous high-grade discovery district."},
+ {n:"Essakane District",c:"Burkina Faso",lat:14.39,lng:-0.02,t:"gold",tier:2,note:"Sahel-zone Birimian gold; extensive artisanal history."},
+ {n:"Houndé Belt",c:"Burkina Faso",lat:11.50,lng:-3.52,t:"gold",tier:2,note:"Birimian greenstone belt with multiple documented deposits."},
+ {n:"Kibali District (Haut-Uélé)",c:"DR Congo",lat:3.05,lng:29.56,t:"gold",tier:2,note:"Moto goldfields of the Kilo-Moto belt; a major modern producing district."},
+ {n:"Siguiri Basin",c:"Guinea",lat:11.42,lng:-9.17,t:"gold",tier:2,note:"Alluvial and laterite gold worked for centuries — heart of the old Mali Empire trade."},
+ {n:"Sabodala District",c:"Senegal",lat:13.15,lng:-12.10,t:"gold",tier:2,note:"Eastern Senegal Birimian belt; the country's principal gold district."},
+ {n:"Sukari District",c:"Egypt",lat:24.95,lng:34.71,t:"gold",tier:2,note:"Nubian Shield gold worked since Pharaonic times."},
+ {n:"Ariab District",c:"Sudan",lat:18.60,lng:35.40,t:"gold",tier:3,note:"Red Sea Hills volcanogenic district; centre of Sudan's gold rush."},
+ {n:"Adola Belt (Lega Dembi)",c:"Ethiopia",lat:5.71,lng:38.95,t:"gold",tier:3,note:"Southern Ethiopian greenstone belt; primary and placer gold."},
+ {n:"Ity District",c:"Côte d'Ivoire",lat:6.87,lng:-8.09,t:"gold",tier:3,note:"Western Birimian gold along the Cavally river; long alluvial history."},
+ {n:"Tongon District",c:"Côte d'Ivoire",lat:9.95,lng:-5.92,t:"gold",tier:3,note:"Northern Côte d'Ivoire Birimian belt gold district."},
+ {n:"Copperbelt (Kitwe–Chingola)",c:"Zambia",lat:-12.80,lng:28.21,t:"metal",tier:2,note:"World-class sediment-hosted copper–cobalt province."},
+ {n:"Kansanshi District",c:"Zambia",lat:-12.10,lng:26.43,t:"metal",tier:2,note:"Copper–gold district in North-Western Province."},
+ {n:"Great Dyke (Chrome)",c:"Zimbabwe",lat:-19.30,lng:29.90,t:"metal",tier:2,note:"550 km layered intrusion; chrome and PGM seams, countless small workings."},
+ {n:"Kivu Tin–Tantalite Belt",c:"DR Congo",lat:-2.50,lng:28.85,t:"metal",tier:2,note:"Pegmatite tin, tantalite and tungsten province of the Kibaran belt."},
+ {n:"Erongo Tin Belt",c:"Namibia",lat:-21.65,lng:15.65,t:"metal",tier:2,note:"Pegmatite tin and tantalite with world-famous mineral specimens."},
+ {n:"Alto Ligonha Pegmatites",c:"Mozambique",lat:-15.50,lng:38.30,t:"metal",tier:2,note:"Classic tantalite, beryl and gemstone pegmatite field."},
+ {n:"Ilakaka Sapphire Fields",c:"Madagascar",lat:-22.68,lng:45.20,t:"gem",tier:2,note:"Alluvial sapphire fields discovered 1998; among the largest on Earth."},
+ {n:"Montepuez Ruby District",c:"Mozambique",lat:-13.13,lng:39.00,t:"gem",tier:2,note:"The world's most significant ruby district, discovered 2009."},
+ {n:"Merelani (Tanzanite)",c:"Tanzania",lat:-3.55,lng:36.98,t:"gem",tier:2,note:"The only tanzanite locality on Earth, at the foot of Kilimanjaro."},
+ {n:"Kagem Emerald District",c:"Zambia",lat:-13.05,lng:28.05,t:"gem",tier:2,note:"Kafubu emerald fields; major world emerald source."},
+ {n:"Erongo Gem Fields",c:"Namibia",lat:-21.60,lng:15.72,t:"gem",tier:2,note:"Aquamarine, tourmaline and topaz from granite pegmatites."},
+ {n:"Kangankunde Carbonatite",c:"Malawi",lat:-15.55,lng:34.85,t:"ree",tier:3,note:"One of the world's highest-grade rare earth carbonatites."},
+ {n:"Gakara REE District",c:"Burundi",lat:-3.55,lng:29.45,t:"ree",tier:3,note:"Vein-hosted bastnäsite; among the highest-grade REE occurrences globally."},
+ {n:"Lofdal Heavy REE District",c:"Namibia",lat:-20.35,lng:14.75,t:"ree",tier:3,note:"Rare heavy-REE (dysprosium) enriched carbonatite dykes near Khorixas."},
+ {n:"Steenkampskraal",c:"South Africa",lat:-31.00,lng:18.55,t:"ree",tier:3,note:"Monazite vein with exceptionally high REE grade; historic thorium mine."},
+ {n:"Songwe Hill",c:"Malawi",lat:-15.85,lng:35.55,t:"ree",tier:3,note:"Carbonatite-hosted rare earth district in the Chilwa province."}
+];
+
+const COLORS={gold:"#D9A93C",metal:"#5F8A6E",gem:"#C96A45",ree:"#9B85D4"};
+const TIER_NAME={1:"Prospector (£4.99/mo)",2:"Explorer (£9.99/mo)",3:"Master Prospector (£14.99/mo)"};
+
+/* ============ map ============ */
+const map=L.map('map',{scrollWheelZoom:false}).setView([2,21],3.2);
+const darkBase=L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',{attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>',subdomains:'abcd',maxZoom:12}).addTo(map);
+const satBase=L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',{attribution:'Imagery &copy; Esri &amp; contributors',maxZoom:17});
+let satOn=false;
+document.getElementById('baseBtn').addEventListener('click',function(){
+  satOn=!satOn;
+  this.setAttribute('aria-pressed',String(satOn));
+  this.textContent=satOn?'◧ Dark map':'◧ Satellite view';
+  if(satOn){map.removeLayer(darkBase);satBase.addTo(map);}else{map.removeLayer(satBase);darkBase.addTo(map);}
+});
+
+const layers={gold:L.layerGroup().addTo(map),metal:L.layerGroup().addTo(map),gem:L.layerGroup().addTo(map),ree:L.layerGroup().addTo(map)};
+function fmt(v,pos,neg){return Math.abs(v).toFixed(2)+"° "+(v>=0?pos:neg);}
+
+DISTRICTS.forEach(d=>{
+  const unlocked=d.tier===0;
+  const m=L.circleMarker([d.lat,d.lng],{radius:unlocked?8:6,color:COLORS[d.t],weight:2,fillColor:COLORS[d.t],fillOpacity:unlocked?0.85:0.25,dashArray:unlocked?null:"3 3"});
+  let html='<div class="pop-name">'+d.n+'</div><div class="pop-coord">'+d.c.toUpperCase()+' · '+fmt(d.lat,"N","S")+' '+fmt(d.lng,"E","W")+'</div>';
+  if(unlocked){html+='<div class="pop-body">'+d.note+'</div>';}
+  else{html+='<div class="pop-body">Full coordinates, notes and field guidance are in the <strong>'+TIER_NAME[d.tier]+'</strong> plan.</div><div class="pop-lock">🔒 <a href="#tiers">Unlock this district →</a></div>';}
+  m.bindPopup(html);
+  layers[d.t].addLayer(m);
+});
+
+document.querySelectorAll('.chip[data-type]').forEach(chip=>{
+  chip.addEventListener('click',()=>{
+    const on=chip.getAttribute('aria-pressed')==='true';
+    chip.setAttribute('aria-pressed',String(!on));
+    const g=layers[chip.dataset.type];
+    if(on){map.removeLayer(g);}else{map.addLayer(g);}
+  });
+});
+
+/* ============ private pins (saved on this device) ============ */
+const pinLayer=L.layerGroup().addTo(map);
+let pinMode=false;
+const PIN_KEY='goldbelt_pins_v1';
+function loadPins(){try{return JSON.parse(localStorage.getItem(PIN_KEY))||[];}catch(e){return[];}}
+function savePins(p){try{localStorage.setItem(PIN_KEY,JSON.stringify(p));}catch(e){}}
+function renderPins(){
+  pinLayer.clearLayers();
+  loadPins().forEach((p,i)=>{
+    const mk=L.circleMarker([p.lat,p.lng],{radius:7,color:"#F0E7D5",weight:2,fillColor:"#F0E7D5",fillOpacity:.9});
+    const div=document.createElement('div');
+    div.innerHTML='<div class="pop-name">Your pin</div><div class="pop-coord">'+fmt(p.lat,"N","S")+' '+fmt(p.lng,"E","W")+'</div><div class="pop-body">'+(p.note?p.note.replace(/</g,"&lt;"):"(no note)")+'</div>';
+    const del=document.createElement('button');del.className='pin-del';del.textContent='DELETE PIN';
+    del.addEventListener('click',()=>{const all=loadPins();all.splice(i,1);savePins(all);renderPins();map.closePopup();});
+    div.appendChild(del);
+    mk.bindPopup(div);
+    pinLayer.addLayer(mk);
+  });
+}
+renderPins();
+document.getElementById('pinBtn').addEventListener('click',function(){
+  pinMode=!pinMode;
+  this.setAttribute('aria-pressed',String(pinMode));
+  this.textContent=pinMode?'⌖ Tap the map…':'⌖ Drop a pin';
+  document.getElementById('map').style.cursor=pinMode?'crosshair':'';
+});
+map.on('click',e=>{
+  if(!pinMode)return;
+  const note=prompt('Note for this pin (saved privately on your device):','');
+  if(note===null)return;
+  const all=loadPins();all.push({lat:e.latlng.lat,lng:e.latlng.lng,note:note});savePins(all);renderPins();
+});
+
+/* ============ GPX download (free preview districts) ============ */
+document.getElementById('gpxBtn').addEventListener('click',()=>{
+  const pts=DISTRICTS.filter(d=>d.tier===0);
+  let gpx='<?xml version="1.0" encoding="UTF-8"?>\n<gpx version="1.1" creator="GoldBelt Africa" xmlns="http://www.topografix.com/GPX/1/1">\n';
+  pts.forEach(d=>{gpx+='<wpt lat="'+d.lat+'" lon="'+d.lng+'"><name>'+d.n.replace(/&/g,'&amp;')+'</name><desc>'+d.c+' — documented gold district</desc></wpt>\n';});
+  gpx+='</gpx>';
+  const blob=new Blob([gpx],{type:'application/gpx+xml'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='goldbelt-africa-preview.gpx';a.click();URL.revokeObjectURL(a.href);
+});
+
+/* ============ updated stamp ============ */
+(function(){
+  const d=new Date(LAST_UPDATED+'T00:00:00');
+  const days=Math.max(0,Math.floor((Date.now()-d.getTime())/86400000));
+  const opts={day:'2-digit',month:'short',year:'numeric'};
+  document.getElementById('updStamp').textContent=d.toLocaleDateString('en-GB',opts).toUpperCase()+(days===0?' · TODAY':' · '+days+'D AGO');
+})();
+
+/* ============ live gold price ============ */
+(async()=>{
+  const el=document.getElementById('goldPrice');
+  try{
+    const r=await fetch('https://api.gold-api.com/price/XAU');
+    const j=await r.json();
+    if(j&&j.price){el.innerHTML='GOLD SPOT · <strong>$'+Number(j.price).toLocaleString(undefined,{maximumFractionDigits:0})+'/oz</strong>';return;}
+    throw 0;
+  }catch(e){el.innerHTML='GOLD · <strong>PRICED BY THE OUNCE, FOUND BY THE GRAM</strong>';}
+})();
+
+/* ============ billing toggle ============ */
+function setBilling(y){
+  document.getElementById('btnMonthly').setAttribute('aria-pressed',String(!y));
+  document.getElementById('btnYearly').setAttribute('aria-pressed',String(y));
+  document.querySelectorAll('.tier .price').forEach(p=>{p.textContent=y?p.dataset.y:p.dataset.m;});
+  document.querySelectorAll('.tier .per').forEach(p=>{p.textContent=y?p.dataset.y:p.dataset.m;});
+  document.querySelectorAll('.sub-link').forEach(a=>{a.setAttribute('href',y?a.dataset.y:a.dataset.m);});
+}
+document.getElementById('btnMonthly').addEventListener('click',()=>setBilling(false));
+document.getElementById('btnYearly').addEventListener('click',()=>setBilling(true));
+
+/* ============ AI briefing demo ============ */
+const SAMPLE_BRIEF="\nDISTRICT BRIEFING — KADOMA–CHAKARI, ZIMBABWE\n─────────────────────────────────────────\nGEOLOGY   Midlands greenstone belt: sheared mafic\n          volcanics with quartz reef systems.\nSTYLE     Reef gold in quartz veins + alluvial\n          gold in drainages off the workings.\nHISTORY   Producing district for over a century;\n          hundreds of recorded workings incl.\n          the famous Cam & Motor mine.\nAPPROACH  Detector work on historic dump margins;\n          pan drainage gravels to bedrock.\nLAW       Prospecting licence via Ministry of\n          Mines; ALL gold sales via Fidelity\n          Gold Refinery. Riverbed alluvial\n          mining is banned (2021).\nVERDICT   Classic ground. Documented, dense\n          with workings, legally accessible\n          with the right paper.\n─────────────────────────────────────────\nFull AI briefings on every district: Master plan.";
+document.getElementById('briefBtn').addEventListener('click',async()=>{
+  const t=document.getElementById('briefTerm');
+  t.innerHTML='<span class="t-gold">goldbelt@africa:~$</span> generate briefing --district "Kadoma–Chakari"\n';
+  try{
+    const r=await fetch('/api/brief',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({district:'Kadoma–Chakari',country:'Zimbabwe'})});
+    if(!r.ok)throw 0;
+    const j=await r.json();
+    typeOut(t,j.briefing||SAMPLE_BRIEF);
+  }catch(e){typeOut(t,SAMPLE_BRIEF);}
+});
+function typeOut(el,text){
+  let i=0;const base=el.innerHTML;
+  const iv=setInterval(()=>{
+    i+=4;el.innerHTML=base+text.slice(0,i).replace(/</g,'&lt;')+'<span class="cursor"></span>';
+    if(i>=text.length){clearInterval(iv);el.innerHTML=base+text.replace(/</g,'&lt;');}
+  },12);
+}
+
+/* ============ newsletter ============ */
+document.getElementById('newsForm').addEventListener('submit',async function(ev){
+  ev.preventDefault();
+  const email=document.getElementById('newsEmail').value.trim();
+  const msg=document.getElementById('newsMsg');
+  if(!email)return;
+  try{
+    const r=await fetch('/api/subscribe',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email})});
+    if(!r.ok)throw 0;
+    msg.textContent='YOU ARE ON THE LIST. WELCOME TO THE BELT.';
+  }catch(e){
+    window.location.href='mailto:hello@goldbeltafrica.com?subject=Newsletter%20signup&body='+encodeURIComponent(email);
+    msg.textContent='OPENING YOUR EMAIL APP TO CONFIRM…';
+  }
+  this.reset();
+});
+
+/* ============ privacy / licence stubs ============ */
+document.getElementById('privacyLink').addEventListener('click',e=>{e.preventDefault();alert('Privacy in one line: your pins stay on your device, your email is used only for what you asked for, and we never sell data. Full policy page coming with the members area.');});
+document.getElementById('licenseLink').addEventListener('click',e=>{e.preventDefault();alert('Licence in one line: your subscription is a personal, non-transferable licence to use the maps and dossiers for your own prospecting. Full agreement page coming with the members area.');});
+
+/* ============ offline / installable (PWA) ============ */
+if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js').catch(()=>{});}
+</script>
+<script>
+/* ============ 54 country mining dossiers ============ */
+const COUNTRIES=[
+{n:"Algeria",b:"HOGGAR SHIELD",min:"Gold, iron, zinc, phosphate, barite",mines:"Amesmessa & Tirek gold (Hoggar), Gara Djebilet iron, Oued Amizour zinc",cos:"Sonarem (state), ENOR",law:"Mining Law of 2014; permits via the National Agency for Mining Activities (ANAM). The state dominates the sector and foreign participation is tightly framed.",tip:"The Saharan gold country is remote and state-controlled — independent prospecting is heavily restricted."},
+{n:"Angola",b:"LUNDA CRATON",min:"Diamonds, gold, iron, phosphate",mines:"Catoca & Luele diamonds (Lunda Sul), Chipindo gold (Huíla), Cassinga iron",cos:"Endiama (state), Sociedade Mineira de Catoca",law:"Mining Code (Law 31/11); licences via the Ministry of Mineral Resources; the diamond trade is tightly controlled end to end.",tip:"Alluvial diamond areas are restricted zones — never enter without written authorisation."},
+{n:"Benin",b:"ATACORA",min:"Gold, phosphate, limestone",mines:"Perma goldfield (Natitingou), Alibori artisanal zones",cos:"Mostly artisanal operators",law:"Mining Code of 2006; Ministry of Water and Mines issues permits.",tip:"A small artisanal gold country — the Perma river gravels are the documented target."},
+{n:"Botswana",b:"KALAHARI / KAAPVAAL MARGIN",min:"Diamonds (world #1 by value), copper, nickel, coal, soda ash",mines:"Jwaneng & Orapa (among the richest diamond mines on Earth), Khoemacau copper",cos:"Debswana (De Beers + Government), MMG",law:"Mines and Minerals Act 1999; Department of Mines. Transparent licensing and low corruption by regional standards.",tip:"Diamonds are firmly state-partnered; the Kalahari Copper Belt is the modern exploration hotspot."},
+{n:"Burkina Faso",b:"BIRIMIAN BELTS",min:"Gold (~60 t/yr), zinc, manganese",mines:"Essakane, Houndé, Sanbrado gold; Perkoa zinc",cos:"IAMGOLD, Endeavour Mining, West African Resources",law:"Mining Code 2015 with 2024 revisions raising state participation; ANEEMAS oversees the artisanal sector.",tip:"Major gold nation, but serious security risks in the north and east — check current travel guidance first."},
+{n:"Burundi",b:"KIBARAN BELT",min:"Gold, rare earths, nickel, tin",mines:"Gakara REE veins, Muyinga & Cibitoke gold, Musongati nickel",cos:"Rainbow Rare Earths (Gakara, suspended), artisanal co-operatives",law:"Mining Code 2013 (revised 2023); exports are channelled through the state.",tip:"Gold is largely artisanal and export rules change often — verify the current legal channel before trading."},
+{n:"Cabo Verde",b:"VOLCANIC ISLANDS",min:"Pozzolana, salt, limestone — no metallic mining",mines:"Salt pans of Sal and Maio",cos:"—",law:"Quarrying permits via the industry directorate.",tip:"Not a prospecting destination; included for completeness."},
+{n:"Cameroon",b:"ADAMAWA / EAST",min:"Gold, bauxite, iron, cobalt-nickel",mines:"Bétaré-Oya & Colomines gold (East), Minim-Martap bauxite, Mbalam iron",cos:"Sonamines (state), Canyon Resources",law:"Mining Code 2016; Sonamines carries state interests; artisanal permits exist for nationals.",tip:"East-region alluvial gold is very active — the Kadey and Lom drainages are the documented ground."},
+{n:"Central African Republic",b:"ALLUVIAL FIELDS",min:"Diamonds, gold",mines:"Berbérati & Carnot diamond fields, Bambari gold",cos:"Artisanal sector",law:"Mining Code 2009; Kimberley Process restrictions still apply to some zones.",tip:"A high-risk jurisdiction; parts of the diamond trade remain under international restriction."},
+{n:"Chad",b:"TIBESTI / BATHA",min:"Gold, natron, salt",mines:"Miski & Kouri Bougoudi gold zones (Tibesti), Batha artisanal areas",cos:"Artisanal operators",law:"Mining Code 2018; Ministry of Mines and Geology.",tip:"The Saharan gold zones are military-sensitive — access is restricted and dangerous."},
+{n:"Comoros",b:"VOLCANIC ISLANDS",min:"No commercial mining (sand, aggregates)",mines:"—",cos:"—",law:"—",tip:"Not a prospecting destination; included for completeness."},
+{n:"Congo, Republic of",b:"MAYOMBE / KOUILOU",min:"Potash, iron, gold, copper",mines:"Kola & Dougou potash, Zanaga iron, Kellé artisanal gold",cos:"Kore Potash, state interests",law:"Mining Code 2005; Ministry of Mines and Geology.",tip:"Artisanal gold occurs in the Sangha and Kellé forests; logistics are the main barrier."},
+{n:"Côte d'Ivoire",b:"BIRIMIAN BELTS",min:"Gold (~50 t/yr and rising), manganese, nickel",mines:"Ity, Tongon, Yaouré, Séguéla gold; Bondoukou manganese",cos:"Endeavour, Barrick, Perseus, Fortuna",law:"Mining Code 2014; SODEMI is the state geology company; artisanal authorisations exist for nationals.",tip:"One of Africa's fastest-growing gold producers; the west (Cavally basin) has centuries of alluvial history."},
+{n:"DR Congo",b:"KATANGA / KILO-MOTO / KIVU",min:"Copper, cobalt (~70% of world supply), gold, tin, tantalite, diamonds",mines:"Kamoa-Kakula & Tenke copper, Kibali gold, Bisie tin, Mbuji-Mayi diamonds",cos:"Ivanhoe, Barrick, Glencore, CMOC, Alphamin, Gécamines (state)",law:"Mining Code 2018 (higher royalties; cobalt is a 'strategic' mineral at 10%); the CAMI cadastre is online. Artisanal work is legal only inside designated ZEA zones.",tip:"Working outside a ZEA or on someone's permit is a crime, and conflict-mineral traceability rules apply to tin and tantalite exports."},
+{n:"Djibouti",b:"AFAR TRIANGLE",min:"Salt (Lake Assal), perlite, gypsum; early gold exploration",mines:"Lake Assal salt flats",cos:"Salt Investment",law:"Ministry of Energy and Natural Resources.",tip:"Geothermal and salt country; metallic prospecting is embryonic."},
+{n:"Egypt",b:"NUBIAN SHIELD",min:"Gold (~20 t/yr), phosphate, tantalum, ilmenite",mines:"Sukari (Eastern Desert), Hamash & Abu Marawat gold, Abu Dabbab tantalum",cos:"AngloGold Ashanti (Sukari), Aton Resources",law:"Mineral Resources Law as amended in 2020 moved to a royalty/tax model; EMRA runs licensing rounds for Eastern Desert blocks.",tip:"The Eastern Desert holds over a hundred ancient Pharaonic gold workings — the modern districts follow them."},
+{n:"Equatorial Guinea",b:"RÍO MUNI",min:"Alluvial gold; exploration-stage iron and bauxite",mines:"Coro & Aconibe artisanal gold",cos:"—",law:"Mining Law 2006; Ministry of Mines.",tip:"A small alluvial scene in the mainland rivers."},
+{n:"Eritrea",b:"NUBIAN SHIELD (VMS)",min:"Gold, copper, zinc, potash",mines:"Bisha (gold-copper-zinc), Zara/Koka gold, Colluli potash",cos:"Zijin Mining (Bisha), ENAMCO (state)",law:"Mining Proclamation 1995; the state takes 10% free plus a 30% paid interest in mines.",tip:"There is no independent artisanal prospecting — the state controls all mineral activity."},
+{n:"Eswatini",b:"BARBERTON EDGE",min:"Coal, quarry stone; historic iron and gold",mines:"Ngwenya (the oldest known mine on Earth, worked ~40,000 years ago), Maloma coal",cos:"—",law:"Minerals sit in trust with the Crown; Mines and Minerals Act 2011.",tip:"Ngwenya is a heritage site — a place to visit, not to dig."},
+{n:"Ethiopia",b:"ADOLA / WESTERN SHIELD",min:"Gold, tantalum, opal, potash, lithium",mines:"Lega Dembi & Sakaro gold, Kenticha tantalum-lithium, Wollo opal fields, Danakil potash",cos:"MIDROC, Kefi Gold (Tulu Kapi)",law:"Mining Proclamation 678/2010 as amended; artisanal licences are issued by regional bureaus.",tip:"Over a million artisanal miners work here; Oromia and Benishangul are the gold regions — check regional security first."},
+{n:"Gabon",b:"OGOOUÉ BASIN",min:"Manganese (world #2), gold, iron",mines:"Moanda manganese, Etéké & Ndjolé gold, Belinga iron",cos:"Comilog/Eramet, state SEM",law:"Mining Code 2019; the state holds a 10% free carry; Ministry of Mines issues permits.",tip:"Rainforest logistics rule everything; gold is alluvial in the Ogooué tributaries."},
+{n:"Gambia",b:"COASTAL SANDS",min:"Zircon, ilmenite, rutile (mineral sands)",mines:"Batukunku–Sanyang beach sands",cos:"GACH",law:"Mines and Quarries Act; Geology Department.",tip:"Beach-sand country — there is no gold story here."},
+{n:"Ghana",b:"ASHANTI / SEFWI / BIRIM",min:"Gold (Africa's #1 producer, roughly 4 Moz/yr), manganese, bauxite, diamonds, lithium",mines:"Obuasi, Tarkwa, Ahafo, Damang gold; Nsuta manganese; Akwatia diamonds; Ewoyaa lithium",cos:"AngloGold Ashanti, Gold Fields, Newmont",law:"Minerals and Mining Act 2006 (Act 703); the Minerals Commission cadastre is online. Small-scale licences are reserved for Ghanaian citizens, and unlicensed 'galamsey' mining is a criminal offence.",tip:"The most mature gold industry in Africa — but foreigners cannot hold small-scale licences, so partner legally."},
+{n:"Guinea",b:"BOKÉ / SIGUIRI / SIMANDOU",min:"Bauxite (the world's top exporter), gold, iron, diamonds",mines:"Sangarédi bauxite, Siguiri & Lefa gold, Simandou iron (the largest untapped iron deposit on Earth), Banankoro diamonds",cos:"CBG, SMB-Winning, AngloGold Ashanti, Nordgold, Rio Tinto",law:"Mining Code 2011 as amended 2013; the state holds a 15% free carry; artisanal gold moves through licensed comptoirs.",tip:"The Siguiri basin's alluvial gold has been worked since the Mali Empire — this is Mansa Musa country."},
+{n:"Guinea-Bissau",b:"BOÉ PLATEAU",min:"Bauxite (undeveloped), phosphate, heavy sands",mines:"Boé bauxite, Farim phosphate",cos:"GB Minerals",law:"Mining Code 2014.",tip:"A frontier jurisdiction with nothing yet in production."},
+{n:"Kenya",b:"NYANZA / MOZAMBIQUE BELT",min:"Titanium sands, gold, fluorspar, soda ash, gemstones (tsavorite)",mines:"Kwale mineral sands, Kakamega–Migori gold, Taita Taveta gemstone fields, Lake Magadi soda",cos:"Base Titanium, Shanta Gold",law:"Mining Act 2016 with an online cadastre portal; artisanal permits for citizens.",tip:"Tsavorite garnet was discovered here — Taita Taveta is licensed small-scale gemstone country."},
+{n:"Lesotho",b:"KIMBERLITE HIGHLANDS",min:"Diamonds — famous for huge, high-value stones",mines:"Letšeng (highest average value per carat on Earth), Kao, Liqhobong, Mothae",cos:"Gem Diamonds, Namakwa, Lucapa",law:"Mines and Minerals Act 2005; Commissioner of Mines.",tip:"Letšeng has produced multiple 500+ carat diamonds from kimberlites above 3,000 m altitude."},
+{n:"Liberia",b:"ARCHEAN NIMBA",min:"Iron, gold, diamonds",mines:"Nimba iron, New Liberty & Kokoya gold, Lofa diamonds",cos:"ArcelorMittal, Avesoro, MNG Gold",law:"Minerals and Mining Law 2000; Class C artisanal licences are reserved for Liberians.",tip:"Alluvial gold and diamonds run across Lofa, Gbarpolu and Grand Cape Mount — Class C areas are mapped by the Ministry."},
+{n:"Libya",b:"SAHARAN PLATFORM",min:"Iron (undeveloped), gypsum, salt; artisanal gold in the far south",mines:"Wadi ash-Shati iron, Tibesti-fringe gold",cos:"—",law:"Framework in flux.",tip:"Not currently a safe or licensed prospecting destination."},
+{n:"Madagascar",b:"PRECAMBRIAN MOSAIC",min:"Sapphires & rubies, nickel, cobalt, ilmenite, graphite, gold, rare earths",mines:"Ilakaka sapphires, Ambatovy nickel-cobalt, QMM ilmenite, Andilamena rubies, Molo graphite",cos:"Ambatovy consortium, Rio Tinto QMM, NextSource",law:"Mining Code revised 2023 with higher royalties; the BCMM cadastre issues permits; gold exports run through a central channel.",tip:"Ilakaka is the world's great open sapphire rush — a licensed local partnership is essential."},
+{n:"Malawi",b:"CHILWA CARBONATITES",min:"Rare earths, rutile, niobium, uranium, gemstones",mines:"Kangankunde & Songwe Hill REE, Kasiya rutile (the largest known rutile deposit), Kayelekera uranium, Kanyika niobium",cos:"Lindian, Mkango, Sovereign Metals, Lotus",law:"Mines and Minerals Act 2023; a new mining authority is being stood up.",tip:"Southern Africa's coming rare-earth country; Mzimba also hosts artisanal gemstones."},
+{n:"Mali",b:"KÉNIÉBA / SOUTHERN BIRIMIAN",min:"Gold (~65 t/yr — Africa's top four), lithium, iron",mines:"Loulo-Gounkoto, Fekola, Sadiola, Syama, Morila gold; Goulamina lithium",cos:"Barrick, B2Gold, Allied Gold, Resolute, Ganfeng",law:"Mining Code 2023: combined state and local participation can reach ~35%, and old stability clauses were removed. The DNGM administers titles, and artisanal corridors are designated.",tip:"An enormous artisanal sector works alongside the majors; security varies sharply by region — Kéniéba in the west is the historic heart."},
+{n:"Mauritania",b:"REGUIBAT SHIELD",min:"Iron, gold, copper, gypsum",mines:"Zouérat iron (SNIM's ore trains run ~2.5 km long), Tasiast gold, Guelb Moghrein copper-gold; Inchiri artisanal zones",cos:"SNIM, Kinross",law:"Mining Code 2008 as amended. Artisanal gold was legalised in 2016 in designated zones administered from Chami.",tip:"The Chami zone drew tens of thousands of detectorists — one of the world's few legal detector gold rushes."},
+{n:"Mauritius",b:"VOLCANIC ISLAND",min:"No metallic mining (basalt, sand)",mines:"—",cos:"—",law:"—",tip:"Not a prospecting destination."},
+{n:"Morocco",b:"ANTI-ATLAS / MESETA",min:"Phosphate (the world's largest reserves), silver, cobalt, zinc, copper, barite",mines:"Khouribga & Benguérir phosphate, Imiter silver, Bou Azzer cobalt, Drâa copper belt",cos:"OCP (state phosphate giant), Managem",law:"Mining Code 2015 (Law 33-13); ONHYM handles geology; regional directorates issue permits.",tip:"The Anti-Atlas is a mineral collector's paradise — specimen digging (azurite, vanadinite) is its own licensed trade."},
+{n:"Mozambique",b:"MONTEPUEZ / ALTO LIGONHA / TETE",min:"Rubies (world #1), graphite, heavy sands, coal, gold, tantalite",mines:"Montepuez rubies, Balama graphite, Moma sands, Moatize coal, Manica gold",cos:"Gemfields, Syrah, Kenmare, Vulcan",law:"Mining Law 2014; the INAMI cadastre is online; the senha mineira artisanal pass is for nationals.",tip:"Manica province is the artisanal gold heart; the Cabo Delgado ruby country carries security restrictions."},
+{n:"Namibia",b:"DAMARA BELT / NAMIB",min:"Uranium (world top three), marine diamonds, gold, tin, lithium, rare earths, gemstones",mines:"Husab & Rössing uranium, Debmarine offshore diamonds, Otjikoto gold, Uis tin, Lofdal REE, Erongo gem fields",cos:"CGN/CNNC, De Beers–Namdeb, B2Gold, Andrada",law:"Minerals (Prospecting and Mining) Act 1992; EPL licences via an online cadastre; non-diamond gemstone digging is licensable.",tip:"One of Africa's best-run mining registries — and Erongo is legendary for aquamarine and tourmaline."},
+{n:"Niger",b:"LIPTAKO / AÏR",min:"Uranium, gold, coal, gypsum",mines:"Arlit uranium, Samira Hill gold, Djado & Aïr artisanal gold rushes",cos:"Orano (status disputed since 2024), SOPAMIN (state)",law:"Mining Code 2006 with 2024 revisions; foreign permits have been under review since the change of government.",tip:"The Djado rush drew thousands of Saharan detectorists — but the zone is remote, unregulated and dangerous."},
+{n:"Nigeria",b:"SCHIST BELTS / JOS PLATEAU",min:"Gold, tin, columbite, lead-zinc, lithium, barite",mines:"Segilola gold (Osun), Zamfara & Kebbi goldfields, Jos Plateau tin, Ebonyi lead-zinc, Nasarawa lithium",cos:"Thor Explorations, artisanal co-operatives",law:"Nigerian Minerals and Mining Act 2007; the Mining Cadastre Office is online and small-scale leases are available. Zamfara's gold zones have faced periodic bans over banditry.",tip:"A huge artisanal sector; the north-west carries severe security risk — the south-west (Osun, Kwara) is the safer documented ground."},
+{n:"Rwanda",b:"KIBARAN 3T BELT",min:"Tin, tantalum (a leading world exporter), tungsten, gold, gemstones",mines:"Rutongo tin, Gatumba tantalum pegmatites, Nyakabingo tungsten, Miyove gold",cos:"Trinity Metals, LuNa Smelter",law:"Mining Law 2018; Rwanda Mines Board; iTSCi traceability tagging is mandatory for tin/tantalum/tungsten exports.",tip:"A clean, formalised small-mining sector — but every kilo of 3T ore must be tagged and traceable."},
+{n:"São Tomé & Príncipe",b:"VOLCANIC ISLANDS",min:"No mining",mines:"—",cos:"—",law:"—",tip:"Not a prospecting destination."},
+{n:"Senegal",b:"KÉDOUGOU-KÉNIÉBA",min:"Gold, zircon, phosphate, ilmenite",mines:"Sabodala-Massawa gold, Mako gold, Grande Côte mineral sands, Matam phosphate",cos:"Endeavour, Managem, Eramet GCO",law:"Mining Code 2016; designated artisanal corridors (couloirs d'orpaillage) operate in Kédougou.",tip:"Kédougou is the legal artisanal gold region — the geology runs straight across the border into Mali's Kéniéba window."},
+{n:"Seychelles",b:"GRANITE ISLANDS",min:"No mining (historic guano)",mines:"—",cos:"—",law:"—",tip:"Not a prospecting destination."},
+{n:"Sierra Leone",b:"KONO / SULA MOUNTAINS",min:"Diamonds, rutile (world-class), iron, gold, bauxite",mines:"Kono & Tongo diamond fields, Sierra Rutile, Marampa & Tonkolili iron, Baomahun gold",cos:"Leone Rock, Sierra Rutile, FG Gold",law:"Mines and Minerals Development Act 2022; the National Minerals Agency licenses artisanal diamond digging for citizens.",tip:"Kono's gravels are still hand-worked — the 709-carat 'Peace Diamond' came from a village dig in 2017."},
+{n:"Somalia",b:"NORTHERN BASEMENT",min:"Gemstones (sapphire, emerald in Somaliland), historic tin, salt, meerschaum",mines:"Simodi/Borama gem occurrences, Majayahan tin",cos:"Artisanal only",law:"The federal framework is nascent; Somaliland licenses separately.",tip:"An effectively unregulated frontier — not currently practical for visiting prospectors."},
+{n:"South Africa",b:"WITWATERSRAND / BUSHVELD",min:"Gold, platinum (~70% of world PGMs), diamonds, chrome, manganese, coal, iron, vanadium",mines:"Witwatersrand gold mines (the deepest on Earth, ~4 km), the Bushveld platinum belt, Venetia & Cullinan diamonds, the Kalahari manganese field (the world's largest)",cos:"Sibanye-Stillwater, Harmony, Anglo American Platinum, Impala, De Beers, Petra",law:"MPRDA 2002; the DMRE issues rights via SAMRAD. Unlicensed mining (zama-zama) is heavily policed and lethally dangerous.",tip:"The public diggings era is over — but registered gem and mineral clubs run legal fossicking trips."},
+{n:"South Sudan",b:"KAPOETA GREENSTONES",min:"Gold (artisanal), copper indications",mines:"Kapoeta & Nanaknak alluvial fields (Eastern Equatoria)",cos:"Artisanal",law:"Mining Act 2012; Ministry of Mining.",tip:"Almost entirely artisanal and informal; a high-risk frontier."},
+{n:"Sudan",b:"NUBIAN SHIELD / RED SEA HILLS",min:"Gold (among Africa's top three including artisanal output), chrome, iron",mines:"Ariab district, Gabgaba, North Kordofan fields",cos:"Managem (Gabgaba), Sudanese Mineral Resources Co. (state)",law:"State channels gold purchases; the conflict since 2023 has pushed much of the sector informal.",tip:"Perhaps two million artisanal miners — but the ongoing war makes this a no-go for outside prospectors."},
+{n:"Tanzania",b:"LAKE VICTORIA / MERELANI",min:"Gold (~50 t/yr), tanzanite (the only source on Earth), diamonds, graphite, nickel, coloured gemstones",mines:"Geita, Bulyanhulu, North Mara gold; Merelani tanzanite; Williamson diamonds; Kabanga nickel",cos:"AngloGold Ashanti, Barrick, Petra, Lifezone",law:"Mining Act 2010 with 2017 amendments: a 16% state free carry and local-content rules. Primary Mining Licences are reserved for Tanzanian citizens; the Mirerani gem trade is formalised.",tip:"Foreigners can't hold small-scale licences — joint ventures with PML holders are the legal route."},
+{n:"Togo",b:"DAHOMEYIDE BELT",min:"Phosphate, iron, artisanal gold, manganese",mines:"Hahotoé-Kpogamé phosphate, Bangeli iron, Wawa artisanal gold",cos:"SNPT (state phosphate)",law:"Mining Code 1996, revised 2003.",tip:"A small artisanal gold scene along the Ghana-border rivers."},
+{n:"Tunisia",b:"GAFSA BASIN",min:"Phosphate, zinc, lead, salt, iron",mines:"Gafsa phosphate basin, Bougrine zinc-lead",cos:"CPG-GCT (state)",law:"Mining Code 2003.",tip:"Phosphate country — there is no gold story."},
+{n:"Uganda",b:"BUSIA / KARAMOJA",min:"Gold, rare earths, tin, historic copper-cobalt, phosphate, vermiculite",mines:"Busia goldfields (Wagagai), Karamoja artisanal gold, Makuutu ionic REE, Ntungamo tin, Kilembe copper (historic)",cos:"Wagagai Mining, Ionic Rare Earths",law:"Mining and Minerals Act 2022 introduced 15% state participation and formal artisanal permits.",tip:"Busia has a century of gold history; the Karamoja digs are informal and remote."},
+{n:"Zambia",b:"COPPERBELT / KAFUBU",min:"Copper (Africa's #2), cobalt, world-class emeralds, gold, manganese, nickel",mines:"Kansanshi, Sentinel, Mopani, Konkola copper; Kagem emeralds; Kasenseli gold",cos:"First Quantum, Gemfields, ZCCM-IH (state)",law:"Mines and Minerals Development Act 2015; an online cadastre; artisanal and small-scale licences are available to citizens.",tip:"The Kafubu emerald fields feed world auctions; gold is the new frontier in North-Western Province."},
+{n:"Zimbabwe",b:"GREENSTONE BELTS / GREAT DYKE",min:"Gold, platinum, chrome, lithium (Africa's #1), diamonds, nickel, tantalite",mines:"Blanket & Freda Rebecca gold; Zimplats, Unki & Mimosa platinum; Bikita & Arcadia lithium; Marange diamonds",cos:"Caledonia, Kuvimba, Implats, Sinomine, ZCDC",law:"Mines and Minerals Act (Chapter 21:05); a prospecting licence is issued by the Ministry of Mines for a modest fee. ALL gold must legally be sold to Fidelity Gold Refinery, and riverbed alluvial mining has been banned since 2021.",tip:"Over 4,000 recorded gold workings — more documented small mines than any country in Africa. Your home advantage."}
+];
+
+/* build coverage grid */
+const grid=document.getElementById('covGrid');
+COUNTRIES.forEach((c,i)=>{
+  const b=document.createElement('button');
+  b.className='cov';b.type='button';
+  b.innerHTML='<div class="c-name">'+c.n+'</div><div class="c-belt">'+c.b+'</div><div class="c-min">'+c.min.split(',').slice(0,3).join(',')+'</div>';
+  b.addEventListener('click',()=>openCountry(i));
+  grid.appendChild(b);
+});
+
+/* search filter */
+document.getElementById('covSearch').addEventListener('input',function(){
+  const q=this.value.toLowerCase();
+  Array.from(grid.children).forEach((el,i)=>{
+    const c=COUNTRIES[i];
+    el.style.display=(c.n.toLowerCase().includes(q)||c.min.toLowerCase().includes(q)||c.b.toLowerCase().includes(q))?'':'none';
+  });
+});
+
+/* modal */
+const back=document.getElementById('modalBack');
+function openCountry(i){
+  const c=COUNTRIES[i];
+  document.getElementById('mBelt').textContent=c.b;
+  document.getElementById('mTitle').textContent=c.n;
+  document.getElementById('mMin').textContent=c.min;
+  document.getElementById('mMines').textContent=c.mines;
+  document.getElementById('mCos').textContent=c.cos;
+  document.getElementById('mLaw').textContent=c.law;
+  document.getElementById('mTip').textContent='FIELD TIP — '+c.tip;
+  back.classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function closeModal(){back.classList.remove('open');document.body.style.overflow='';}
+document.getElementById('modalClose').addEventListener('click',closeModal);
+back.addEventListener('click',e=>{if(e.target===back)closeModal();});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal();});
+</script>
+</body>
+</html>
