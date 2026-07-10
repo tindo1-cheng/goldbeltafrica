@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>GoldBelt Africa — Go Where the Data Points. Prospecting Maps for All 54 African Countries</title>
-<meta name="description" content="Africa's documented gold, mineral, gemstone and rare earth districts on one map — with named sources, country mining dossiers, AI briefings, GPX downloads and live prices. Web, installable on iOS & Android, offline-ready. From £4.99/month.">
+<meta name="description" content="Africa's documented gold, mineral, gemstone and rare earth districts on one map — with named sources, country mining dossiers, AI briefings, GPX downloads and live prices. Web, installable on iOS & Android, offline-ready. From $4.99/month.">
 <meta name="theme-color" content="#191007">
 <link rel="manifest" href="manifest.json">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -127,18 +127,17 @@ h1 .g{color:var(--gold)}
 
 /* tiers */
 .tiers{padding:70px 0}
-.bill-toggle{display:inline-flex;border:1px solid var(--seam);border-radius:100px;background:var(--soil);margin:20px 0 6px;padding:4px}
-.bill-toggle button{font-family:var(--mono);font-size:.78rem;padding:9px 20px;border-radius:100px;border:none;background:transparent;color:var(--dust);cursor:pointer;letter-spacing:.06em}
-.bill-toggle button[aria-pressed="true"]{background:var(--gold);color:#241804;font-weight:600}
-.save-note{font-family:var(--mono);font-size:.7rem;color:var(--greenstone);margin-left:12px;letter-spacing:.08em}
-.tier-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:28px}
-@media(max-width:920px){.tier-grid{grid-template-columns:1fr;max-width:480px;margin-left:auto;margin-right:auto}}
+.tier-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin-top:28px}
+@media(max-width:1080px){.tier-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:640px){.tier-grid{grid-template-columns:1fr;max-width:480px;margin-left:auto;margin-right:auto}}
+.tier.life{border-color:var(--gold-hi);background:linear-gradient(180deg,rgba(217,169,60,.08),var(--soil))}
+.tier.life .flag{background:var(--gold-hi)}
 .tier{background:var(--soil);border:1px solid var(--seam);border-radius:14px;padding:30px;display:flex;flex-direction:column;position:relative}
 .tier.hot{border-color:var(--gold)}
 .tier .flag{position:absolute;top:-12px;left:24px;background:var(--gold);color:#241804;font-family:var(--mono);font-size:.62rem;letter-spacing:.14em;text-transform:uppercase;font-weight:600;padding:4px 12px;border-radius:100px}
 .tier .tk{font-family:var(--mono);font-size:.68rem;letter-spacing:.18em;text-transform:uppercase;color:var(--dust)}
 .tier h3{font-family:var(--display);font-weight:800;font-size:1.4rem;margin:8px 0 4px}
-.tier .price{font-family:var(--mono);font-size:2rem;color:var(--gold-hi);font-weight:600;margin:10px 0 2px}
+.tier .price{font-family:var(--mono);font-size:1.7rem;color:var(--gold-hi);font-weight:600;margin:10px 0 2px}
 .tier .per{font-family:var(--mono);font-size:.72rem;color:var(--dust);margin-bottom:20px;min-height:2.2em}
 .tier ul{list-style:none;margin-bottom:26px;flex:1}
 .tier li{padding:8px 0;border-bottom:1px dashed var(--seam);font-size:.88rem;color:var(--quartz)}
@@ -448,18 +447,12 @@ footer{padding:60px 0 40px}
 <section class="tiers" id="tiers">
   <div class="wrap">
     <div class="sec-head"><h2>One subscription. Every layer. Every country.</h2><span class="sec-tag">FIG. 06 — PRICING</span></div>
-    <div>
-      <div class="bill-toggle" role="group" aria-label="Billing period">
-        <button id="btnMonthly" aria-pressed="true">MONTHLY</button>
-        <button id="btnYearly" aria-pressed="false">YEARLY</button>
-      </div>
-      <span class="save-note">YEARLY = 2 MONTHS FREE + 7-DAY FREE TRIAL</span>
-    </div>
+    <p class="sec-sub">Four plans in US dollars, priced below every comparable service — and AI briefings are included, never a paid add-on. Subscriptions cancel anytime in one click; Founder is a single payment for lifetime access.</p>
     <div class="tier-grid">
       <div class="tier">
         <span class="tk">Tier 1</span><h3>Prospector</h3>
-        <div class="price" data-m="£4.99" data-y="£49">£4.99</div>
-        <div class="per" data-m="PER MONTH · CANCEL ANYTIME" data-y="PER YEAR · 2 MONTHS FREE · 7-DAY TRIAL">PER MONTH · CANCEL ANYTIME</div>
+        <div class="price">$4.99</div>
+        <div class="per">PER MONTH · CANCEL ANYTIME</div>
         <ul>
           <li>Full gold layer — every documented goldfield, all 54 countries</li>
           <li>GPS coordinates &amp; field notes for every gold district</li>
@@ -470,14 +463,14 @@ footer{padding:60px 0 40px}
           <li class="dim">Base metals &amp; gemstone layers</li>
           <li class="dim">Rare earths · AI briefings · GPX</li>
         </ul>
-        <a class="btn ghost sub-link" data-m="STRIPE_LINK_T1_MONTHLY" data-y="STRIPE_LINK_T1_YEARLY" href="STRIPE_LINK_T1_MONTHLY">Subscribe — Prospector</a>
+        <a class="btn ghost" href="STRIPE_LINK_T1">Subscribe — Prospector</a>
         <p class="trial-note">SECURE CHECKOUT BY STRIPE</p>
       </div>
       <div class="tier hot">
-        <span class="flag">Best value · Most popular</span>
+        <span class="flag">Most popular</span>
         <span class="tk">Tier 2</span><h3>Explorer</h3>
-        <div class="price" data-m="£9.99" data-y="£99">£9.99</div>
-        <div class="per" data-m="PER MONTH · CANCEL ANYTIME" data-y="PER YEAR · 2 MONTHS FREE · 7-DAY TRIAL">PER MONTH · CANCEL ANYTIME</div>
+        <div class="price">$9.99</div>
+        <div class="per">PER MONTH · CANCEL ANYTIME</div>
         <ul>
           <li>Everything in Prospector</li>
           <li>Base metals layer — copper, tin, tantalite, chrome, nickel</li>
@@ -487,13 +480,13 @@ footer{padding:60px 0 40px}
           <li>Community finds feed &amp; monthly competition <span class="soon">SOON</span></li>
           <li class="dim">Rare earths · AI briefings · GPX · field sheets</li>
         </ul>
-        <a class="btn sub-link" data-m="STRIPE_LINK_T2_MONTHLY" data-y="STRIPE_LINK_T2_YEARLY" href="STRIPE_LINK_T2_MONTHLY">Subscribe — Explorer</a>
+        <a class="btn" href="STRIPE_LINK_T2">Subscribe — Explorer</a>
         <p class="trial-note">SECURE CHECKOUT BY STRIPE</p>
       </div>
       <div class="tier">
         <span class="tk">Tier 3</span><h3>Master Prospector</h3>
-        <div class="price" data-m="£14.99" data-y="£149">£14.99</div>
-        <div class="per" data-m="PER MONTH · CANCEL ANYTIME" data-y="PER YEAR · 2 MONTHS FREE · 7-DAY TRIAL">PER MONTH · CANCEL ANYTIME</div>
+        <div class="price">$19.99</div>
+        <div class="per">PER MONTH · CANCEL ANYTIME</div>
         <ul>
           <li>Everything in Explorer</li>
           <li>Rare earth layer — carbonatite &amp; heavy-REE districts</li>
@@ -502,14 +495,31 @@ footer{padding:60px 0 40px}
           <li>Printable one-page field sheets per district</li>
           <li>Monthly new-district briefing by email</li>
           <li>Priority support · vote on the next region we map</li>
+          <li>AI included — never a paid add-on</li>
           <li>Waypoint sync across devices <span class="soon">SOON</span></li>
         </ul>
-        <a class="btn ghost sub-link" data-m="STRIPE_LINK_T3_MONTHLY" data-y="STRIPE_LINK_T3_YEARLY" href="STRIPE_LINK_T3_MONTHLY">Subscribe — Master</a>
+        <a class="btn ghost" href="STRIPE_LINK_T3">Subscribe — Master</a>
+        <p class="trial-note">SECURE CHECKOUT BY STRIPE</p>
+      </div>
+      <div class="tier life">
+        <span class="flag">One payment · Forever</span>
+        <span class="tk">Tier 4</span><h3>Founder — Lifetime</h3>
+        <div class="price">$149.99</div>
+        <div class="per">ONE-OFF · NO SUBSCRIPTION · EVER</div>
+        <ul>
+          <li>Everything in Master Prospector — for life</li>
+          <li>Every future layer, district and feature included forever</li>
+          <li>Founder badge on the community feed</li>
+          <li>Founding member price locked — never pay again</li>
+          <li>Priority voice in what we build next</li>
+          <li>Limited to the first 500 founders</li>
+        </ul>
+        <a class="btn" href="STRIPE_LINK_LIFETIME">Become a Founder — $149.99 once</a>
         <p class="trial-note">SECURE CHECKOUT BY STRIPE</p>
       </div>
     </div>
   </div>
-</section>
+  </section>
 
 <section class="coverage" id="coverage">
   <div class="wrap">
@@ -746,9 +756,9 @@ footer{padding:60px 0 40px}
 
     <h3 class="f-cat">Account &amp; billing</h3>
     <details><summary>Can I cancel anytime?</summary><div class="a">Yes. Subscriptions run through Stripe and cancel in one click from your receipt email. No contracts, no minimum term, no phone calls.</div></details>
-    <details><summary>Is there a free trial?</summary><div class="a">Yearly plans include a 7-day free trial — cancel within it and pay nothing. Monthly plans start immediately at £4.99.</div></details>
+    <details><summary>Is there a lifetime option?</summary><div class="a">Yes — the Founder plan: one payment of $149.99 for lifetime access to everything, including every future layer and feature. Limited to the first 500 founders.</div></details>
     <details><summary>How do payments work?</summary><div class="a">Stripe handles checkout — cards, Apple Pay and Google Pay. We never see or store your card details.</div></details>
-    <details><summary>Which plan should I start with?</summary><div class="a">Only chasing gold? Prospector. Want gemstones, metals and the 54 country dossiers? Explorer is the best value. Master adds rare earths, AI briefings, GPX and field sheets for serious trips.</div></details>
+    <details><summary>Which plan should I start with?</summary><div class="a">Only chasing gold? Prospector at $4.99. Want gemstones, metals and the 54 country dossiers? Explorer. Master adds rare earths, AI briefings, GPX and field sheets. Never want a subscription? Founder — one payment, yours for life.</div></details>
     <details><summary>Can I upgrade or downgrade later?</summary><div class="a">Yes, anytime — the change takes effect on your next billing date, and upgrades unlock instantly.</div></details>
     <details><summary>Do you offer refunds?</summary><div class="a">If something's wrong in your first 14 days, email us and we'll make it right or refund you. After that, cancelling stops all future charges.</div></details>
     <details><summary>Will I get a receipt for VAT/tax?</summary><div class="a">Yes — Stripe emails a receipt for every payment, suitable for your records.</div></details>
@@ -858,7 +868,7 @@ const DISTRICTS = [
 ];
 
 const COLORS={gold:"#D9A93C",metal:"#5F8A6E",gem:"#C96A45",ree:"#9B85D4"};
-const TIER_NAME={1:"Prospector (£4.99/mo)",2:"Explorer (£9.99/mo)",3:"Master Prospector (£14.99/mo)"};
+const TIER_NAME={1:"Prospector ($4.99/mo)",2:"Explorer ($9.99/mo)",3:"Master Prospector ($19.99/mo)"};
 
 /* ============ map ============ */
 const map=L.map('map',{scrollWheelZoom:false}).setView([2,21],3.2);
@@ -955,17 +965,6 @@ document.getElementById('gpxBtn').addEventListener('click',()=>{
     throw 0;
   }catch(e){el.innerHTML='GOLD · <strong>PRICED BY THE OUNCE, FOUND BY THE GRAM</strong>';}
 })();
-
-/* ============ billing toggle ============ */
-function setBilling(y){
-  document.getElementById('btnMonthly').setAttribute('aria-pressed',String(!y));
-  document.getElementById('btnYearly').setAttribute('aria-pressed',String(y));
-  document.querySelectorAll('.tier .price').forEach(p=>{p.textContent=y?p.dataset.y:p.dataset.m;});
-  document.querySelectorAll('.tier .per').forEach(p=>{p.textContent=y?p.dataset.y:p.dataset.m;});
-  document.querySelectorAll('.sub-link').forEach(a=>{a.setAttribute('href',y?a.dataset.y:a.dataset.m);});
-}
-document.getElementById('btnMonthly').addEventListener('click',()=>setBilling(false));
-document.getElementById('btnYearly').addEventListener('click',()=>setBilling(true));
 
 /* ============ AI briefing demo ============ */
 const SAMPLE_BRIEF="\nDISTRICT BRIEFING — KADOMA–CHAKARI, ZIMBABWE\n─────────────────────────────────────────\nGEOLOGY   Midlands greenstone belt: sheared mafic\n          volcanics with quartz reef systems.\nSTYLE     Reef gold in quartz veins + alluvial\n          gold in drainages off the workings.\nHISTORY   Producing district for over a century;\n          hundreds of recorded workings incl.\n          the famous Cam & Motor mine.\nAPPROACH  Detector work on historic dump margins;\n          pan drainage gravels to bedrock.\nLAW       Prospecting licence via Ministry of\n          Mines; ALL gold sales via Fidelity\n          Gold Refinery. Riverbed alluvial\n          mining is banned (2021).\nVERDICT   Classic ground. Documented, dense\n          with workings, legally accessible\n          with the right paper.\n─────────────────────────────────────────\nFull AI briefings on every district: Master plan.";
