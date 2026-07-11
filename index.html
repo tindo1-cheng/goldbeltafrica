@@ -198,8 +198,9 @@ h1 .g{color:var(--gold)}
 .vid .v-cap strong{color:var(--quartz)}
 
 .devices{padding:70px 0}
-.dev-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:32px}
-@media(max-width:860px){.dev-grid{grid-template-columns:1fr}}
+.dev-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin-top:32px}
+@media(max-width:1000px){.dev-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:560px){.dev-grid{grid-template-columns:1fr}}
 .dev{background:var(--soil);border:1px solid var(--seam);border-radius:12px;padding:22px;text-align:center}
 .dev svg{width:100%;height:170px}
 .dev h3{font-family:var(--display);font-weight:800;font-size:1.08rem;margin:10px 0 6px}
@@ -207,6 +208,12 @@ h1 .g{color:var(--gold)}
 .qr-box{display:flex;align-items:center;gap:14px;justify-content:center;margin-top:14px;background:#120B04;border:1px dashed var(--seam);border-radius:10px;padding:12px}
 .qr-box img{border-radius:6px}
 .qr-box span{font-family:var(--mono);font-size:.62rem;letter-spacing:.16em;color:var(--gold);text-align:left}
+.expandable{cursor:pointer}
+.more-hint{display:inline-block;font-family:var(--mono);font-size:.6rem;letter-spacing:.16em;color:var(--gold);border:1px solid var(--seam);border-radius:100px;padding:2px 10px;margin-top:10px}
+.card-more{display:none;margin-top:12px;border-top:1px dashed var(--seam);padding-top:10px;font-size:.82rem;color:var(--dust);text-align:left}
+.card-more a{font-family:var(--mono);font-size:.7rem;letter-spacing:.08em}
+.open .card-more{display:block}
+.sp-price{font-family:var(--mono);font-size:1.1rem;color:var(--gold-hi);margin:10px 0 8px;font-weight:600}
 /* community */
 .community{padding:70px 0}
 .com-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:32px}
@@ -441,7 +448,7 @@ footer{padding:60px 0 40px}
   </div>
 </section>
 
-<section class="brief">
+<section class="brief" id="brief">
   <div class="wrap">
     <div class="sec-head"><h2>Pick a district. Get the intelligence report.</h2><span class="sec-tag">FIG. 05 — AI BRIEFINGS</span></div>
     <div class="brief-box">
@@ -670,7 +677,7 @@ footer{padding:60px 0 40px}
 
 <section class="devices">
   <div class="wrap">
-    <div class="sec-head"><h2>Plan it. Pocket it. Dig it.</h2><span class="sec-tag">FIG. 10 — EVERY SCREEN, ONE MAP</span></div>
+    <div class="sec-head"><h2>Plan it. Pocket it. Get to it. Dig it.</h2><span class="sec-tag">FIG. 10 — EVERY SCREEN, ONE MAP</span></div>
     <p class="sec-sub">The same map on your laptop, tablet and phone — installs like an app, keeps working where the signal dies.</p>
     <div class="dev-grid">
       <div class="dev">
@@ -695,7 +702,20 @@ footer{padding:60px 0 40px}
         </svg>
         <h3>Pocket — installs as an app</h3>
         <p>Open the site on iOS or Android, tap share, then <b>Add to Home Screen</b>. No app store needed.</p>
-        <div class="qr-box"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMYAAADGCAIAAAAG+WgKAAAEIElEQVR4nO3dQWodORRA0U4T6GlPs4RMs/819DTb6QUUBPG4kuqbc8Z2+du+CB6qUn378e8/f0Hn79sfgK9GUsQkRUxSxCRFTFLEJEVMUsQkRUxSxCRF7PvKF/3+/d/uz/EHP3/+GnzX8zM/r1P9XiufcPZ59n3mmZXf1CpFTFLEJEVMUsQkRWxp4nuaTWErViaala+ZfcLZ7LbyNfv+Ynf/F09WKWKSIiYpYpIiJiliw4nvaTYdVNPKvr2wfXtzz6+p/hp3/xdWKWKSIiYpYpIiJili2cR318kZp5rvZld+P6sUMUkRkxQxSRGTFLGPnPhmO3rVHZsrTv6st7FKEZMUMUkRkxQxSRHLJr67u1EnTzip5s27J8nsY5UiJilikiImKWKSIjac+O7uT1V3P+47G7O6z3PF2/YKrVLEJEVMUsQkRUxSxL594hvY901hK981c/Jn3WWVIiYpYpIiJilikiI2fB/fyTcC3J25qu+qdiFXfvrsOrMrP1mliEmKmKSISYqYpIhle3z7Zoq7516+bXarrrzv81iliEmKmKSISYqYpIgNJ76T893sOp9o347eyb+YVYqYpIhJipikiEmK2NLEt+8NdCv23Vd58uSWyvvP87RKEZMUMUkRkxQxSRHLzuo8+a6B55Vn8+a+p/Zmqql536y9cmWrFDFJEZMUMUkRkxSx4cRXzVPVRLMyc+3bhdz3/N1M9eTjjFWKmKSISYqYpIhJilj2BvZ9+1xPd59lq/Y39+3freyBVp/nySpFTFLEJEVMUsQkRWz4HN/M2065rH7WyXtcV1QTsbs6eQVJEZMUMUkRkxSxjSe3VO6ezHly2n3b6TczVilikiImKWKSIiYpYtke38nTO5/uzmUr16nO/HzbdZ6sUsQkRUxSxCRFTFLENj7Hd/fte++/93Lm5HvkZ38NqxQxSRGTFDFJEZMUseyuzpXvWnHyFJRPfM/gynXu3gdrlSImKWKSIiYpYpIidnmPb+U6T3fPxqwm2dl7BlfcfbO8VYqYpIhJipikiEmK2NIe39vcPfey2vHct5948pyWJ6sUMUkRkxQxSRGTFLGjb2eYOTlPfeIJMCf371ZYpYhJipikiEmKmKSIDe/qfP+pm5W7z8Q9nXxv++xnWaWISYqYpIhJipikiG18jm/FyXmq2gt72xvhZ9fZNwNapYhJipikiEmKmKSIZRPfXXdPZXnad05p9WTfvrtDrVLEJEVMUsQkRUxSxL7IxHd3h3HfTuXJNwa6q5OXkhQxSRGTFDFJEcsmvq/6vNvb7qtcUb29wl2dvIKkiEmKmKSISYrYcOK7e77KyZM5970fYTZPzd7id/J3t0oRkxQxSRGTFDFJEfvI9/HxZlYpYpIiJilikiImKWKSIiYpYpIiJilikiImKWL/A3/g9QbEgf+2AAAAAElFTkSuQmCC" width="104" height="104" alt="QR code opening GoldBelt Africa"><span>SCAN TO OPEN<br>ON YOUR PHONE</span></div>
+        <div class="qr-box"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAK4AAACuCAIAAAAgbqG5AAADNklEQVR4nO3dMY7cNgBA0XUQwK1bH8Ft7n+GtL6Om98RSAialLjGe/WMVh58EKIlUl++f/v6AR8ff719AtxCCkQKRApECkQKRApECkQKRApECuTvmQ/9/Pnv6fP4Dz9+/LPwrXPnfNv5zJg5Z6MCkQKRApECkQKZmkGM1q6iZ8xcac98ZjzD8Vszn5kxc+TRu7/hyKhApECkQKRApEAWZxCjtavWXVfRa1fsa1f+a9+a8e5vaFQgUiBSIFIgUiDbZhDv2nV/YeY4u2YitzEqECkQKRApECmQTzmD2PX00bt3HG5jVCBSIFIgUiBSINtmELddV3/GFQ3v/oZGBSIFIgUiBSIFsjiDeHdnobVnlt79zOjd33BkVCBSIFIgUiBSIFMziNvuL4zOPWt023HOMSoQKRApECkQKZDF90E8uRPpk88R7bovsLbf7Npx1o48MioQKRApECkQKZBtTzE9+fzPk+cz4zO+Y25kVCBSIFIgUiBSINe9D+K244x27Qq7ZuZfuvbXjQpECkQKRApECuTgbq5r18zn7kGsfevcnYvR2pF3nY9RgUiBSIFIgUiBLM4g3n3WaOZ8zl3Vr33r3fdNzzAqECkQKRApECmQL9+/ff3fD+1aF7zLk6snZr41evJddbuOY1QgUiBSIFIgUiDb7kHc9kTQzN96d2X3zLdG5+YmRgUiBSIFIgUiBXJwHcRo1/NI7z6zdG7npV2rpK2D4LdIgUiBSIFIgSw+xXTuf9TP7WJ02+6pM578fYwKRApECkQKRApkagZxm3dXSY9uW9GwxqhApECkQKRApEAW30n9pLX1C2vOrRm//73eRgUiBSIFIgUiBfLobq4zbputzKxEWDvyOfZi4rdIgUiBSIFIgVz3Tupdds0F1u53nJsHWQfBcVIgUiBSIFIgj+7FdJtdex+Nzj0Nteu91SOjApECkQKRApEC+UNmEO/u6TSzUmPX3xrZzZXNpECkQKRApEC2zSCefM5/tOvJonPvelhjLyZeIAUiBSIFIgWyOIN4d73zk/8zf865t0uvMSoQKRApECkQKZBP+T4ITjAqECkQKRApECkQKRApECkQKRApECmQXxq1YCcnrxbjAAAAAElFTkSuQmCC" width="104" height="104" alt="QR code opening GoldBelt Africa"><span>SCAN TO OPEN<br>ON YOUR PHONE</span></div>
+      </div>
+      <div class="dev">
+        <svg viewBox="0 0 300 190" aria-label="Handheld GPS with a route to a waypoint">
+          <rect x="110" y="12" width="80" height="150" rx="14" fill="#0D0803" stroke="#3A2A16" stroke-width="3"/>
+          <rect x="120" y="26" width="60" height="96" rx="4" fill="#120B04"/>
+          <path d="M128 112 q14 -22 22 -38 q8 -16 24 -28" stroke="#D9A93C" stroke-width="2.5" fill="none" stroke-dasharray="4 4"/>
+          <circle cx="130" cy="112" r="4" fill="#F0E7D5"/>
+          <path d="M174 40 l7 14 -7 -4 -7 4 Z" fill="#D9A93C"/>
+          <circle cx="150" cy="140" r="6" fill="none" stroke="#3A2A16" stroke-width="2"/>
+          <rect x="132" y="134" width="8" height="12" rx="2" fill="#26190C"/><rect x="160" y="134" width="8" height="12" rx="2" fill="#26190C"/>
+        </svg>
+        <h3>Get to it — GPX &amp; waypoints</h3>
+        <p>Download district waypoints, load them into your handheld or phone GPS, and navigate straight to the ground.</p>
       </div>
       <div class="dev">
         <svg viewBox="0 0 300 190" aria-label="Tablet showing the GoldBelt map offline">
@@ -706,7 +726,7 @@ footer{padding:60px 0 40px}
           <circle cx="196" cy="40" r="7" fill="none" stroke="#5F8A6E" stroke-width="2"/>
           <path d="M192 40 l3 3 l6 -7" stroke="#5F8A6E" stroke-width="2" fill="none"/>
         </svg>
-        <h3>Field — offline-ready</h3>
+        <h3>Dig it — offline in the field</h3>
         <p>Load your target area before you leave coverage; the app, your pins and district data keep working in the bush.</p>
       </div>
     </div>
@@ -742,12 +762,12 @@ footer{padding:60px 0 40px}
 <section class="sponsors">
   <div class="wrap">
     <div class="sec-head"><h2>Gear partners</h2><span class="sec-tag">FIG. 11 — ADVERTISE TO PROSPECTORS</span></div>
-    <p class="sec-sub">Our members buy detectors, coils, pans, sluices and GPS units. If you make or sell prospecting gear, this audience is yours.</p>
+    <p class="sec-sub">Our members buy detectors, coils, pans, sluices and GPS units. If you make or sell prospecting gear, buy a slot below — self-serve, live within 24 hours of sending your logo and link.</p>
     <div class="sp-grid">
-      <div class="sp"><div class="s-slot">SPONSOR SLOT A</div><h3>Your detector brand here</h3><p>Homepage placement + monthly email feature.</p><a href="mailto:hello@goldbeltafrica.com?subject=Sponsor%20Slot%20A">ENQUIRE →</a></div>
-      <div class="sp"><div class="s-slot">SPONSOR SLOT B</div><h3>Coils &amp; accessories</h3><p>Reach detectorists planning African trips.</p><a href="mailto:hello@goldbeltafrica.com?subject=Sponsor%20Slot%20B">ENQUIRE →</a></div>
-      <div class="sp"><div class="s-slot">SPONSOR SLOT C</div><h3>Pans, sluices &amp; field kit</h3><p>Placement beside the alluvial districts layer.</p><a href="mailto:hello@goldbeltafrica.com?subject=Sponsor%20Slot%20C">ENQUIRE →</a></div>
-      <div class="sp"><div class="s-slot">SPONSOR SLOT D</div><h3>Tours, training &amp; insurance</h3><p>Guided digs, courses and cover for prospectors.</p><a href="mailto:hello@goldbeltafrica.com?subject=Sponsor%20Slot%20D">ENQUIRE →</a></div>
+      <div class="sp"><div class="s-slot">SPONSOR SLOT A</div><h3>Your detector brand here</h3><p>Homepage placement + monthly email feature.</p><div class="sp-price">$99 / MONTH</div><a class="btn" href="STRIPE_LINK_SPONSOR" style="font-size:.85rem;padding:9px 18px">Buy this slot</a><br><a href="mailto:hello@goldbeltafrica.com?subject=Sponsor%20Slot%20A%20—%20logo%20and%20link">SEND LOGO &amp; LINK →</a></div>
+      <div class="sp"><div class="s-slot">SPONSOR SLOT B</div><h3>Coils &amp; accessories</h3><p>Reach detectorists planning African trips.</p><div class="sp-price">$99 / MONTH</div><a class="btn" href="STRIPE_LINK_SPONSOR" style="font-size:.85rem;padding:9px 18px">Buy this slot</a><br><a href="mailto:hello@goldbeltafrica.com?subject=Sponsor%20Slot%20B%20—%20logo%20and%20link">SEND LOGO &amp; LINK →</a></div>
+      <div class="sp"><div class="s-slot">SPONSOR SLOT C</div><h3>Pans, sluices &amp; field kit</h3><p>Placement beside the alluvial districts layer.</p><div class="sp-price">$99 / MONTH</div><a class="btn" href="STRIPE_LINK_SPONSOR" style="font-size:.85rem;padding:9px 18px">Buy this slot</a><br><a href="mailto:hello@goldbeltafrica.com?subject=Sponsor%20Slot%20C%20—%20logo%20and%20link">SEND LOGO &amp; LINK →</a></div>
+      <div class="sp"><div class="s-slot">SPONSOR SLOT D</div><h3>Tours, training &amp; insurance</h3><p>Guided digs, courses and cover for prospectors.</p><div class="sp-price">$99 / MONTH</div><a class="btn" href="STRIPE_LINK_SPONSOR" style="font-size:.85rem;padding:9px 18px">Buy this slot</a><br><a href="mailto:hello@goldbeltafrica.com?subject=Sponsor%20Slot%20D%20—%20logo%20and%20link">SEND LOGO &amp; LINK →</a></div>
     </div>
   </div>
 </section>
@@ -1027,6 +1047,63 @@ document.getElementById('newsForm').addEventListener('submit',async function(ev)
     msg.textContent='OPENING YOUR EMAIL APP TO CONFIRM…';
   }
   this.reset();
+});
+
+
+/* ============ live cards: tap any box for more ============ */
+const MORE={
+/* five answers */
+"Start where gold has already come out":{t:"Over a century of mining left thousands of recorded workings across Africa. Old-timers only pegged ground that paid — their maps are the best prospecting filter ever made.",a:"#map-section",l:"OPEN THE MAP →"},
+"Read the rocks that host the gold":{t:"Gold follows structure: quartz reefs in sheared greenstone, laterite caps over Birimian belts, gravels below old workings. Learn the hosts and the map starts talking.",a:"#ores",l:"READ THE ORE GUIDE →"},
+"Check who holds the ground":{t:"Every dossier names the operating companies and links the official cadastre so you can check open ground against the government record before you travel.",a:"#coverage",l:"OPEN THE DOSSIERS →"},
+"Know the rules before you swing":{t:"Permits, citizen-only licences, export rules, banned methods — the law differs in all 54 countries and the dossiers spell each one out in plain English.",a:"#coverage",l:"CHECK YOUR COUNTRY →"},
+"Price what you're chasing":{t:"The live gold spot in the header updates continuously, so you always know what today's gram is worth before committing fuel and days.",a:"#tiers",l:"SEE THE PLANS →"},
+/* features */
+"Documented mineral districts":{t:"135+ districts and growing monthly — gold, base metals, gemstones and rare earths, each with GPS coordinates and deposit-type notes.",a:"#map-section",l:"EXPLORE THE MAP →"},
+"Country mining dossiers":{t:"Tap any country card: key minerals, the major mines, who operates them, the mining act, the permit route, and a straight field tip.",a:"#coverage",l:"OPEN A DOSSIER →"},
+"Your pins & field notes":{t:"Turn on Drop-a-pin, tap the map, type a note. Pins live on your own device only — nobody sees your spots, including us.",a:"#map-section",l:"TRY IT ON THE MAP →"},
+"Satellite & terrain views":{t:"Cycle the ◧ View button: Dark for districts, Satellite for real ground, Pro Terrain for contour lines that reveal ridgelines and drainages.",a:"#map-section",l:"CYCLE THE VIEWS →"},
+"AI district briefings":{t:"Pick a district and the AI assembles the geological record into a plain-English report: geology, style, history, approach, law, verdict.",a:"#brief",l:"RUN THE SAMPLE →"},
+"GPX for your handheld":{t:"Waypoint files load straight into Garmin units, Organic Maps or OsmAnd. Free preview GPX on the map toolbar; every district on the Master plan.",a:"#map-section",l:"DOWNLOAD THE PREVIEW →"},
+"The map in your pocket":{t:"Open the site on your phone, tap share, Add to Home Screen — it installs as an app and keeps working offline once loaded.",a:"#map-section",l:"SEE HOW →"},
+"Live metal prices":{t:"Gold spot streams into the header from public market feeds, refreshed continuously — real time, genuinely.",a:"#tiers",l:"SEE THE PLANS →"},
+"Official claim registers, linked":{t:"Each dossier links the country's official mining cadastre — DR Congo, Zambia, Tanzania, Mozambique, Namibia and more — always the final legal word.",a:"#coverage",l:"FIND YOUR CADASTRE →"},
+/* sources — real, named, clickable */
+"USGS Mineral Resources Data System (MRDS)":{t:"Hundreds of thousands of recorded occurrences, deposits and past producers worldwide, free to search.",u:"https://mrdata.usgs.gov/mrds/",l:"OPEN USGS MRDS →"},
+"National geological surveys":{t:"Africa's own surveys publish the memoirs and belt maps behind our districts — South Africa's Council for Geoscience is a flagship example.",u:"https://www.geoscience.org.za",l:"OPEN COUNCIL FOR GEOSCIENCE →"},
+"British Geological Survey archive":{t:"A century of international survey mapping of African goldfields held in the public record.",u:"https://www.bgs.ac.uk",l:"OPEN BGS →"},
+"Official mining cadastre portals":{t:"Government claim registers you can search yourself — here is DR Congo's CAMI portal as an example; each dossier links its own country's.",u:"https://portals.landfolio.com/drc/en/",l:"OPEN DRC CADASTRE →"},
+"Public company technical reports":{t:"Listed miners must file their geology publicly (JORC / NI 43-101). SEDAR+ holds thousands of these reports, free.",u:"https://www.sedarplus.ca",l:"SEARCH FILINGS →"},
+"Satellite & terrain data":{t:"ESA's Copernicus programme gives free Sentinel-2 imagery of every African district; NASA SRTM supplies the elevation under our Pro Terrain view.",u:"https://dataspace.copernicus.eu",l:"OPEN COPERNICUS →"},
+"Live market feeds":{t:"The gold spot in the header refreshes continuously from public market pricing — watch it move during trading hours.",a:"#tiers",l:"SEE IT LIVE ABOVE →"},
+"Mining codes & gazettes":{t:"Every country's mining act summarised in its dossier — Ghana's Act 703, DRC's 2018 Code, Mali's 2023 Code, Zimbabwe's Chapter 21:05.",a:"#coverage",l:"READ IN THE DOSSIERS →"},
+/* ore guide — feel, tests, real footage */
+"Reef gold in quartz":{t:"THE FEEL: shockingly heavy for its size, soft enough to dent with a knife — it bends, never shatters. Gleams the same from every angle; pyrite flashes and crumbles.",u:"https://www.youtube.com/results?search_query=gold+in+quartz+vein+specimen",l:"▶ WATCH REAL SPECIMENS →"},
+"Placer (alluvial) gold":{t:"THE FEEL: swirl the pan — gold sits dead still in the black sand while everything else dances. That stubborn weight is the thrill every panner chases.",u:"https://www.youtube.com/results?search_query=gold+panning+bedrock+cleanup",l:"▶ WATCH BEDROCK CLEANUPS →"},
+"Copper — malachite & azurite":{t:"THE FEEL: cool, heavy, silky-banded green. Streak it on unglazed tile: pale green. The stain at surface is the arrow — the lode sits below.",u:"https://www.youtube.com/results?search_query=malachite+azurite+specimen",l:"▶ WATCH REAL SPECIMENS →"},
+"Silver-bearing galena":{t:"THE FEEL: absurdly heavy — the densest common ore. Breaks into perfect mirror cubes; leaves a grey streak. Handle then wash hands: it is lead ore.",u:"https://www.youtube.com/results?search_query=galena+silver+ore+specimen",l:"▶ WATCH REAL SPECIMENS →"},
+"Bauxite — aluminium ore":{t:"THE FEEL: surprisingly light and earthy, like fired clay full of peas. Whole plateaus of it in Guinea — the world's aluminium starts as this humble red rock.",u:"https://www.youtube.com/results?search_query=bauxite+ore+mining+guinea",l:"▶ WATCH THE PLATEAUS →"},
+"Diamond in kimberlite":{t:"THE FEEL: rough diamonds look greasy, not sparkly, and shed water like wax. Kimberlite is soft blue-grey rock that weathers to yellow ground.",u:"https://www.youtube.com/results?search_query=rough+diamond+kimberlite",l:"▶ WATCH ROUGH DIAMONDS →"},
+"Ruby in marble":{t:"THE FEEL: hexagonal barrels harder than steel — a ruby scratches a knife, never the reverse. Corundum's weight makes it linger in the pan like gold's red cousin.",u:"https://www.youtube.com/results?search_query=ruby+crystal+in+marble+specimen",l:"▶ WATCH REAL CRYSTALS →"},
+"Rare earths — bastnäsite":{t:"THE FEEL: waxy honey-to-lilac veins, heavier than they look. Kangankunde and Gakara carry some of the highest grades on Earth — tomorrow's money rock.",u:"https://www.youtube.com/results?search_query=bastnasite+rare+earth+ore",l:"▶ WATCH REAL SPECIMENS →"}
+};
+document.querySelectorAll('.ans, .feat, .src, .ore').forEach(card=>{
+  const titleEl=card.querySelector('h3, .o-name');
+  if(!titleEl)return;
+  const info=MORE[titleEl.textContent.trim()];
+  if(!info)return;
+  card.classList.add('expandable');
+  const body=card.querySelector('.o-body')||card.querySelector('div:last-child')||card;
+  const host=card.classList.contains('ore')?card.querySelector('.o-body'):(card.classList.contains('src')?card.querySelector('div:last-child'):card);
+  const hint=document.createElement('span');hint.className='more-hint';hint.textContent='＋ TAP FOR MORE';
+  const more=document.createElement('div');more.className='card-more';
+  more.innerHTML=info.t+(info.u?'<br><br><a href="'+info.u+'" target="_blank" rel="noopener">'+info.l+'</a>':(info.a?'<br><br><a href="'+info.a+'">'+info.l+'</a>':''));
+  host.appendChild(hint);host.appendChild(more);
+  card.addEventListener('click',e=>{
+    if(e.target.closest('a'))return;
+    const open=card.classList.toggle('open');
+    hint.textContent=open?'− CLOSE':'＋ TAP FOR MORE';
+  });
 });
 
 /* ============ privacy / licence stubs ============ */
