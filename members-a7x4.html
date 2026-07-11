@@ -11,7 +11,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,800&family=Archivo:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
 <style>
-:root{--pit:#191007;--soil:#26190C;--seam:#3A2A16;--quartz:#F0E7D5;--dust:#B7A88E;--gold:#D9A93C;--gold-hi:#F3CB6A;--greenstone:#5F8A6E;--oxide:#C96A45;--ree:#9B85D4;--mono:'IBM Plex Mono',monospace;--display:'Bricolage Grotesque',sans-serif;--body:'Archivo',sans-serif}
+:root{--pit:#FBEFDA;--soil:#FFFFFF;--seam:#EAD9BC;--quartz:#2A1A0E;--dust:#7A5E42;--gold:#C6841A;--gold-hi:#E8A81E;--greenstone:#2E7D52;--oxide:#C96A2E;--ree:#7A5AB8;--ink:#2A1A0E;--accent:#1E7BC4;--mono:'IBM Plex Mono',monospace;--display:'Bricolage Grotesque',sans-serif;--body:'Archivo',sans-serif}
 *{margin:0;padding:0;box-sizing:border-box}
 body{background:var(--pit);color:var(--quartz);font-family:var(--body);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
 a{color:var(--gold);text-decoration:none}
@@ -20,12 +20,12 @@ a:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid var(-
 h2{font-family:var(--display);font-weight:800;font-size:clamp(1.4rem,3vw,2rem);letter-spacing:-.02em}
 .sec-tag{font-family:var(--mono);font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;color:var(--dust)}
 .sec-head{display:flex;align-items:baseline;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:14px}
-nav{position:sticky;top:0;z-index:1200;background:rgba(25,16,7,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--seam)}
+nav{position:sticky;top:0;z-index:1200;background:rgba(255,255,255,.94);backdrop-filter:blur(10px);border-bottom:1px solid var(--seam);box-shadow:0 1px 12px rgba(140,90,20,.06)}
 .nav-inner{display:flex;align-items:center;justify-content:space-between;height:64px}
-.logo{font-family:var(--display);font-weight:800;font-size:1.25rem}
+.logo{display:flex;align-items:center;font-family:var(--display);font-weight:800;font-size:1.2rem;color:var(--ink)}
 .logo em{color:var(--gold);font-style:normal}
-.member-badge{font-family:var(--mono);font-size:.66rem;letter-spacing:.16em;color:#241804;background:var(--gold);border-radius:100px;padding:5px 14px;font-weight:600}
-.welcome{background:linear-gradient(180deg,rgba(217,169,60,.1),transparent);border-bottom:1px solid var(--seam);padding:36px 0 26px}
+.member-badge{font-family:var(--mono);font-size:.66rem;letter-spacing:.16em;color:#fff;background:var(--gold);border-radius:100px;padding:5px 14px;font-weight:600;text-decoration:none}
+.welcome{background:linear-gradient(180deg,#FFF6E0,var(--pit));border-bottom:1px solid var(--seam);padding:36px 0 26px}
 .welcome h1{font-family:var(--display);font-weight:800;font-size:clamp(1.7rem,4vw,2.6rem);letter-spacing:-.02em}
 .welcome h1 span{color:var(--gold)}
 .welcome p{color:var(--dust);max-width:70ch;margin-top:8px}
@@ -35,27 +35,27 @@ section{border-bottom:1px solid var(--seam);padding:44px 0}
 .chip[aria-pressed="true"]{border-color:var(--gold);color:var(--gold-hi);background:rgba(217,169,60,.08)}
 .chip .dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:7px;vertical-align:1px}
 .chip.base{border-style:dashed}
-#map{height:600px;border-radius:12px;border:1px solid var(--seam);background:var(--soil)}
+#map{height:600px;border-radius:12px;border:1px solid var(--seam);background:#EAe0cc;box-shadow:0 4px 24px rgba(140,90,20,.08)}
 @media(max-width:760px){#map{height:450px}}
 .map-note{font-family:var(--mono);font-size:.7rem;color:var(--dust);margin-top:12px;letter-spacing:.04em}
-.leaflet-popup-content-wrapper{background:var(--soil);color:var(--quartz);border:1px solid var(--seam);border-radius:8px;font-family:var(--body)}
-.leaflet-popup-tip{background:var(--soil)}
+.leaflet-popup-content-wrapper{background:#fff;color:var(--ink);border:1px solid var(--seam);border-radius:8px;font-family:var(--body);box-shadow:0 4px 20px rgba(140,90,20,.15)}
+.leaflet-popup-tip{background:#fff}
 .pop-name{font-family:var(--display);font-weight:800;font-size:1.02rem;margin-bottom:2px}
 .pop-coord{font-family:var(--mono);font-size:.68rem;color:var(--gold);letter-spacing:.06em}
 .pop-body{font-size:.85rem;color:var(--dust);margin-top:6px;max-width:240px}
 .pop-brief{margin-top:8px;background:var(--gold);color:#241804;border:none;border-radius:5px;font-family:var(--mono);font-size:.68rem;font-weight:600;letter-spacing:.08em;padding:7px 12px;cursor:pointer}
 .pin-del{background:none;border:1px solid var(--seam);color:var(--oxide);border-radius:4px;padding:2px 8px;font-family:var(--mono);font-size:.68rem;cursor:pointer;margin-top:8px}
-.term{background:#120B04;border:1px solid var(--seam);border-radius:10px;padding:20px;font-family:var(--mono);font-size:.76rem;color:var(--dust);line-height:1.7;min-height:150px;white-space:pre-wrap;margin-top:16px}
+.term{background:#1A0F06;border:1px solid var(--seam);border-radius:10px;padding:20px;font-family:var(--mono);font-size:.76rem;color:#E8D5B8;line-height:1.7;min-height:150px;white-space:pre-wrap;margin-top:16px}
 .term .t-gold{color:var(--gold-hi)}
 .term-actions{display:flex;gap:10px;margin-top:12px}
 .btn{display:inline-block;background:var(--gold);color:#241804;font-weight:600;padding:11px 22px;border-radius:6px;border:none;cursor:pointer;font-size:.9rem;font-family:var(--body)}
 .btn:hover{background:var(--gold-hi)}
-.btn.ghost{background:transparent;color:var(--gold);border:1px solid var(--gold)}
+.btn.ghost{background:transparent;color:var(--accent);border:1px solid var(--accent)}
 .cov-search{width:100%;max-width:420px;background:var(--soil);border:1px solid var(--seam);border-radius:8px;color:var(--quartz);font-family:var(--mono);font-size:.85rem;padding:12px 16px;margin-bottom:20px}
 .cov-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
 @media(max-width:900px){.cov-grid{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:520px){.cov-grid{grid-template-columns:1fr}}
-.cov{border:1px solid var(--seam);border-radius:10px;padding:16px 18px;background:var(--soil);cursor:pointer;text-align:left;font-family:var(--body);color:var(--quartz)}
+.cov{border:1px solid var(--seam);border-radius:10px;padding:16px 18px;background:var(--soil);cursor:pointer;text-align:left;font-family:var(--body);color:var(--quartz);box-shadow:0 2px 14px rgba(140,90,20,.05)}
 .cov:hover{border-color:var(--gold)}
 .cov .c-name{font-family:var(--display);font-weight:800;font-size:1rem;display:flex;justify-content:space-between}
 .cov .c-name::after{content:"→";color:var(--gold);font-size:.85rem}
@@ -79,7 +79,7 @@ footer{padding:40px 0;font-family:var(--mono);font-size:.72rem;color:var(--dust)
 
 <nav>
   <div class="wrap nav-inner">
-    <div class="logo">GoldBelt <em>Africa</em></div>
+    <div class="logo"><svg viewBox="0 0 300 320" xmlns="http://www.w3.org/2000/svg" style="width:34px;height:36px;flex:none;vertical-align:middle;margin-right:10px"><path d="M27.0,135.5 L22.7,133.4 L20.4,131.0 L19.1,126.1 L13.3,120.3 L12.2,117.4 L6.7,114.5 L4.4,111.6 L3.4,107.3 L4.0,105.3 L2.2,101.9 L0.0,100.3 L1.9,99.5 L4.0,96.3 L5.9,89.5 L5.9,76.5 L2.5,72.5 L2.8,68.6 L5.9,65.1 L7.2,60.4 L11.1,56.9 L13.9,49.2 L16.8,47.6 L19.6,43.1 L21.8,41.3 L25.9,40.8 L35.2,32.9 L34.1,27.4 L36.3,21.2 L39.1,18.2 L46.7,14.4 L51.0,7.1 L54.2,7.1 L56.9,9.0 L67.4,9.7 L71.6,7.3 L76.3,6.5 L83.3,3.3 L97.9,2.2 L100.1,2.8 L104.2,1.1 L108.9,1.0 L110.7,2.1 L118.4,0.0 L121.4,0.5 L121.3,2.8 L125.0,1.1 L125.3,2.0 L123.1,4.2 L123.1,6.2 L124.6,7.3 L124.1,11.2 L121.2,13.4 L122.0,15.8 L124.3,15.9 L125.4,18.0 L127.0,18.7 L143.4,22.5 L145.5,26.5 L160.2,31.4 L164.4,28.2 L163.4,24.8 L164.7,22.7 L170.9,20.0 L176.8,20.9 L178.3,22.9 L185.6,24.2 L186.7,25.6 L192.5,25.6 L203.1,28.7 L208.2,26.1 L212.1,25.7 L215.2,26.3 L216.3,28.5 L217.4,27.0 L224.3,28.3 L226.4,27.2 L229.3,34.8 L225.9,42.2 L224.9,43.0 L221.5,39.6 L218.4,33.3 L219.7,38.3 L225.7,49.7 L232.6,59.5 L231.8,60.3 L231.9,63.2 L237.7,68.1 L240.4,83.1 L244.5,85.8 L248.2,95.0 L256.6,101.4 L265.9,110.7 L265.8,112.5 L263.3,113.6 L266.6,115.6 L269.4,119.3 L271.6,119.3 L296.2,113.8 L298.2,112.3 L299.9,112.3 L300.0,113.5 L299.6,118.4 L297.5,124.8 L288.9,141.9 L280.1,153.0 L265.1,164.3 L258.3,173.1 L252.6,177.0 L249.7,184.9 L247.9,186.3 L245.9,191.8 L246.2,194.3 L249.0,195.9 L247.9,203.2 L253.5,213.3 L254.8,230.8 L251.8,237.0 L249.0,239.8 L240.1,243.6 L228.7,253.3 L228.3,256.5 L231.3,263.8 L232.1,263.6 L231.6,272.6 L219.0,279.7 L219.4,281.6 L220.5,281.9 L217.4,293.1 L213.6,296.0 L208.0,303.7 L200.0,310.9 L196.7,312.9 L189.9,314.9 L189.4,316.1 L175.4,315.8 L164.5,319.9 L162.5,320.0 L157.1,317.0 L155.1,310.2 L156.5,309.4 L156.4,306.0 L143.3,285.7 L139.8,271.4 L139.1,263.7 L135.2,258.2 L131.9,250.1 L128.4,245.7 L128.3,235.6 L131.4,225.7 L136.4,219.0 L136.6,213.2 L133.1,206.3 L134.7,203.6 L128.9,187.9 L117.9,175.1 L115.3,170.5 L118.3,161.1 L117.5,160.5 L119.6,152.0 L117.9,149.1 L115.9,148.3 L114.0,144.5 L106.1,146.8 L102.6,146.7 L98.9,140.7 L95.8,137.8 L85.0,138.4 L68.3,144.7 L56.6,142.7 L42.1,146.3 L37.6,144.2 L27.0,135.5 Z" fill="#2A1A0E"/><path d="M295.9,236.6 L294.4,234.0 L293.6,235.3 L294.1,240.4 L292.9,241.5 L292.6,245.2 L282.4,276.2 L275.0,279.1 L269.0,276.4 L265.6,263.4 L266.4,260.2 L268.4,259.4 L270.5,254.6 L270.9,251.8 L268.7,242.8 L270.8,237.5 L279.0,235.6 L285.0,230.3 L286.3,228.1 L285.8,226.2 L287.6,226.7 L290.0,223.6 L290.1,221.0 L291.5,219.0 L295.3,225.7 L297.1,233.1 L295.9,236.6 Z" fill="#2A1A0E"/></svg>GoldBelt <em>Africa</em></div>
     <span class="member-badge">◆ MEMBER AREA</span>
   </div>
 </nav>
@@ -99,7 +99,7 @@ footer{padding:40px 0;font-family:var(--mono);font-size:.72rem;color:var(--dust)
       <button class="chip" data-type="metal" aria-pressed="true"><span class="dot" style="background:var(--greenstone)"></span>Base metals</button>
       <button class="chip" data-type="gem" aria-pressed="true"><span class="dot" style="background:var(--oxide)"></span>Gemstones</button>
       <button class="chip" data-type="ree" aria-pressed="true"><span class="dot" style="background:var(--ree)"></span>Rare earths</button>
-      <button class="chip base" id="baseBtn" aria-pressed="false">◧ View: Dark</button>
+      <button class="chip base" id="baseBtn" aria-pressed="false">◧ View: Map</button>
       <button class="chip base" id="heatBtn" aria-pressed="false">◉ Heat view</button>
       <button class="chip base" id="pinBtn" aria-pressed="false">⌖ Drop a pin</button>
       <button class="chip base" id="gpxBtn">⇩ Download ALL districts (GPX)</button>
@@ -154,11 +154,11 @@ footer{padding:40px 0;font-family:var(--mono);font-size:.72rem;color:var(--dust)
 const COLORS={gold:"#D9A93C",metal:"#5F8A6E",gem:"#C96A45",ree:"#9B85D4"};
 
 const map=L.map('map',{scrollWheelZoom:false}).setView([2,21],3.2);
-const darkBase=L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',{attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>',subdomains:'abcd',maxZoom:12}).addTo(map);
+const mapBase=L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',{attribution:'&copy; OpenStreetMap &copy; CARTO',subdomains:'abcd',maxZoom:14}).addTo(map);
 const satBase=L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',{attribution:'Imagery &copy; Esri &amp; contributors',maxZoom:17});
 let baseIdx=0;
 const terrainBase=L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png',{attribution:'&copy; OpenStreetMap contributors, SRTM | &copy; <a href="https://opentopomap.org">OpenTopoMap</a> (CC-BY-SA)',maxZoom:15});
-const BASES=[{l:darkBase,n:'Dark'},{l:satBase,n:'Satellite'},{l:terrainBase,n:'Pro Terrain'}];
+const BASES=[{l:mapBase,n:'Map'},{l:satBase,n:'Satellite'},{l:terrainBase,n:'Pro Terrain'}];
 document.getElementById('baseBtn').addEventListener('click',function(){
   map.removeLayer(BASES[baseIdx].l);
   baseIdx=(baseIdx+1)%BASES.length;
