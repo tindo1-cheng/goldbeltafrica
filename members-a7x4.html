@@ -80,7 +80,7 @@ footer{padding:40px 0;font-family:var(--mono);font-size:.72rem;color:var(--dust)
 <nav>
   <div class="wrap nav-inner">
     <div class="logo">GoldBelt <em>Africa</em></div>
-    <a class="member-badge" href="index.html">◆ MEMBER AREA · HOME</a>
+    <span class="member-badge">◆ MEMBER AREA</span>
   </div>
 </nav>
 
@@ -99,7 +99,8 @@ footer{padding:40px 0;font-family:var(--mono);font-size:.72rem;color:var(--dust)
       <button class="chip" data-type="metal" aria-pressed="true"><span class="dot" style="background:var(--greenstone)"></span>Base metals</button>
       <button class="chip" data-type="gem" aria-pressed="true"><span class="dot" style="background:var(--oxide)"></span>Gemstones</button>
       <button class="chip" data-type="ree" aria-pressed="true"><span class="dot" style="background:var(--ree)"></span>Rare earths</button>
-      <button class="chip base" id="baseBtn" aria-pressed="false">◧ Satellite view</button>
+      <button class="chip base" id="baseBtn" aria-pressed="false">◧ View: Dark</button>
+      <button class="chip base" id="heatBtn" aria-pressed="false">◉ Heat view</button>
       <button class="chip base" id="pinBtn" aria-pressed="false">⌖ Drop a pin</button>
       <button class="chip base" id="gpxBtn">⇩ Download ALL districts (GPX)</button>
     </div>
@@ -137,6 +138,7 @@ footer{padding:40px 0;font-family:var(--mono);font-size:.72rem;color:var(--dust)
     <div class="m-row"><div class="m-k">Who mines here</div><div class="m-v" id="mCos"></div></div>
     <div class="m-row"><div class="m-k">Law, permits &amp; rules</div><div class="m-v" id="mLaw"></div></div>
     <div class="m-tip" id="mTip"></div>
+    <div style="margin-top:20px;text-align:center"><button class="btn" id="mFly" type="button">◧ View this country on the map</button></div>
   </div>
 </div>
 
@@ -145,118 +147,32 @@ footer{padding:40px 0;font-family:var(--mono);font-size:.72rem;color:var(--dust)
 </footer>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<script src="data.js"></script>
 <script>
-const DISTRICTS=[
- {n:"Kadoma–Chakari District",c:"Zimbabwe",lat:-18.33,lng:29.91,t:"gold",tier:0,note:"Midlands greenstone belt. Long history of reef and alluvial gold; heavily worked historic district."},
- {n:"Kwekwe–Sherwood District",c:"Zimbabwe",lat:-18.93,lng:29.82,t:"gold",tier:1,note:"Greenstone-hosted gold with extensive historic workings along the Great Dyke margin."},
- {n:"Shamva District",c:"Zimbabwe",lat:-17.31,lng:31.57,t:"gold",tier:1,note:"Harare–Bindura–Shamva greenstone belt. Documented reef gold and small-scale workings."},
- {n:"Bindura District",c:"Zimbabwe",lat:-17.30,lng:31.33,t:"gold",tier:1,note:"Northern limb of the Harare greenstone belt; gold with nickel occurrences nearby."},
- {n:"Penhalonga Valley",c:"Zimbabwe",lat:-18.89,lng:32.70,t:"gold",tier:1,note:"Mutare greenstone belt. Historic alluvial and reef gold in the eastern highlands."},
- {n:"Gwanda Belt",c:"Zimbabwe",lat:-20.94,lng:29.00,t:"gold",tier:1,note:"Gwanda greenstone belt; dense cluster of historic gold workings."},
- {n:"Obuasi District",c:"Ghana",lat:6.20,lng:-1.67,t:"gold",tier:0,note:"Ashanti belt. One of Africa's most productive gold districts for over a century."},
- {n:"Tarkwa District",c:"Ghana",lat:5.30,lng:-1.99,t:"gold",tier:1,note:"Tarkwaian conglomerate-hosted gold; major producing district."},
- {n:"Bibiani Belt",c:"Ghana",lat:6.46,lng:-2.32,t:"gold",tier:2,note:"Sefwi belt shear-zone gold; documented workings along the belt margin."},
- {n:"Geita District",c:"Tanzania",lat:-2.87,lng:32.23,t:"gold",tier:0,note:"Lake Victoria goldfields; greenstone-hosted gold south of the lake."},
- {n:"Bulyanhulu–Kahama",c:"Tanzania",lat:-3.23,lng:32.55,t:"gold",tier:2,note:"Narrow high-grade quartz veins in the Sukumaland greenstone belt."},
- {n:"Witwatersrand Basin",c:"South Africa",lat:-26.20,lng:28.05,t:"gold",tier:0,note:"The most productive goldfield in history; conglomerate reef gold around Johannesburg."},
- {n:"Barberton Belt",c:"South Africa",lat:-25.79,lng:31.05,t:"gold",tier:1,note:"One of Earth's oldest greenstone belts; reef gold mined since the 1880s."},
- {n:"Pilgrim's Rest–Sabie",c:"South Africa",lat:-24.89,lng:30.76,t:"gold",tier:1,note:"Historic alluvial and reef goldfield on the Mpumalanga escarpment."},
- {n:"Kéniéba Window (Loulo)",c:"Mali",lat:12.94,lng:-11.32,t:"gold",tier:1,note:"West Mali Birimian window; one of Africa's richest modern gold districts."},
- {n:"Sadiola District",c:"Mali",lat:13.88,lng:-11.70,t:"gold",tier:2,note:"Laterite and saprolite-hosted gold in the Kayes region."},
- {n:"Morila District",c:"Mali",lat:11.68,lng:-7.42,t:"gold",tier:2,note:"Southern Mali Birimian gold; famous high-grade discovery district."},
- {n:"Essakane District",c:"Burkina Faso",lat:14.39,lng:-0.02,t:"gold",tier:2,note:"Sahel-zone Birimian gold; extensive artisanal history."},
- {n:"Houndé Belt",c:"Burkina Faso",lat:11.50,lng:-3.52,t:"gold",tier:2,note:"Birimian greenstone belt with multiple documented deposits."},
- {n:"Kibali District (Haut-Uélé)",c:"DR Congo",lat:3.05,lng:29.56,t:"gold",tier:2,note:"Moto goldfields of the Kilo-Moto belt; a major modern producing district."},
- {n:"Siguiri Basin",c:"Guinea",lat:11.42,lng:-9.17,t:"gold",tier:2,note:"Alluvial and laterite gold worked for centuries — heart of the old Mali Empire trade."},
- {n:"Sabodala District",c:"Senegal",lat:13.15,lng:-12.10,t:"gold",tier:2,note:"Eastern Senegal Birimian belt; the country's principal gold district."},
- {n:"Sukari District",c:"Egypt",lat:24.95,lng:34.71,t:"gold",tier:2,note:"Nubian Shield gold worked since Pharaonic times."},
- {n:"Ariab District",c:"Sudan",lat:18.60,lng:35.40,t:"gold",tier:3,note:"Red Sea Hills volcanogenic district; centre of Sudan's gold rush."},
- {n:"Adola Belt (Lega Dembi)",c:"Ethiopia",lat:5.71,lng:38.95,t:"gold",tier:3,note:"Southern Ethiopian greenstone belt; primary and placer gold."},
- {n:"Ity District",c:"Côte d'Ivoire",lat:6.87,lng:-8.09,t:"gold",tier:3,note:"Western Birimian gold along the Cavally river; long alluvial history."},
- {n:"Tongon District",c:"Côte d'Ivoire",lat:9.95,lng:-5.92,t:"gold",tier:3,note:"Northern Côte d'Ivoire Birimian belt gold district."},
- {n:"Copperbelt (Kitwe–Chingola)",c:"Zambia",lat:-12.80,lng:28.21,t:"metal",tier:2,note:"World-class sediment-hosted copper–cobalt province."},
- {n:"Kansanshi District",c:"Zambia",lat:-12.10,lng:26.43,t:"metal",tier:2,note:"Copper–gold district in North-Western Province."},
- {n:"Great Dyke (Chrome)",c:"Zimbabwe",lat:-19.30,lng:29.90,t:"metal",tier:2,note:"550 km layered intrusion; chrome and PGM seams, countless small workings."},
- {n:"Kivu Tin–Tantalite Belt",c:"DR Congo",lat:-2.50,lng:28.85,t:"metal",tier:2,note:"Pegmatite tin, tantalite and tungsten province of the Kibaran belt."},
- {n:"Erongo Tin Belt",c:"Namibia",lat:-21.65,lng:15.65,t:"metal",tier:2,note:"Pegmatite tin and tantalite with world-famous mineral specimens."},
- {n:"Alto Ligonha Pegmatites",c:"Mozambique",lat:-15.50,lng:38.30,t:"metal",tier:2,note:"Classic tantalite, beryl and gemstone pegmatite field."},
- {n:"Ilakaka Sapphire Fields",c:"Madagascar",lat:-22.68,lng:45.20,t:"gem",tier:2,note:"Alluvial sapphire fields discovered 1998; among the largest on Earth."},
- {n:"Montepuez Ruby District",c:"Mozambique",lat:-13.13,lng:39.00,t:"gem",tier:2,note:"The world's most significant ruby district, discovered 2009."},
- {n:"Merelani (Tanzanite)",c:"Tanzania",lat:-3.55,lng:36.98,t:"gem",tier:2,note:"The only tanzanite locality on Earth, at the foot of Kilimanjaro."},
- {n:"Kagem Emerald District",c:"Zambia",lat:-13.05,lng:28.05,t:"gem",tier:2,note:"Kafubu emerald fields; major world emerald source."},
- {n:"Erongo Gem Fields",c:"Namibia",lat:-21.60,lng:15.72,t:"gem",tier:2,note:"Aquamarine, tourmaline and topaz from granite pegmatites."},
- {n:"Kangankunde Carbonatite",c:"Malawi",lat:-15.55,lng:34.85,t:"ree",tier:3,note:"One of the world's highest-grade rare earth carbonatites."},
- {n:"Gakara REE District",c:"Burundi",lat:-3.55,lng:29.45,t:"ree",tier:3,note:"Vein-hosted bastnäsite; among the highest-grade REE occurrences globally."},
- {n:"Lofdal Heavy REE District",c:"Namibia",lat:-20.35,lng:14.75,t:"ree",tier:3,note:"Rare heavy-REE (dysprosium) enriched carbonatite dykes near Khorixas."},
- {n:"Steenkampskraal",c:"South Africa",lat:-31.00,lng:18.55,t:"ree",tier:3,note:"Monazite vein with exceptionally high REE grade; historic thorium mine."},
- {n:"Songwe Hill",c:"Malawi",lat:-15.85,lng:35.55,t:"ree",tier:3,note:"Carbonatite-hosted rare earth district in the Chilwa province."}
-];
-const COUNTRIES=[
-{n:"Algeria",b:"HOGGAR SHIELD",min:"Gold, iron, zinc, phosphate, barite",mines:"Amesmessa & Tirek gold (Hoggar), Gara Djebilet iron, Oued Amizour zinc",cos:"Sonarem (state), ENOR",law:"Mining Law of 2014; permits via the National Agency for Mining Activities (ANAM). The state dominates the sector and foreign participation is tightly framed.",tip:"The Saharan gold country is remote and state-controlled — independent prospecting is heavily restricted."},
-{n:"Angola",b:"LUNDA CRATON",min:"Diamonds, gold, iron, phosphate",mines:"Catoca & Luele diamonds (Lunda Sul), Chipindo gold (Huíla), Cassinga iron",cos:"Endiama (state), Sociedade Mineira de Catoca",law:"Mining Code (Law 31/11); licences via the Ministry of Mineral Resources; the diamond trade is tightly controlled end to end.",tip:"Alluvial diamond areas are restricted zones — never enter without written authorisation."},
-{n:"Benin",b:"ATACORA",min:"Gold, phosphate, limestone",mines:"Perma goldfield (Natitingou), Alibori artisanal zones",cos:"Mostly artisanal operators",law:"Mining Code of 2006; Ministry of Water and Mines issues permits.",tip:"A small artisanal gold country — the Perma river gravels are the documented target."},
-{n:"Botswana",b:"KALAHARI / KAAPVAAL MARGIN",min:"Diamonds (world #1 by value), copper, nickel, coal, soda ash",mines:"Jwaneng & Orapa (among the richest diamond mines on Earth), Khoemacau copper",cos:"Debswana (De Beers + Government), MMG",law:"Mines and Minerals Act 1999; Department of Mines. Transparent licensing and low corruption by regional standards.",tip:"Diamonds are firmly state-partnered; the Kalahari Copper Belt is the modern exploration hotspot."},
-{n:"Burkina Faso",b:"BIRIMIAN BELTS",min:"Gold (~60 t/yr), zinc, manganese",mines:"Essakane, Houndé, Sanbrado gold; Perkoa zinc",cos:"IAMGOLD, Endeavour Mining, West African Resources",law:"Mining Code 2015 with 2024 revisions raising state participation; ANEEMAS oversees the artisanal sector.",tip:"Major gold nation, but serious security risks in the north and east — check current travel guidance first."},
-{n:"Burundi",b:"KIBARAN BELT",min:"Gold, rare earths, nickel, tin",mines:"Gakara REE veins, Muyinga & Cibitoke gold, Musongati nickel",cos:"Rainbow Rare Earths (Gakara, suspended), artisanal co-operatives",law:"Mining Code 2013 (revised 2023); exports are channelled through the state.",tip:"Gold is largely artisanal and export rules change often — verify the current legal channel before trading."},
-{n:"Cabo Verde",b:"VOLCANIC ISLANDS",min:"Pozzolana, salt, limestone — no metallic mining",mines:"Salt pans of Sal and Maio",cos:"—",law:"Quarrying permits via the industry directorate.",tip:"Not a prospecting destination; included for completeness."},
-{n:"Cameroon",b:"ADAMAWA / EAST",min:"Gold, bauxite, iron, cobalt-nickel",mines:"Bétaré-Oya & Colomines gold (East), Minim-Martap bauxite, Mbalam iron",cos:"Sonamines (state), Canyon Resources",law:"Mining Code 2016; Sonamines carries state interests; artisanal permits exist for nationals.",tip:"East-region alluvial gold is very active — the Kadey and Lom drainages are the documented ground."},
-{n:"Central African Republic",b:"ALLUVIAL FIELDS",min:"Diamonds, gold",mines:"Berbérati & Carnot diamond fields, Bambari gold",cos:"Artisanal sector",law:"Mining Code 2009; Kimberley Process restrictions still apply to some zones.",tip:"A high-risk jurisdiction; parts of the diamond trade remain under international restriction."},
-{n:"Chad",b:"TIBESTI / BATHA",min:"Gold, natron, salt",mines:"Miski & Kouri Bougoudi gold zones (Tibesti), Batha artisanal areas",cos:"Artisanal operators",law:"Mining Code 2018; Ministry of Mines and Geology.",tip:"The Saharan gold zones are military-sensitive — access is restricted and dangerous."},
-{n:"Comoros",b:"VOLCANIC ISLANDS",min:"No commercial mining (sand, aggregates)",mines:"—",cos:"—",law:"—",tip:"Not a prospecting destination; included for completeness."},
-{n:"Congo, Republic of",b:"MAYOMBE / KOUILOU",min:"Potash, iron, gold, copper",mines:"Kola & Dougou potash, Zanaga iron, Kellé artisanal gold",cos:"Kore Potash, state interests",law:"Mining Code 2005; Ministry of Mines and Geology.",tip:"Artisanal gold occurs in the Sangha and Kellé forests; logistics are the main barrier."},
-{n:"Côte d'Ivoire",b:"BIRIMIAN BELTS",min:"Gold (~50 t/yr and rising), manganese, nickel",mines:"Ity, Tongon, Yaouré, Séguéla gold; Bondoukou manganese",cos:"Endeavour, Barrick, Perseus, Fortuna",law:"Mining Code 2014; SODEMI is the state geology company; artisanal authorisations exist for nationals.",tip:"One of Africa's fastest-growing gold producers; the west (Cavally basin) has centuries of alluvial history."},
-{n:"DR Congo",b:"KATANGA / KILO-MOTO / KIVU",min:"Copper, cobalt (~70% of world supply), gold, tin, tantalite, diamonds",mines:"Kamoa-Kakula & Tenke copper, Kibali gold, Bisie tin, Mbuji-Mayi diamonds",cos:"Ivanhoe, Barrick, Glencore, CMOC, Alphamin, Gécamines (state)",law:"Mining Code 2018 (higher royalties; cobalt is a 'strategic' mineral at 10%); the CAMI cadastre is online. Artisanal work is legal only inside designated ZEA zones.",tip:"Working outside a ZEA or on someone's permit is a crime, and conflict-mineral traceability rules apply to tin and tantalite exports."},
-{n:"Djibouti",b:"AFAR TRIANGLE",min:"Salt (Lake Assal), perlite, gypsum; early gold exploration",mines:"Lake Assal salt flats",cos:"Salt Investment",law:"Ministry of Energy and Natural Resources.",tip:"Geothermal and salt country; metallic prospecting is embryonic."},
-{n:"Egypt",b:"NUBIAN SHIELD",min:"Gold (~20 t/yr), phosphate, tantalum, ilmenite",mines:"Sukari (Eastern Desert), Hamash & Abu Marawat gold, Abu Dabbab tantalum",cos:"AngloGold Ashanti (Sukari), Aton Resources",law:"Mineral Resources Law as amended in 2020 moved to a royalty/tax model; EMRA runs licensing rounds for Eastern Desert blocks.",tip:"The Eastern Desert holds over a hundred ancient Pharaonic gold workings — the modern districts follow them."},
-{n:"Equatorial Guinea",b:"RÍO MUNI",min:"Alluvial gold; exploration-stage iron and bauxite",mines:"Coro & Aconibe artisanal gold",cos:"—",law:"Mining Law 2006; Ministry of Mines.",tip:"A small alluvial scene in the mainland rivers."},
-{n:"Eritrea",b:"NUBIAN SHIELD (VMS)",min:"Gold, copper, zinc, potash",mines:"Bisha (gold-copper-zinc), Zara/Koka gold, Colluli potash",cos:"Zijin Mining (Bisha), ENAMCO (state)",law:"Mining Proclamation 1995; the state takes 10% free plus a 30% paid interest in mines.",tip:"There is no independent artisanal prospecting — the state controls all mineral activity."},
-{n:"Eswatini",b:"BARBERTON EDGE",min:"Coal, quarry stone; historic iron and gold",mines:"Ngwenya (the oldest known mine on Earth, worked ~40,000 years ago), Maloma coal",cos:"—",law:"Minerals sit in trust with the Crown; Mines and Minerals Act 2011.",tip:"Ngwenya is a heritage site — a place to visit, not to dig."},
-{n:"Ethiopia",b:"ADOLA / WESTERN SHIELD",min:"Gold, tantalum, opal, potash, lithium",mines:"Lega Dembi & Sakaro gold, Kenticha tantalum-lithium, Wollo opal fields, Danakil potash",cos:"MIDROC, Kefi Gold (Tulu Kapi)",law:"Mining Proclamation 678/2010 as amended; artisanal licences are issued by regional bureaus.",tip:"Over a million artisanal miners work here; Oromia and Benishangul are the gold regions — check regional security first."},
-{n:"Gabon",b:"OGOOUÉ BASIN",min:"Manganese (world #2), gold, iron",mines:"Moanda manganese, Etéké & Ndjolé gold, Belinga iron",cos:"Comilog/Eramet, state SEM",law:"Mining Code 2019; the state holds a 10% free carry; Ministry of Mines issues permits.",tip:"Rainforest logistics rule everything; gold is alluvial in the Ogooué tributaries."},
-{n:"Gambia",b:"COASTAL SANDS",min:"Zircon, ilmenite, rutile (mineral sands)",mines:"Batukunku–Sanyang beach sands",cos:"GACH",law:"Mines and Quarries Act; Geology Department.",tip:"Beach-sand country — there is no gold story here."},
-{n:"Ghana",b:"ASHANTI / SEFWI / BIRIM",min:"Gold (Africa's #1 producer, roughly 4 Moz/yr), manganese, bauxite, diamonds, lithium",mines:"Obuasi, Tarkwa, Ahafo, Damang gold; Nsuta manganese; Akwatia diamonds; Ewoyaa lithium",cos:"AngloGold Ashanti, Gold Fields, Newmont",law:"Minerals and Mining Act 2006 (Act 703); the Minerals Commission cadastre is online. Small-scale licences are reserved for Ghanaian citizens, and unlicensed 'galamsey' mining is a criminal offence.",tip:"The most mature gold industry in Africa — but foreigners cannot hold small-scale licences, so partner legally."},
-{n:"Guinea",b:"BOKÉ / SIGUIRI / SIMANDOU",min:"Bauxite (the world's top exporter), gold, iron, diamonds",mines:"Sangarédi bauxite, Siguiri & Lefa gold, Simandou iron (the largest untapped iron deposit on Earth), Banankoro diamonds",cos:"CBG, SMB-Winning, AngloGold Ashanti, Nordgold, Rio Tinto",law:"Mining Code 2011 as amended 2013; the state holds a 15% free carry; artisanal gold moves through licensed comptoirs.",tip:"The Siguiri basin's alluvial gold has been worked since the Mali Empire — this is Mansa Musa country."},
-{n:"Guinea-Bissau",b:"BOÉ PLATEAU",min:"Bauxite (undeveloped), phosphate, heavy sands",mines:"Boé bauxite, Farim phosphate",cos:"GB Minerals",law:"Mining Code 2014.",tip:"A frontier jurisdiction with nothing yet in production."},
-{n:"Kenya",b:"NYANZA / MOZAMBIQUE BELT",min:"Titanium sands, gold, fluorspar, soda ash, gemstones (tsavorite)",mines:"Kwale mineral sands, Kakamega–Migori gold, Taita Taveta gemstone fields, Lake Magadi soda",cos:"Base Titanium, Shanta Gold",law:"Mining Act 2016 with an online cadastre portal; artisanal permits for citizens.",tip:"Tsavorite garnet was discovered here — Taita Taveta is licensed small-scale gemstone country."},
-{n:"Lesotho",b:"KIMBERLITE HIGHLANDS",min:"Diamonds — famous for huge, high-value stones",mines:"Letšeng (highest average value per carat on Earth), Kao, Liqhobong, Mothae",cos:"Gem Diamonds, Namakwa, Lucapa",law:"Mines and Minerals Act 2005; Commissioner of Mines.",tip:"Letšeng has produced multiple 500+ carat diamonds from kimberlites above 3,000 m altitude."},
-{n:"Liberia",b:"ARCHEAN NIMBA",min:"Iron, gold, diamonds",mines:"Nimba iron, New Liberty & Kokoya gold, Lofa diamonds",cos:"ArcelorMittal, Avesoro, MNG Gold",law:"Minerals and Mining Law 2000; Class C artisanal licences are reserved for Liberians.",tip:"Alluvial gold and diamonds run across Lofa, Gbarpolu and Grand Cape Mount — Class C areas are mapped by the Ministry."},
-{n:"Libya",b:"SAHARAN PLATFORM",min:"Iron (undeveloped), gypsum, salt; artisanal gold in the far south",mines:"Wadi ash-Shati iron, Tibesti-fringe gold",cos:"—",law:"Framework in flux.",tip:"Not currently a safe or licensed prospecting destination."},
-{n:"Madagascar",b:"PRECAMBRIAN MOSAIC",min:"Sapphires & rubies, nickel, cobalt, ilmenite, graphite, gold, rare earths",mines:"Ilakaka sapphires, Ambatovy nickel-cobalt, QMM ilmenite, Andilamena rubies, Molo graphite",cos:"Ambatovy consortium, Rio Tinto QMM, NextSource",law:"Mining Code revised 2023 with higher royalties; the BCMM cadastre issues permits; gold exports run through a central channel.",tip:"Ilakaka is the world's great open sapphire rush — a licensed local partnership is essential."},
-{n:"Malawi",b:"CHILWA CARBONATITES",min:"Rare earths, rutile, niobium, uranium, gemstones",mines:"Kangankunde & Songwe Hill REE, Kasiya rutile (the largest known rutile deposit), Kayelekera uranium, Kanyika niobium",cos:"Lindian, Mkango, Sovereign Metals, Lotus",law:"Mines and Minerals Act 2023; a new mining authority is being stood up.",tip:"Southern Africa's coming rare-earth country; Mzimba also hosts artisanal gemstones."},
-{n:"Mali",b:"KÉNIÉBA / SOUTHERN BIRIMIAN",min:"Gold (~65 t/yr — Africa's top four), lithium, iron",mines:"Loulo-Gounkoto, Fekola, Sadiola, Syama, Morila gold; Goulamina lithium",cos:"Barrick, B2Gold, Allied Gold, Resolute, Ganfeng",law:"Mining Code 2023: combined state and local participation can reach ~35%, and old stability clauses were removed. The DNGM administers titles, and artisanal corridors are designated.",tip:"An enormous artisanal sector works alongside the majors; security varies sharply by region — Kéniéba in the west is the historic heart."},
-{n:"Mauritania",b:"REGUIBAT SHIELD",min:"Iron, gold, copper, gypsum",mines:"Zouérat iron (SNIM's ore trains run ~2.5 km long), Tasiast gold, Guelb Moghrein copper-gold; Inchiri artisanal zones",cos:"SNIM, Kinross",law:"Mining Code 2008 as amended. Artisanal gold was legalised in 2016 in designated zones administered from Chami.",tip:"The Chami zone drew tens of thousands of detectorists — one of the world's few legal detector gold rushes."},
-{n:"Mauritius",b:"VOLCANIC ISLAND",min:"No metallic mining (basalt, sand)",mines:"—",cos:"—",law:"—",tip:"Not a prospecting destination."},
-{n:"Morocco",b:"ANTI-ATLAS / MESETA",min:"Phosphate (the world's largest reserves), silver, cobalt, zinc, copper, barite",mines:"Khouribga & Benguérir phosphate, Imiter silver, Bou Azzer cobalt, Drâa copper belt",cos:"OCP (state phosphate giant), Managem",law:"Mining Code 2015 (Law 33-13); ONHYM handles geology; regional directorates issue permits.",tip:"The Anti-Atlas is a mineral collector's paradise — specimen digging (azurite, vanadinite) is its own licensed trade."},
-{n:"Mozambique",b:"MONTEPUEZ / ALTO LIGONHA / TETE",min:"Rubies (world #1), graphite, heavy sands, coal, gold, tantalite",mines:"Montepuez rubies, Balama graphite, Moma sands, Moatize coal, Manica gold",cos:"Gemfields, Syrah, Kenmare, Vulcan",law:"Mining Law 2014; the INAMI cadastre is online; the senha mineira artisanal pass is for nationals.",tip:"Manica province is the artisanal gold heart; the Cabo Delgado ruby country carries security restrictions."},
-{n:"Namibia",b:"DAMARA BELT / NAMIB",min:"Uranium (world top three), marine diamonds, gold, tin, lithium, rare earths, gemstones",mines:"Husab & Rössing uranium, Debmarine offshore diamonds, Otjikoto gold, Uis tin, Lofdal REE, Erongo gem fields",cos:"CGN/CNNC, De Beers–Namdeb, B2Gold, Andrada",law:"Minerals (Prospecting and Mining) Act 1992; EPL licences via an online cadastre; non-diamond gemstone digging is licensable.",tip:"One of Africa's best-run mining registries — and Erongo is legendary for aquamarine and tourmaline."},
-{n:"Niger",b:"LIPTAKO / AÏR",min:"Uranium, gold, coal, gypsum",mines:"Arlit uranium, Samira Hill gold, Djado & Aïr artisanal gold rushes",cos:"Orano (status disputed since 2024), SOPAMIN (state)",law:"Mining Code 2006 with 2024 revisions; foreign permits have been under review since the change of government.",tip:"The Djado rush drew thousands of Saharan detectorists — but the zone is remote, unregulated and dangerous."},
-{n:"Nigeria",b:"SCHIST BELTS / JOS PLATEAU",min:"Gold, tin, columbite, lead-zinc, lithium, barite",mines:"Segilola gold (Osun), Zamfara & Kebbi goldfields, Jos Plateau tin, Ebonyi lead-zinc, Nasarawa lithium",cos:"Thor Explorations, artisanal co-operatives",law:"Nigerian Minerals and Mining Act 2007; the Mining Cadastre Office is online and small-scale leases are available. Zamfara's gold zones have faced periodic bans over banditry.",tip:"A huge artisanal sector; the north-west carries severe security risk — the south-west (Osun, Kwara) is the safer documented ground."},
-{n:"Rwanda",b:"KIBARAN 3T BELT",min:"Tin, tantalum (a leading world exporter), tungsten, gold, gemstones",mines:"Rutongo tin, Gatumba tantalum pegmatites, Nyakabingo tungsten, Miyove gold",cos:"Trinity Metals, LuNa Smelter",law:"Mining Law 2018; Rwanda Mines Board; iTSCi traceability tagging is mandatory for tin/tantalum/tungsten exports.",tip:"A clean, formalised small-mining sector — but every kilo of 3T ore must be tagged and traceable."},
-{n:"São Tomé & Príncipe",b:"VOLCANIC ISLANDS",min:"No mining",mines:"—",cos:"—",law:"—",tip:"Not a prospecting destination."},
-{n:"Senegal",b:"KÉDOUGOU-KÉNIÉBA",min:"Gold, zircon, phosphate, ilmenite",mines:"Sabodala-Massawa gold, Mako gold, Grande Côte mineral sands, Matam phosphate",cos:"Endeavour, Managem, Eramet GCO",law:"Mining Code 2016; designated artisanal corridors (couloirs d'orpaillage) operate in Kédougou.",tip:"Kédougou is the legal artisanal gold region — the geology runs straight across the border into Mali's Kéniéba window."},
-{n:"Seychelles",b:"GRANITE ISLANDS",min:"No mining (historic guano)",mines:"—",cos:"—",law:"—",tip:"Not a prospecting destination."},
-{n:"Sierra Leone",b:"KONO / SULA MOUNTAINS",min:"Diamonds, rutile (world-class), iron, gold, bauxite",mines:"Kono & Tongo diamond fields, Sierra Rutile, Marampa & Tonkolili iron, Baomahun gold",cos:"Leone Rock, Sierra Rutile, FG Gold",law:"Mines and Minerals Development Act 2022; the National Minerals Agency licenses artisanal diamond digging for citizens.",tip:"Kono's gravels are still hand-worked — the 709-carat 'Peace Diamond' came from a village dig in 2017."},
-{n:"Somalia",b:"NORTHERN BASEMENT",min:"Gemstones (sapphire, emerald in Somaliland), historic tin, salt, meerschaum",mines:"Simodi/Borama gem occurrences, Majayahan tin",cos:"Artisanal only",law:"The federal framework is nascent; Somaliland licenses separately.",tip:"An effectively unregulated frontier — not currently practical for visiting prospectors."},
-{n:"South Africa",b:"WITWATERSRAND / BUSHVELD",min:"Gold, platinum (~70% of world PGMs), diamonds, chrome, manganese, coal, iron, vanadium",mines:"Witwatersrand gold mines (the deepest on Earth, ~4 km), the Bushveld platinum belt, Venetia & Cullinan diamonds, the Kalahari manganese field (the world's largest)",cos:"Sibanye-Stillwater, Harmony, Anglo American Platinum, Impala, De Beers, Petra",law:"MPRDA 2002; the DMRE issues rights via SAMRAD. Unlicensed mining (zama-zama) is heavily policed and lethally dangerous.",tip:"The public diggings era is over — but registered gem and mineral clubs run legal fossicking trips."},
-{n:"South Sudan",b:"KAPOETA GREENSTONES",min:"Gold (artisanal), copper indications",mines:"Kapoeta & Nanaknak alluvial fields (Eastern Equatoria)",cos:"Artisanal",law:"Mining Act 2012; Ministry of Mining.",tip:"Almost entirely artisanal and informal; a high-risk frontier."},
-{n:"Sudan",b:"NUBIAN SHIELD / RED SEA HILLS",min:"Gold (among Africa's top three including artisanal output), chrome, iron",mines:"Ariab district, Gabgaba, North Kordofan fields",cos:"Managem (Gabgaba), Sudanese Mineral Resources Co. (state)",law:"State channels gold purchases; the conflict since 2023 has pushed much of the sector informal.",tip:"Perhaps two million artisanal miners — but the ongoing war makes this a no-go for outside prospectors."},
-{n:"Tanzania",b:"LAKE VICTORIA / MERELANI",min:"Gold (~50 t/yr), tanzanite (the only source on Earth), diamonds, graphite, nickel, coloured gemstones",mines:"Geita, Bulyanhulu, North Mara gold; Merelani tanzanite; Williamson diamonds; Kabanga nickel",cos:"AngloGold Ashanti, Barrick, Petra, Lifezone",law:"Mining Act 2010 with 2017 amendments: a 16% state free carry and local-content rules. Primary Mining Licences are reserved for Tanzanian citizens; the Mirerani gem trade is formalised.",tip:"Foreigners can't hold small-scale licences — joint ventures with PML holders are the legal route."},
-{n:"Togo",b:"DAHOMEYIDE BELT",min:"Phosphate, iron, artisanal gold, manganese",mines:"Hahotoé-Kpogamé phosphate, Bangeli iron, Wawa artisanal gold",cos:"SNPT (state phosphate)",law:"Mining Code 1996, revised 2003.",tip:"A small artisanal gold scene along the Ghana-border rivers."},
-{n:"Tunisia",b:"GAFSA BASIN",min:"Phosphate, zinc, lead, salt, iron",mines:"Gafsa phosphate basin, Bougrine zinc-lead",cos:"CPG-GCT (state)",law:"Mining Code 2003.",tip:"Phosphate country — there is no gold story."},
-{n:"Uganda",b:"BUSIA / KARAMOJA",min:"Gold, rare earths, tin, historic copper-cobalt, phosphate, vermiculite",mines:"Busia goldfields (Wagagai), Karamoja artisanal gold, Makuutu ionic REE, Ntungamo tin, Kilembe copper (historic)",cos:"Wagagai Mining, Ionic Rare Earths",law:"Mining and Minerals Act 2022 introduced 15% state participation and formal artisanal permits.",tip:"Busia has a century of gold history; the Karamoja digs are informal and remote."},
-{n:"Zambia",b:"COPPERBELT / KAFUBU",min:"Copper (Africa's #2), cobalt, world-class emeralds, gold, manganese, nickel",mines:"Kansanshi, Sentinel, Mopani, Konkola copper; Kagem emeralds; Kasenseli gold",cos:"First Quantum, Gemfields, ZCCM-IH (state)",law:"Mines and Minerals Development Act 2015; an online cadastre; artisanal and small-scale licences are available to citizens.",tip:"The Kafubu emerald fields feed world auctions; gold is the new frontier in North-Western Province."},
-{n:"Zimbabwe",b:"GREENSTONE BELTS / GREAT DYKE",min:"Gold, platinum, chrome, lithium (Africa's #1), diamonds, nickel, tantalite",mines:"Blanket & Freda Rebecca gold; Zimplats, Unki & Mimosa platinum; Bikita & Arcadia lithium; Marange diamonds",cos:"Caledonia, Kuvimba, Implats, Sinomine, ZCDC",law:"Mines and Minerals Act (Chapter 21:05); a prospecting licence is issued by the Ministry of Mines for a modest fee. ALL gold must legally be sold to Fidelity Gold Refinery, and riverbed alluvial mining has been banned since 2021.",tip:"Over 4,000 recorded gold workings — more documented small mines than any country in Africa. Your home advantage."}
-];
+/* DISTRICTS from data.js */
+/* COUNTRIES from data.js */
 const COLORS={gold:"#D9A93C",metal:"#5F8A6E",gem:"#C96A45",ree:"#9B85D4"};
 
 const map=L.map('map',{scrollWheelZoom:false}).setView([2,21],3.2);
 const darkBase=L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',{attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>',subdomains:'abcd',maxZoom:12}).addTo(map);
 const satBase=L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',{attribution:'Imagery &copy; Esri &amp; contributors',maxZoom:17});
-let satOn=false;
+let baseIdx=0;
+const terrainBase=L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png',{attribution:'&copy; OpenStreetMap contributors, SRTM | &copy; <a href="https://opentopomap.org">OpenTopoMap</a> (CC-BY-SA)',maxZoom:15});
+const BASES=[{l:darkBase,n:'Dark'},{l:satBase,n:'Satellite'},{l:terrainBase,n:'Pro Terrain'}];
 document.getElementById('baseBtn').addEventListener('click',function(){
-  satOn=!satOn;this.setAttribute('aria-pressed',String(satOn));
-  this.textContent=satOn?'◧ Dark map':'◧ Satellite view';
-  if(satOn){map.removeLayer(darkBase);satBase.addTo(map);}else{map.removeLayer(satBase);darkBase.addTo(map);}
+  map.removeLayer(BASES[baseIdx].l);
+  baseIdx=(baseIdx+1)%BASES.length;
+  BASES[baseIdx].l.addTo(map);
+  this.textContent='◧ View: '+BASES[baseIdx].n;
+  this.setAttribute('aria-pressed',String(baseIdx!==0));
+});
+/* PRO TOOL — heat view built from documented district density */
+const heatLayer=L.layerGroup();
+DISTRICTS.forEach(d=>{heatLayer.addLayer(L.circle([d.lat,d.lng],{radius:60000,weight:0,fillColor:COLORS[d.t],fillOpacity:0.12,interactive:false}));});
+document.getElementById('heatBtn').addEventListener('click',function(){
+  const on=this.getAttribute('aria-pressed')==='true';
+  this.setAttribute('aria-pressed',String(!on));
+  if(on){map.removeLayer(heatLayer);}else{heatLayer.addTo(map);}
 });
 
 const layers={gold:L.layerGroup().addTo(map),metal:L.layerGroup().addTo(map),gem:L.layerGroup().addTo(map),ree:L.layerGroup().addTo(map)};
@@ -360,9 +276,14 @@ function openCountry(i){
   document.getElementById('mCos').textContent=c.cos;
   document.getElementById('mLaw').textContent=c.law;
   document.getElementById('mTip').textContent='FIELD TIP — '+c.tip;
-  back.classList.add('open');document.body.style.overflow='hidden';
+  back.dataset.country=c.n;back.classList.add('open');document.body.style.overflow='hidden';
 }
 function closeModal(){back.classList.remove('open');document.body.style.overflow='';}
+document.getElementById('mFly').addEventListener('click',()=>{
+  const v=COUNTRY_VIEWS[back.dataset.country];
+  closeModal();
+  if(v){document.getElementById('map').scrollIntoView({behavior:'smooth',block:'center'});map.flyTo([v[0],v[1]],v[2]);}
+});
 document.getElementById('modalClose').addEventListener('click',closeModal);
 back.addEventListener('click',e=>{if(e.target===back)closeModal();});
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal();});
