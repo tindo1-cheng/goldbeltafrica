@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GoldBelt Africa — Back Office</title>
+<meta name="robots" content="noindex, nofollow">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,800&family=Archivo:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--pit:#191007;--soil:#26190C;--seam:#3A2A16;--quartz:#F0E7D5;--dust:#B7A88E;--gold:#D9A93C;--gold-hi:#F3CB6A;--greenstone:#5F8A6E;--mono:'IBM Plex Mono',monospace;--display:'Bricolage Grotesque',sans-serif;--body:'Archivo',sans-serif}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--pit);color:var(--quartz);font-family:var(--body);-webkit-font-smoothing:antialiased}
+.wrap{max-width:960px;margin:0 auto;padding:40px 20px}
+h1{font-family:var(--display);font-weight:800;font-size:1.8rem}
+h1 em{color:var(--gold);font-style:normal}
+.sub{font-family:var(--mono);font-size:.72rem;color:var(--dust);letter-spacing:.14em;margin-top:4px}
+.gate{background:var(--soil);border:1px solid var(--seam);border-radius:12px;padding:30px;margin-top:30px;max-width:420px}
+.gate label{font-family:var(--mono);font-size:.7rem;letter-spacing:.14em;color:var(--dust);text-transform:uppercase}
+.gate input{width:100%;background:#120B04;border:1px solid var(--seam);border-radius:8px;color:var(--quartz);font-family:var(--mono);padding:12px 14px;margin:8px 0 14px}
+.btn{background:var(--gold);color:#241804;font-weight:600;border:none;border-radius:6px;padding:11px 22px;font-family:var(--body);cursor:pointer}
+.btn:hover{background:var(--gold-hi)}
+.err{color:#E0795A;font-family:var(--mono);font-size:.78rem;margin-top:10px}
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:26px}
+@media(max-width:700px){.cards{grid-template-columns:1fr}}
+.card{background:var(--soil);border:1px solid var(--seam);border-radius:12px;padding:22px}
+.card .k{font-family:var(--mono);font-size:.66rem;letter-spacing:.16em;text-transform:uppercase;color:var(--dust)}
+.card .v{font-family:var(--display);font-weight:800;font-size:2.1rem;color:var(--gold-hi);margin-top:8px}
+.card.green .v{color:var(--greenstone)}
+.recent{background:var(--soil);border:1px solid var(--seam);border-radius:12px;padding:22px;margin-top:20px}
+.recent h2{font-family:var(--display);font-weight:800;font-size:1.1rem;margin-bottom:12px}
+.row{display:flex;justify-content:space-between;gap:12px;padding:9px 0;border-bottom:1px dashed var(--seam);font-size:.86rem}
+.row .em{color:var(--dust);font-family:var(--mono);font-size:.76rem}
+.row .amt{color:var(--gold-hi);font-family:var(--mono);white-space:nowrap}
+.hint{font-family:var(--mono);font-size:.7rem;color:var(--dust);margin-top:20px;line-height:1.7}
+.hidden{display:none}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>GoldBelt <em>Africa</em> — Back Office</h1>
+  <div class="sub">PRIVATE · LIVE FROM STRIPE</div>
+
+  <div class="gate" id="gate">
+    <label for="pw">Dashboard password</label>
+    <input type="password" id="pw" placeholder="enter password" autocomplete="current-password">
+    <button class="btn" id="go">Open dashboard</button>
+    <div class="err" id="err"></div>
+  </div>
+
+  <div id="board" class="hidden">
+    <div class="cards">
+      <div class="card"><div class="k">Active subscribers</div><div class="v" id="mSubs">—</div></div>
+      <div class="card green"><div class="k">Monthly recurring (MRR)</div><div class="v" id="mMrr">—</div></div>
+      <div class="card green"><div class="k">Collected last 30 days</div><div class="v" id="mGross">—</div></div>
+    </div>
+    <div class="recent">
+      <h2>Recent payments</h2>
+      <div id="mRecent"></div>
+    </div>
+    <div class="hint">
+      Figures come live from Stripe. "Collected" is money in — remember payouts to your bank still need your business registration.<br>
+      Full detail, refunds and cancellations live in your Stripe dashboard. This page is read-only.
+    </div>
+  </div>
+</div>
+<script>
+const gate=document.getElementById('gate'),board=document.getElementById('board'),err=document.getElementById('err');
+function money(n,cur){return (cur||'USD')+' '+Number(n).toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2});}
+async function load(pw){
+  err.textContent='Loading…';
+  try{
+    const r=await fetch('/api/stats?pw='+encodeURIComponent(pw));
+    if(r.status===401){err.textContent='Wrong password.';return;}
+    if(!r.ok)throw new Error('server');
+    const j=await r.json();
+    document.getElementById('mSubs').textContent=j.active_subscriptions;
+    document.getElementById('mMrr').textContent='$'+Number(j.mrr).toLocaleString();
+    document.getElementById('mGross').textContent='$'+Number(j.gross_30d).toLocaleString(undefined,{maximumFractionDigits:0});
+    const box=document.getElementById('mRecent');
+    box.innerHTML = (j.recent&&j.recent.length)? j.recent.map(p=>
+      '<div class="row"><span class="em">'+(p.email||'—')+' · '+p.date+'</span><span class="amt">'+money(p.amt,p.cur)+'</span></div>'
+    ).join('') : '<div class="row"><span class="em">No payments yet — your first sale will appear here.</span></div>';
+    gate.classList.add('hidden');board.classList.remove('hidden');
+    try{sessionStorage.setItem('gb_pw',pw);}catch(e){}
+  }catch(e){err.textContent='Could not load. Check the Stripe key is set in Vercel.';}
+}
+document.getElementById('go').addEventListener('click',()=>load(document.getElementById('pw').value.trim()));
+document.getElementById('pw').addEventListener('keydown',e=>{if(e.key==='Enter')load(e.target.value.trim());});
+try{const s=sessionStorage.getItem('gb_pw');if(s)load(s);}catch(e){}
+</script>
+</body>
+</html>
