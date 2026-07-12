@@ -1,5 +1,5 @@
 /* GoldBelt Africa — offline-ready service worker */
-const CACHE = 'goldbelt-v2';
+const CACHE = 'goldbelt-v3';
 const SHELL = ['/', '/index.html', '/data.js', '/manifest.json', '/icon.svg'];
 
 self.addEventListener('install', e => {
