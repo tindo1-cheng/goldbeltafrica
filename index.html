@@ -191,6 +191,11 @@ h1 .g{color:var(--gold)}
 .auth .a-v{font-size:.9rem;color:var(--ink)}
 .auth .a-u{font-family:var(--mono);font-size:.75rem;color:var(--accent);margin-top:2px;word-break:break-word}
 .auth .a-u a{color:var(--accent)}
+.comm-cta{display:inline-block;margin-top:14px;font-family:var(--mono);font-size:.68rem;letter-spacing:.12em;color:var(--accent);border:1px solid var(--accent);border-radius:100px;padding:7px 14px;text-decoration:none}
+.comm-cta:hover{background:rgba(30,123,196,.08)}
+.rel-log{margin-top:12px}
+.rel{display:flex;gap:10px;padding:7px 0;border-top:1px dashed var(--seam);font-size:.8rem;color:var(--quartz)}
+.rel-d{font-family:var(--mono);font-size:.62rem;letter-spacing:.1em;color:var(--gold);white-space:nowrap;padding-top:2px}
 /* ore guide */
 .ores{padding:70px 0}
 .ore-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin-top:30px}
@@ -691,7 +696,7 @@ footer{padding:60px 0 40px}
           <circle cx="150" cy="152" r="4" fill="#3A2A16"/>
         </svg>
         <h3>Pocket — installs as an app</h3>
-        <p>Open the site on iOS or Android, tap share, then <b>Add to Home Screen</b>. No app store needed.</p>
+        <p>Open the site on iOS, Android or Huawei/HarmonyOS, tap share/menu, then <b>Add to Home Screen</b>. No app store needed — which means it works on Huawei phones without Google services.</p>
         <div class="qr-box"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAK4AAACuCAIAAAAgbqG5AAADNklEQVR4nO3dMY7cNgBA0XUQwK1bH8Ft7n+GtL6Om98RSAialLjGe/WMVh58EKIlUl++f/v6AR8ff719AtxCCkQKRApECkQKRApECkQKRApECuTvmQ/9/Pnv6fP4Dz9+/LPwrXPnfNv5zJg5Z6MCkQKRApECkQKZmkGM1q6iZ8xcac98ZjzD8Vszn5kxc+TRu7/hyKhApECkQKRApEAWZxCjtavWXVfRa1fsa1f+a9+a8e5vaFQgUiBSIFIgUiDbZhDv2nV/YeY4u2YitzEqECkQKRApECmQTzmD2PX00bt3HG5jVCBSIFIgUiBSINtmELddV3/GFQ3v/oZGBSIFIgUiBSIFsjiDeHdnobVnlt79zOjd33BkVCBSIFIgUiBSIFMziNvuL4zOPWt023HOMSoQKRApECkQKZDF90E8uRPpk88R7bovsLbf7Npx1o48MioQKRApECkQKZBtTzE9+fzPk+cz4zO+Y25kVCBSIFIgUiBSINe9D+K244x27Qq7ZuZfuvbXjQpECkQKRApECuTgbq5r18zn7kGsfevcnYvR2pF3nY9RgUiBSIFIgUiBLM4g3n3WaOZ8zl3Vr33r3fdNzzAqECkQKRApECmQL9+/ff3fD+1aF7zLk6snZr41evJddbuOY1QgUiBSIFIgUiDb7kHc9kTQzN96d2X3zLdG5+YmRgUiBSIFIgUiBXJwHcRo1/NI7z6zdG7npV2rpK2D4LdIgUiBSIFIgSw+xXTuf9TP7WJ02+6pM578fYwKRApECkQKRApkagZxm3dXSY9uW9GwxqhApECkQKRApEAW30n9pLX1C2vOrRm//73eRgUiBSIFIgUiBfLobq4zbputzKxEWDvyOfZi4rdIgUiBSIFIgVz3Tupdds0F1u53nJsHWQfBcVIgUiBSIFIgj+7FdJtdex+Nzj0Nteu91SOjApECkQKRApEC+UNmEO/u6TSzUmPX3xrZzZXNpECkQKRApEC2zSCefM5/tOvJonPvelhjLyZeIAUiBSIFIgWyOIN4d73zk/8zf865t0uvMSoQKRApECkQKZBP+T4ITjAqECkQKRApECkQKRApECkQKRApECmQXxq1YCcnrxbjAAAAAElFTkSuQmCC" width="104" height="104" alt="QR code opening GoldBelt Africa"><span>SCAN TO OPEN<br>ON YOUR PHONE</span></div>
       </div>
       <div class="dev">
@@ -729,21 +734,29 @@ footer{padding:60px 0 40px}
     <p class="sec-sub">The prospecting community makes up its own mind — and shares what works. Trip reports, finds and straight answers from people on the same ground.</p>
     <div class="com-grid">
       <div class="com">
-        <h3>Finds feed <span class="soon">LAUNCHING</span></h3>
+        <h3>Finds feed <span class="soon">SEND YOURS</span></h3>
         <p>Members post finds, gravels and ground reports by district. A taste of what's coming:</p>
         <div class="finds">
           <div class="find"><span class="f-t">KÉDOUGOU, SN</span><span>"0.8 g of flake off bedrock in the corridor — third visit paid for the trip."</span></div>
           <div class="find"><span class="f-t">GWANDA, ZW</span><span>"Old-timer dump reworked with the detector: two nuggets, 3.1 g total."</span></div>
           <div class="find"><span class="f-t">ERONGO, NA</span><span>"Aquamarine pocket in the granite — licensed dig, best crystal 6 cm."</span></div>
+        <a class="comm-cta" href="mailto:mansamusa@goldbeltafrica.com?subject=My%20find%20for%20the%20Finds%20Feed&body=District%20%2B%20country%3A%0AWhat%20I%20found%20(grams%2C%20stone%2C%20story)%3A%0APhoto%20attached%3A%20yes%2Fno%0A%0ABy%20sending%20this%20I%20confirm%20the%20find%20was%20legal%20and%20licensed.">SUBMIT A FIND →</a>
         </div>
       </div>
       <div class="com">
         <h3>Win prizes</h3>
         <p>Find of the Month: members vote, the winner takes a free month of Master Prospector and the featured slot on the homepage. Photos must be legal, licensed finds — we celebrate prospectors who do it right.</p>
+        <a class="comm-cta" href="mailto:mansamusa@goldbeltafrica.com?subject=Find%20of%20the%20Month%20entry&body=District%20%2B%20country%3A%0AThe%20story%3A%0APhoto%20attached%3A%20yes%0A%0AI%20confirm%20this%20find%20was%20legal%20and%20licensed.">ENTER FIND OF THE MONTH →</a>
       </div>
       <div class="com">
         <h3>Releases — see what's new</h3>
-        <p>Every map update is logged: new districts added, dossiers refreshed, layers improved. The "MAP UPDATED" stamp above the map always shows the latest release, so you know the data under your boots is current.</p>
+        <p>Every update is logged, so you know the data under your boots is current.</p>
+        <div class="rel-log">
+          <div class="rel"><span class="rel-d">JUL 2026</span><span>Warm sunrise redesign · country flags · Mining Authorities directory (54 countries)</span></div>
+          <div class="rel"><span class="rel-d">JUL 2026</span><span>145 documented districts live · Heat view · Pro Terrain · per-country map fly-to</span></div>
+          <div class="rel"><span class="rel-d">JUL 2026</span><span>AI district briefings launched · Country Mineral Booklets ($9.99) on every dossier</span></div>
+          <div class="rel"><span class="rel-d">JUL 2026</span><span>goldbeltafrica.com live · members area · GPX downloads · PWA offline install</span></div>
+        </div>
       </div>
     </div>
   </div>
