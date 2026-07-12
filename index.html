@@ -221,6 +221,28 @@ h1 .g{color:var(--gold)}
 .vid .v-cap strong{color:var(--quartz)}
 
 .devices{padding:70px 0}
+.hero-qr{display:inline-flex;align-items:center;gap:10px;margin-left:12px;background:#1A0F06;border-radius:10px;padding:7px 10px;vertical-align:middle}
+.hero-qr img{border-radius:5px;display:block}
+.hero-qr span{font-family:var(--mono);font-size:.55rem;letter-spacing:.14em;color:var(--gold-hi);line-height:1.5}
+.dev-controls{display:flex;align-items:center;gap:12px;margin:26px 0 18px;flex-wrap:wrap}
+.dev-label{font-family:var(--mono);font-size:.66rem;letter-spacing:.16em;color:var(--dust)}
+#devCountry{background:#fff;border:1px solid var(--seam);border-radius:8px;color:var(--ink);font-family:var(--body);font-size:.95rem;padding:10px 14px;min-width:230px;box-shadow:0 2px 12px rgba(140,90,20,.06)}
+.dev-hint{font-family:var(--mono);font-size:.62rem;color:var(--dust);letter-spacing:.06em}
+.live-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+@media(max-width:900px){.live-grid{grid-template-columns:1fr}}
+.dev-live{text-align:center}
+.dev-live h3{font-family:var(--display);font-weight:800;font-size:1.02rem;margin:14px 0 4px;color:var(--ink)}
+.dev-live p{font-size:.82rem;color:var(--dust)}
+.frame{position:relative;background:#1A0F06;box-shadow:0 10px 30px rgba(60,35,10,.25)}
+.frame-laptop{border:11px solid #1A0F06;border-radius:14px 14px 4px 4px;margin-bottom:12px}
+.frame-laptop::after{content:'';position:absolute;left:-9%;right:-9%;bottom:-12px;height:12px;background:#2A190C;border-radius:0 0 12px 12px}
+.frame-ios{border:9px solid #1A0F06;border-radius:30px;overflow:hidden;max-width:250px;margin:0 auto}
+.frame-ios::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:88px;height:16px;background:#1A0F06;border-radius:0 0 12px 12px;z-index:900}
+.frame-android{border:9px solid #1A0F06;border-radius:22px;overflow:hidden;max-width:250px;margin:0 auto}
+.frame-android::before{content:'';position:absolute;top:7px;left:50%;transform:translateX(-50%);width:9px;height:9px;background:#000;border:2px solid #333;border-radius:50%;z-index:900}
+.mini-map{height:250px;width:100%;background:#EAE0CC}
+.frame-ios .mini-map,.frame-android .mini-map{height:340px}
+
 .dev-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin-top:32px}
 @media(max-width:1000px){.dev-grid{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:560px){.dev-grid{grid-template-columns:1fr}}
@@ -359,6 +381,7 @@ footer{padding:60px 0 40px}
       <a class="btn" href="#tiers">Start finding ground worth digging</a>
       <a class="btn ghost" href="#map-section">Open the free map</a>
       <div class="price-chip" id="goldPrice">GOLD SPOT · <strong>loading…</strong></div>
+      <div class="hero-qr"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAK4AAACuCAIAAAAgbqG5AAADNklEQVR4nO3dMY7cNgBA0XUQwK1bH8Ft7n+GtL6Om98RSAialLjGe/WMVh58EKIlUl++f/v6AR8ff719AtxCCkQKRApECkQKRApECkQKRApECuTvmQ/9/Pnv6fP4Dz9+/LPwrXPnfNv5zJg5Z6MCkQKRApECkQKZmkGM1q6iZ8xcac98ZjzD8Vszn5kxc+TRu7/hyKhApECkQKRApEAWZxCjtavWXVfRa1fsa1f+a9+a8e5vaFQgUiBSIFIgUiDbZhDv2nV/YeY4u2YitzEqECkQKRApECmQTzmD2PX00bt3HG5jVCBSIFIgUiBSINtmELddV3/GFQ3v/oZGBSIFIgUiBSIFsjiDeHdnobVnlt79zOjd33BkVCBSIFIgUiBSIFMziNvuL4zOPWt023HOMSoQKRApECkQKZDF90E8uRPpk88R7bovsLbf7Npx1o48MioQKRApECkQKZBtTzE9+fzPk+cz4zO+Y25kVCBSIFIgUiBSINe9D+K244x27Qq7ZuZfuvbXjQpECkQKRApECuTgbq5r18zn7kGsfevcnYvR2pF3nY9RgUiBSIFIgUiBLM4g3n3WaOZ8zl3Vr33r3fdNzzAqECkQKRApECmQL9+/ff3fD+1aF7zLk6snZr41evJddbuOY1QgUiBSIFIgUiDb7kHc9kTQzN96d2X3zLdG5+YmRgUiBSIFIgUiBXJwHcRo1/NI7z6zdG7npV2rpK2D4LdIgUiBSIFIgSw+xXTuf9TP7WJ02+6pM578fYwKRApECkQKRApkagZxm3dXSY9uW9GwxqhApECkQKRApEAW30n9pLX1C2vOrRm//73eRgUiBSIFIgUiBfLobq4zbputzKxEWDvyOfZi4rdIgUiBSIFIgVz3Tupdds0F1u53nJsHWQfBcVIgUiBSIFIgj+7FdJtdex+Nzj0Nteu91SOjApECkQKRApEC+UNmEO/u6TSzUmPX3xrZzZXNpECkQKRApEC2zSCefM5/tOvJonPvelhjLyZeIAUiBSIFIgWyOIN4d73zk/8zf865t0uvMSoQKRApECkQKZBP+T4ITjAqECkQKRApECkQKRApECkQKRApECmQXxq1YCcnrxbjAAAAAElFTkSuQmCC" width="72" height="72" alt="QR code — open GoldBelt Africa on your phone"><span>SCAN —<br>TAKE THE MAP<br>WITH YOU</span></div>
     </div>
   </div>
 </header>
@@ -672,59 +695,31 @@ footer{padding:60px 0 40px}
 
 <section class="devices">
   <div class="wrap">
-    <div class="sec-head"><h2>Plan it. Pocket it. Get to it. Dig it.</h2><span class="sec-tag">FIG. 10 — EVERY SCREEN, ONE MAP</span></div>
-    <p class="sec-sub">The same map on your laptop, tablet and phone — installs like an app, keeps working where the signal dies.</p>
-    <div class="dev-grid">
-      <div class="dev">
-        <svg viewBox="0 0 300 190" aria-label="Laptop showing the GoldBelt map">
-          <rect x="45" y="20" width="210" height="130" rx="8" fill="#0D0803" stroke="#3A2A16" stroke-width="3"/>
-          <rect x="55" y="30" width="190" height="110" rx="3" fill="#120B04"/>
-          <path d="M120 45 q30 -10 55 5 q20 12 15 40 q-5 30 -40 35 q-30 4 -42 -20 q-12 -25 12 -60 Z" fill="#26190C"/>
-          <g fill="#D9A93C"><circle cx="150" cy="70" r="3"/><circle cx="135" cy="95" r="3"/><circle cx="162" cy="105" r="3"/><circle cx="145" cy="120" r="2.5"/></g>
-          <circle cx="175" cy="85" r="2.5" fill="#C96A45"/><circle cx="122" cy="72" r="2.5" fill="#5F8A6E"/>
-          <path d="M30 155 L270 155 L285 172 L15 172 Z" fill="#1E1409" stroke="#3A2A16" stroke-width="2"/>
-        </svg>
-        <h3>Plan — on the web</h3>
-        <p>Scout districts, read the dossiers, run AI briefings and drop pins before you have left the house.</p>
+    <div class="sec-head"><h2>Plan it. Pocket it. Get to it. Dig it.</h2><span class="sec-tag">FIG. 10 — LIVE ON EVERY SCREEN</span></div>
+    <p class="sec-sub">These aren't pictures — the three screens below are the <b>real map, live right now</b>. Pick any of the 54 countries and watch every device fly there.</p>
+    <div class="dev-controls">
+      <label class="dev-label" for="devCountry">SHOW ME</label>
+      <select id="devCountry" aria-label="Choose a country to preview on all devices"></select>
+      <span class="dev-hint">← try Ghana, DR Congo, Mauritania…</span>
+    </div>
+    <div class="live-grid">
+      <div class="dev-live">
+        <div class="frame frame-laptop"><div class="mini-map" id="mmDesk"></div></div>
+        <h3>Desktop · Map view</h3>
+        <p>Plan at home — scout districts, read dossiers, run AI briefings.</p>
       </div>
-      <div class="dev">
-        <svg viewBox="0 0 300 190" aria-label="Phone showing the GoldBelt map">
-          <rect x="115" y="10" width="70" height="150" rx="12" fill="#0D0803" stroke="#3A2A16" stroke-width="3"/>
-          <rect x="122" y="24" width="56" height="118" rx="4" fill="#120B04"/>
-          <path d="M138 45 q14 -6 26 2 q10 7 8 22 q-3 18 -20 20 q-15 2 -20 -12 q-5 -14 6 -32 Z" fill="#26190C"/>
-          <g fill="#D9A93C"><circle cx="150" cy="62" r="2.5"/><circle cx="143" cy="78" r="2.5"/><circle cx="157" cy="85" r="2.5"/></g>
-          <circle cx="150" cy="152" r="4" fill="#3A2A16"/>
-        </svg>
-        <h3>Pocket — installs as an app</h3>
-        <p>Open the site on iOS, Android or Huawei/HarmonyOS, tap share/menu, then <b>Add to Home Screen</b>. No app store needed — which means it works on Huawei phones without Google services.</p>
-        <div class="qr-box"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAK4AAACuCAIAAAAgbqG5AAADNklEQVR4nO3dMY7cNgBA0XUQwK1bH8Ft7n+GtL6Om98RSAialLjGe/WMVh58EKIlUl++f/v6AR8ff719AtxCCkQKRApECkQKRApECkQKRApECuTvmQ/9/Pnv6fP4Dz9+/LPwrXPnfNv5zJg5Z6MCkQKRApECkQKZmkGM1q6iZ8xcac98ZjzD8Vszn5kxc+TRu7/hyKhApECkQKRApEAWZxCjtavWXVfRa1fsa1f+a9+a8e5vaFQgUiBSIFIgUiDbZhDv2nV/YeY4u2YitzEqECkQKRApECmQTzmD2PX00bt3HG5jVCBSIFIgUiBSINtmELddV3/GFQ3v/oZGBSIFIgUiBSIFsjiDeHdnobVnlt79zOjd33BkVCBSIFIgUiBSIFMziNvuL4zOPWt023HOMSoQKRApECkQKZDF90E8uRPpk88R7bovsLbf7Npx1o48MioQKRApECkQKZBtTzE9+fzPk+cz4zO+Y25kVCBSIFIgUiBSINe9D+K244x27Qq7ZuZfuvbXjQpECkQKRApECuTgbq5r18zn7kGsfevcnYvR2pF3nY9RgUiBSIFIgUiBLM4g3n3WaOZ8zl3Vr33r3fdNzzAqECkQKRApECmQL9+/ff3fD+1aF7zLk6snZr41evJddbuOY1QgUiBSIFIgUiDb7kHc9kTQzN96d2X3zLdG5+YmRgUiBSIFIgUiBXJwHcRo1/NI7z6zdG7npV2rpK2D4LdIgUiBSIFIgSw+xXTuf9TP7WJ02+6pM578fYwKRApECkQKRApkagZxm3dXSY9uW9GwxqhApECkQKRApEAW30n9pLX1C2vOrRm//73eRgUiBSIFIgUiBfLobq4zbputzKxEWDvyOfZi4rdIgUiBSIFIgVz3Tupdds0F1u53nJsHWQfBcVIgUiBSIFIgj+7FdJtdex+Nzj0Nteu91SOjApECkQKRApEC+UNmEO/u6TSzUmPX3xrZzZXNpECkQKRApEC2zSCefM5/tOvJonPvelhjLyZeIAUiBSIFIgWyOIN4d73zk/8zf865t0uvMSoQKRApECkQKZBP+T4ITjAqECkQKRApECkQKRApECkQKRApECmQXxq1YCcnrxbjAAAAAElFTkSuQmCC" width="104" height="104" alt="QR code opening GoldBelt Africa"><span>SCAN TO OPEN<br>ON YOUR PHONE</span></div>
+      <div class="dev-live">
+        <div class="frame frame-ios"><div class="mini-map" id="mmIos"></div></div>
+        <h3>iPhone · Satellite</h3>
+        <p>Pocket it — installs from Safari, no App Store needed.</p>
       </div>
-      <div class="dev">
-        <svg viewBox="0 0 300 190" aria-label="Handheld GPS with a route to a waypoint">
-          <rect x="110" y="12" width="80" height="150" rx="14" fill="#0D0803" stroke="#3A2A16" stroke-width="3"/>
-          <rect x="120" y="26" width="60" height="96" rx="4" fill="#120B04"/>
-          <path d="M128 112 q14 -22 22 -38 q8 -16 24 -28" stroke="#D9A93C" stroke-width="2.5" fill="none" stroke-dasharray="4 4"/>
-          <circle cx="130" cy="112" r="4" fill="#F0E7D5"/>
-          <path d="M174 40 l7 14 -7 -4 -7 4 Z" fill="#D9A93C"/>
-          <circle cx="150" cy="140" r="6" fill="none" stroke="#3A2A16" stroke-width="2"/>
-          <rect x="132" y="134" width="8" height="12" rx="2" fill="#26190C"/><rect x="160" y="134" width="8" height="12" rx="2" fill="#26190C"/>
-        </svg>
-        <h3>Get to it — GPX &amp; waypoints</h3>
-        <p>Download district waypoints, load them into your handheld or phone GPS, and navigate straight to the ground.</p>
-      </div>
-      <div class="dev">
-        <svg viewBox="0 0 300 190" aria-label="Tablet showing the GoldBelt map offline">
-          <rect x="75" y="15" width="150" height="160" rx="10" fill="#0D0803" stroke="#3A2A16" stroke-width="3"/>
-          <rect x="85" y="27" width="130" height="136" rx="4" fill="#120B04"/>
-          <path d="M115 55 q28 -12 52 4 q18 13 12 38 q-7 28 -38 30 q-28 2 -36 -20 q-8 -22 10 -52 Z" fill="#26190C"/>
-          <g fill="#D9A93C"><circle cx="150" cy="80" r="3"/><circle cx="132" cy="100" r="3"/><circle cx="160" cy="112" r="3"/></g>
-          <circle cx="196" cy="40" r="7" fill="none" stroke="#5F8A6E" stroke-width="2"/>
-          <path d="M192 40 l3 3 l6 -7" stroke="#5F8A6E" stroke-width="2" fill="none"/>
-        </svg>
-        <h3>Dig it — offline in the field</h3>
-        <p>Load your target area before you leave coverage; the app, your pins and district data keep working in the bush.</p>
+      <div class="dev-live">
+        <div class="frame frame-android"><div class="mini-map" id="mmAnd"></div></div>
+        <h3>Android &amp; Huawei · Pro Terrain</h3>
+        <p>Get to it — contours, ridgelines and drainages; works without Google services.</p>
       </div>
     </div>
+    <p class="map-note">DIG IT — LOAD YOUR TARGET AREA BEFORE YOU LEAVE COVERAGE; THE APP, YOUR PINS AND DISTRICT DATA KEEP WORKING OFFLINE IN THE BUSH.</p>
   </div>
 </section>
 
@@ -1117,6 +1112,33 @@ document.getElementById('licenseLink').addEventListener('click',e=>{e.preventDef
 
 /* ============ offline / installable (PWA) ============ */
 if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js').catch(()=>{});}
+
+/* ============ live device mini-maps ============ */
+(function(){
+  if(typeof L==='undefined'||typeof COUNTRY_VIEWS==='undefined')return;
+  const sel=document.getElementById('devCountry');
+  if(!sel)return;
+  function mini(id,tiles,opts){
+    const m=L.map(id,{zoomControl:false,scrollWheelZoom:false,dragging:true,tap:true,attributionControl:true});
+    L.tileLayer(tiles,Object.assign({maxZoom:15},opts)).addTo(m);
+    DISTRICTS.forEach(d=>{L.circleMarker([d.lat,d.lng],{radius:4,color:'#1A0F06',weight:1,fillColor:COLORS[d.t],fillOpacity:.95}).addTo(m);});
+    return m;
+  }
+  const mDesk=mini('mmDesk','https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',{subdomains:'abcd',attribution:'&copy; OSM &copy; CARTO'});
+  const mIos=mini('mmIos','https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',{attribution:'Esri'});
+  const mAnd=mini('mmAnd','https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png',{attribution:'&copy; OSM, SRTM | OpenTopoMap'});
+  const names=Object.keys(COUNTRY_VIEWS).sort();
+  names.forEach(n=>{const o=document.createElement('option');o.value=n;o.textContent=(typeof flagOf==='function'?flagOf(n)+' ':'')+n;sel.appendChild(o);});
+  function flyAll(n){
+    const v=COUNTRY_VIEWS[n]; if(!v)return;
+    [mDesk,mIos,mAnd].forEach((m,i)=>{m.flyTo([v[0],v[1]],Math.max(4,v[2]-(i===0?0:1)),{duration:1.6});});
+  }
+  sel.addEventListener('change',()=>flyAll(sel.value));
+  const start='Zimbabwe';
+  sel.value=names.includes(start)?start:names[0];
+  [mDesk,mIos,mAnd].forEach(m=>{const v=COUNTRY_VIEWS[sel.value];m.setView([v[0],v[1]],Math.max(4,v[2]-1));});
+  setTimeout(()=>{[mDesk,mIos,mAnd].forEach(m=>m.invalidateSize());},400);
+})();
 </script>
 <script>
 /* COUNTRIES loaded from data.js */
