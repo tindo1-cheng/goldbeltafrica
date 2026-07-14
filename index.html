@@ -191,6 +191,12 @@ h1 .g{color:var(--gold)}
 .auth .a-v{font-size:.9rem;color:var(--ink)}
 .auth .a-u{font-family:var(--mono);font-size:.75rem;color:var(--accent);margin-top:2px;word-break:break-word}
 .auth .a-u a{color:var(--accent)}
+.prize{border:1px solid var(--seam);border-radius:10px;padding:12px 14px;margin-top:12px;background:#FFFBF2;text-align:left}
+.prize-d{font-family:var(--mono);font-size:.6rem;letter-spacing:.16em;color:var(--gold);margin-bottom:3px}
+.prize-n{font-family:var(--display);font-weight:800;font-size:1rem;color:var(--ink)}
+.prize-p{font-family:var(--mono);font-size:.68rem;color:var(--greenstone);font-weight:400;margin-left:6px}
+.prize-s{font-size:.78rem;color:var(--dust);margin-top:5px}
+.prize-t{font-family:var(--mono);font-size:.6rem;letter-spacing:.06em;color:var(--dust);margin-top:12px;line-height:1.7;text-align:left}
 .comm-cta{display:inline-block;margin-top:14px;font-family:var(--mono);font-size:.68rem;letter-spacing:.12em;color:var(--accent);border:1px solid var(--accent);border-radius:100px;padding:7px 14px;text-decoration:none}
 .comm-cta:hover{background:rgba(30,123,196,.08)}
 .rel-log{margin-top:12px}
@@ -304,6 +310,9 @@ h1 .g{color:var(--gold)}
 .sup-box{background:var(--soil);border:1px solid var(--seam);border-radius:14px;padding:34px;margin-top:10px}
 .sup-box p{color:var(--dust);max-width:60ch;margin-bottom:16px}
 footer{padding:60px 0 40px}
+.contact-strip{display:flex;flex-wrap:wrap;gap:16px;align-items:center;border:1px solid var(--seam);background:#FFFBF2;border-radius:10px;padding:14px 18px;margin:26px 0 18px}
+.contact-strip .c-k{font-family:var(--mono);font-size:.62rem;letter-spacing:.18em;color:var(--gold)}
+.contact-strip a{font-family:var(--mono);font-size:.78rem;color:var(--ink)}
 .foot-cols{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:26px;margin-bottom:36px}
 @media(max-width:860px){.foot-cols{grid-template-columns:1fr 1fr}}
 .foot-cols h4{font-family:var(--mono);font-size:.66rem;letter-spacing:.2em;text-transform:uppercase;color:var(--dust);margin-bottom:12px}
@@ -740,7 +749,18 @@ footer{padding:60px 0 40px}
       </div>
       <div class="com">
         <h3>Win prizes</h3>
-        <p>Find of the Month: members vote, the winner takes a free month of Master Prospector and the featured slot on the homepage. Photos must be legal, licensed finds — we celebrate prospectors who do it right.</p>
+        <p>Find of the Month: members vote, the winner takes a free month of Master Prospector and the featured homepage slot. Photos must be legal, licensed finds.</p>
+        <div class="prize">
+          <div class="prize-d">DEC 2026 GRAND PRIZE</div>
+          <div class="prize-n">Nokta Legend 2 <span class="prize-p">≈ $999 (list $1,149)</span></div>
+          <p class="prize-s">Nokta's flagship multi-frequency detector — hunts coins, relics and <b>small gold in mineralised ground</b> on simultaneous multi-frequency (4–40 kHz), 99 Target IDs, dedicated Gold mode, waterproof to 5 m, just 1.2 kg, ships with two coils and a 3-year warranty. A serious African-goldfields machine.</p>
+        </div>
+        <div class="prize">
+          <div class="prize-d">APR 2027 GRAND PRIZE</div>
+          <div class="prize-n">Minelab GPZ 7000 <span class="prize-p">≈ $9,499 (list $11,399)</span></div>
+          <p class="prize-s">The deepest gold detector made — ZVT technology reaches up to <b>40% deeper</b> than the GPX series, Super-D coil sensitive from sub-gram flakes to retirement nuggets, precision ground balance for severe mineralisation, 256 noise-cancel channels, built-in GPS find-logging.</p>
+        </div>
+        <p class="prize-t">HOW TO WIN: every legal find you submit is one entry. Winner drawn from entries and must be a <b>registered, active GoldBelt subscriber</b> at the draw date. One prize per draw · shipped worldwide · no purchase of gear required, subscription required · full terms by email.</p>
         <a class="comm-cta" href="mailto:mansamusa@goldbeltafrica.com?subject=Find%20of%20the%20Month%20entry&body=District%20%2B%20country%3A%0AThe%20story%3A%0APhoto%20attached%3A%20yes%0A%0AI%20confirm%20this%20find%20was%20legal%20and%20licensed.">ENTER FIND OF THE MONTH →</a>
       </div>
       <div class="com">
@@ -875,13 +895,19 @@ footer{padding:60px 0 40px}
       <div>
         <h4>Company</h4>
         <a href="#coverage">Country coverage</a>
-        <a href="mailto:mansamusa@goldbeltafrica.com">Contact</a>
+        <a href="#contact">Contact</a>
         <a href="#" id="privacyLink">Privacy policy</a>
         <a href="#" id="licenseLink">Licence agreement</a>
       </div>
     </div>
     <div class="legal">
       <strong>Important — read before you prospect.</strong> GoldBelt Africa provides educational and reference mapping compiled from published geological information. Markers indicate documented mineral districts, not guaranteed deposits and not permission to enter or work any land. Prospecting, panning, metal detecting and mineral extraction are regulated in every African country and require the appropriate licence or permit from the national mining authority. Always confirm land ownership, existing claims and local law before any field activity. GoldBelt Africa accepts no liability for prospecting outcomes or unlicensed activity. Mineral prices shown are indicative spot prices from third-party feeds. Country dossiers summarise laws in good faith and may date; the official gazette always prevails.
+    </div>
+    <div class="contact-strip" id="contact">
+      <span class="c-k">CONTACT</span>
+      <a href="mailto:mansamusa@goldbeltafrica.com">mansamusa@goldbeltafrica.com</a>
+      <a href="tel:+447359724755">+44 7359 724755 · UK</a>
+      <a href="tel:+263773001353">+263 773 001 353 · ZW</a>
     </div>
     <div class="foot-row">
       <span>© 2026 GOLDBELT AFRICA</span>
